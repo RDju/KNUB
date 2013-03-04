@@ -19,9 +19,9 @@ so they can be matched
 #include <Z_OSC.h>
 #include <Wire.h>
 //was 1959
-#define maxSend 3276
+#define maxSend 1900
 //was 1172
-#define minSend 1011
+#define minSend 1600
 
 byte write_cmds[] = {B01011000, B01011010, B01011100, B01011110};
 

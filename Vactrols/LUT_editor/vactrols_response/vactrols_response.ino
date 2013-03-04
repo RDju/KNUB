@@ -40,8 +40,9 @@ int lookup[256] = {0,0,31,50,63,74,82,89,95,101,105,110,114,118,121,124,127,130,
 byte myMac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 byte myIp[]  = { 192, 168, 0, 8 };
 int  myPort  = 10000;
+int minVal, maxVal;
 
-char *subAddress[4]={"/dac/cvA", "/dac/cvB", "/dac/cvC", "/dac/cvD"};
+char *subAddress[6]={"/dac/cvA", "/dac/cvB", "/dac/cvC", "/dac/cvD", "/dac/minVal", "/dac/maxVal"};
 
 Z_OSCServer server;
 Z_OSCMessage *rcvMes;
@@ -57,6 +58,9 @@ void setup(){
   lg = 255;
   mult = 250;
  
+   minVal = 1500;
+   maxVal = 3600;
+ 
 }
 
 
@@ -66,43 +70,42 @@ if(server.available()){
   
     rcvMes = server.getMessage();
     
-    //deals with dacA and dacB on the eval board
+    //deals with dacA 
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[0])){
         
         val = rcvMes->getInteger32(0);
-  
- 
         an1 = analogRead(0);
-        an2 = analogRead(2);
-  
-        
-        Serial.print(an1);
-        Serial.print(",");
-        Serial.println(an2);
-        
-        //map(val, 0, 255, 1381, 1557)
-        writeDac(dacID, write_cmds[0], map(val, 0, 255, 1381, 1509));
-       }
-  
+        writeDac(dacID, write_cmds[0], map(val, 0, 255, minVal, maxVal));
+        Serial.write(map(an1, 0, 1024, 0, 255));
+     
+   }
    
-   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
+   //deals with dacB 
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
         
         val = rcvMes->getInteger32(0);
-  
- 
-        an1 = analogRead(0);
-        an2 = analogRead(2);
-  
+        an1 = analogRead(1);
+        writeDac(dacID, write_cmds[1], map(val, 0, 255, minVal, maxVal));
+        Serial.write(map(an1, 0, 1024, 0, 255));
+     
+   }
+   
+   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[4])){
         
-        Serial.print(an1);
-        Serial.print(",");
-        Serial.println(an2);
+       minVal = rcvMes->getInteger32(0);
+   }
+   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[5])){
         
-        
-        writeDac(dacID, write_cmds[1], map(val, 0, 255, 1381, 1557));
-       }
-    
+       maxVal = rcvMes->getInteger32(0);
+   }
   }
+
+/*
+writeDac(dacID, write_cmds[0], 4095);
+delay(500);
+writeDac(dacID, write_cmds[0], 0);
+delay(500);
+*/
 }
 
 void writeDac(byte addr, byte wrid, int val){
