@@ -22,6 +22,13 @@ char *subAddress[6]={"/dac/cvA", "/dac/cvB", "/dac/cvC", "/dac/cvD", "/dac/minVa
 
 Z_OSCServer server;
 Z_OSCMessage *rcvMes;
+Z_OSCClient client;
+Z_OSCMessage sendMes;
+
+
+byte computer[] = {192, 168, 0, 5};
+int pdPort = 57100;
+char oscAdr1[] = "/vactrol";
 
 void setup(){
 
@@ -29,6 +36,9 @@ void setup(){
   Ethernet.begin(myMac, myIp);
   server.sockOpen(myPort);
   Serial.begin(9600);
+
+  minDacVal = 1500;
+  maxDacVal = 3000;
 
 }
 
@@ -44,8 +54,14 @@ if(server.available()){
         
         val = rcvMes->getInteger32(0);
         analogInVal = analogRead(0);
-        writeDac(dacID, write_cmds[0], map(yellowLUT[val], 0, 255, yellowMin, yellowMax));
+        writeDac(dacID, write_cmds[0], map(val, 0, 255, minDacVal, maxDacVal));
         Serial.write(map(analogInVal, 0, 1024, 0, 255));
+         
+         Z_OSCMessage message;
+         message.setAddress(computer, pdPort);
+         message.setZ_OSCMessage(oscAdr1, "i", analogInVal);
+         client.send(&message); 
+       
      
    }
    

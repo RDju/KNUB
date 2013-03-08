@@ -110,9 +110,9 @@ if(server.available()){
             int v1 = map(lookup[i], 0, 255, minSend, maxSend);
             int v2 = map(lookup[255 - i], 0, 255, minSend, maxSend);
             //int v2 = 0;
-            //multiWriteDac(dacID, knob1_ch1, knob1_ch2, v1, v2);
+            multiWriteDac(dacID, knob1_ch1, knob1_ch2, v1, v2);
             
-            writeDac(dacID, write_cmds[0], v1);
+            //writeDac(dacID, write_cmds[0], v1);
             delay(5);
             vacResp[i] = constrain(map(analogRead(0), 0, 1024, 0, 1024), 0, 1024);
             delay(5);  

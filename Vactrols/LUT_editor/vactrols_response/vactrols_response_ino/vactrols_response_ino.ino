@@ -30,6 +30,10 @@ void setup(){
   server.sockOpen(myPort);
   Serial.begin(9600);
 
+  minDacVal = 1500;
+  maxDacVal = 3000;
+
+
 }
 
 
@@ -44,7 +48,7 @@ if(server.available()){
         
         val = rcvMes->getInteger32(0);
         analogInVal = analogRead(0);
-        writeDac(dacID, write_cmds[0], map(yellowLUT[val], 0, 255, yellowMin, yellowMax));
+        writeDac(dacID, write_cmds[0], map(val, 0, 255, minDacVal, maxDacVal));
         Serial.write(map(analogInVal, 0, 1024, 0, 255));
      
    }
