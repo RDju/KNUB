@@ -5,10 +5,8 @@ This version has been updated from a previous one that was dealing with a digita
 this works with the quad DAC mcp4728 found on the evaluation board.
 
 
-TODO:
+this version works for 2 vactrols at the same time wired as viltage devider
 
-check the response of 2 vactrols AT THE SAME TIME
-so they can be matched
 
 */
 //#include <Client.h>
