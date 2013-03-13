@@ -22,7 +22,17 @@ void setup(){
   Ethernet.begin(myMac, myIp);
   server.sockOpen(myPort);
 
+  
+
+
   ///here recall dacs last settings as to avoid a short circuit
+  //for now set all knubs to middle pos 127
+  
+  for(int i = 0; i<3; i++){
+  
+    turnKnub(i, 1, 127);
+  }
+
 }
 
 
