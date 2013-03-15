@@ -74,15 +74,3 @@ void turnKnub(byte knubNum, byte knubType, byte knubVal){
 
 
 
-//function for SingleWrite : 
-
-void writeDac(byte addr, byte wrid, int val){
-  
-  Wire.beginTransmission(addr);
-  Wire.write(wrid);
-  Wire.write(highByte(val));
-  Wire.write(lowByte(val)); 
-  Wire.endTransmission();
-};
-
-
