@@ -69,8 +69,27 @@ void turnKnub(byte knubNum, byte knubType, byte knubVal){
       multiWriteDac(dacIDZ[3], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
   }
+} 
+  
+  
 
-}
+  
+  //this load all 8 knubs values at once from memory
+  void setKnubPgm(byte * knubsVals){
+   for(int i = 0; i<8; i++){
+      turnKnub(i, 1, knubsVals[i]);
+    }
+ }
+
+
+  void knubStart(){
+    //here recall dacs last 
+   pgmNum = readSingleKnub(eepromAddr1, 0);  
+   readKnubPreset(eepromAddr1, pgmNum, (byte *)knubsValues);
+   setKnubPgm((byte *)knubsValues);
+  
+  
+  }
 
 
 

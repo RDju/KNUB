@@ -1,56 +1,38 @@
+/*
+the first 16 memory addresses are reserved for things like lastPgmNum
+*/
+
 #include <SPI.h>
 #include <Z_OSC.h>
-#include <MIDI.h>
 #include <Ethernet.h>
 #include <Wire.h>
+#include <MIDI.h>
+
+#include "memory.h"
+#include "knubVars.h"
 #include "knubFuncs.h"
-
-#define ledPin 4
-
-byte myMac[] = { 11, 22, 33, 44, 55};
-byte myIp[]  = { 192, 168, 0, 8 };
-uint16_t  myPort  = 10000;
-
-Z_OSCServer server;
-Z_OSCMessage *rcvMes;
-
-char *subAddress[3]={"/knub/turn", "/knub/loadBank/", "/knub/saveBank"};
+#include "knubMidi.h"
+#include "knubOSC.h"
 
 void setup(){
 
   Wire.begin();
+  
   Ethernet.begin(myMac, myIp);
   server.sockOpen(myPort);
-
   
-
-
-  ///here recall dacs last settings as to avoid a short circuit
-  //for now set all knubs to middle pos 127
+  MIDI.begin(1);
+  MIDI.setHandleControlChange(handleControlChange);
+  MIDI.setHandleProgramChange(handleProgramChange);
   
-  for(int i = 0; i<3; i++){
   
-    turnKnub(i, 1, 127);
-  }
-
 }
 
 
 void loop(){
- 
-  if(server.available()){
-  
-    rcvMes = server.getMessage();
    
-   //deals with pots messages
-    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[0])){
-        
-      byte wichPot = rcvMes->getInteger32(0);
-      byte potVal =  rcvMes->getInteger32(1);   
-        
-        turnKnub(wichPot, 1, potVal);     
-    }
-  }
+  knubDoOsc();
+  
 }
 
 
