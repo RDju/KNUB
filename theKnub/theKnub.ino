@@ -18,21 +18,25 @@ void setup(){
 
   Wire.begin();
   
-  Ethernet.begin(myMac, myIp);
-  server.sockOpen(myPort);
+  if(Ethernet.begin(myMac, myIp)){
+    editMode = true;
+    server.sockOpen(myPort);
+  }else{
   
-  MIDI.begin(1);
-  MIDI.setHandleControlChange(handleControlChange);
-  MIDI.setHandleProgramChange(handleProgramChange);
-  
-  
+    playMode = true;
+    MIDI.begin(1);
+    MIDI.setHandleControlChange(handleControlChange);
+    MIDI.setHandleProgramChange(handleProgramChange);
+  }
 }
 
 
 void loop(){
-   
-  knubDoOsc();
   
+  if(editMode){
+    knubDoOsc();
+  }
+
 }
 
 

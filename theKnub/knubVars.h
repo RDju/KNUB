@@ -6,3 +6,5 @@
 byte knubsValues[numKnubs];
 
 byte pgmNum;
+
+boolean editMode, playMode, calibMode;
