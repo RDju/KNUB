@@ -18,7 +18,7 @@ void setup(){
 
   Wire.begin();
   
-  if(Ethernet.begin(myMac, myIp)){
+  if(Ethernet.begin(myMac)== 1){
     editMode = true;
     server.sockOpen(myPort);
   }else{
