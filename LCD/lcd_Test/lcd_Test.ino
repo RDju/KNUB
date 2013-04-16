@@ -68,7 +68,7 @@ int numTabs[] = {0, 2, 4};
 
 
 char* curves[] = {"LIN", "LOG", "ALOG"};
-char* params[] = {"DIST", "TONE", "VOL"};
+char* params[] = {"DIST", "TONE", "VOL "};
 char*  prmVals[] = {"10", "50", "60"};
 
 int currentParam = 0;
@@ -128,6 +128,11 @@ void loop(){
         tabIndx++;
         tabIndx = tabIndx%numTabs[pageLevel];
         tab(paramTabs[tabIndx]);
+        
+        if(tabIndx > 0){
+          
+          customCursor(tabIndx);
+        }
       }
     }  
   }
@@ -140,7 +145,7 @@ void loop(){
  switch(tabIndx){
  
    case 0:
-     Serial.println((encoderValue%10)%3);
+    
      if((encoderValue%10)%3 < 3){
      
        updateParam(tabIndx, params[(encoderValue%10)%3]);
@@ -150,6 +155,7 @@ void loop(){
  
  }
  
+ Serial.println(prmChange);
  
 
 }
@@ -177,12 +183,13 @@ void updateEncoder(){
     
     
       encoderValue ++;
+      
  
   }
   if(sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000){
 
       encoderValue --;
- 
+     
   }
 
   lastEncoderValue = encoded; //store this value for next time

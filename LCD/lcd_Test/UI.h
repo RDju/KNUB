@@ -12,6 +12,7 @@ char* effectsName[] = {"RAT", "HOLY", "WAH", "DELAY"};
 
 char* fxTabs[] = {"0,7", "1,7"};
 char* paramTabs[] = {"0,7", "1,1", "1,6", "1,11"};
+char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
 
 /////////////// UTILS ////////////////
 void initDisplay(){
@@ -25,9 +26,9 @@ void initDisplay(){
 
 void initMemDisp(){
   
- lcd.write("su1;");
+ lcd.write("su0;");
  delay(5);
- lcd.write("sf1;");
+ lcd.write("sf0;");
  delay(5);
 
 }
@@ -62,6 +63,46 @@ void updateParam(int prmIndx, char newVal[]){
   delay(5);
 
 }
+
+
+void customCursor(int cusTab){
+  
+  if(cusTab == 0){
+  
+    lcd.write("sd");
+    lcd.write(customCursorTabs[3]);
+    lcd.write(";");
+    delay(5);
+    lcd.write("ss ;");
+    delay(5);
+  }else if(cusTab > 0){
+     lcd.write("sd");
+    lcd.write(customCursorTabs[cusTab]);
+    lcd.write(";");
+    delay(5);
+    lcd.write("ss ;");
+    delay(5);
+  
+  
+  
+  
+  }
+  
+  
+  
+  
+    
+  
+  
+  lcd.write("sd");
+  lcd.write(customCursorTabs[cusTab]);
+  lcd.write(";");
+  delay(5);
+  lcd.write("ss>;");
+  delay(5);
+
+}
+
 
 ///////////////////////////////////////////////////////
 
