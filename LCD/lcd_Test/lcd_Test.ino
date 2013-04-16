@@ -75,12 +75,12 @@ int currentParam = 0;
 int currentCurve = 0;
 
 
-boolean pageUpdated;
+boolean prmChange;
  
 void setup(){
- lcd.begin(9600);
+  lcd.begin(9600);
 
-   initDisplay();
+  initDisplay();
    
   pinMode(encoderPin1, INPUT); 
   pinMode(encoderPin2, INPUT);
@@ -93,52 +93,25 @@ void setup(){
 
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
+  
   Serial.begin(9600);
  
   Serial.println(sizeof(params)/sizeof(char*));
-  pageUpdated = false;
   
-   productPage();
-   delay(500);
-   softwareVersion();
-   delay(500);
-   initMemDisp();
+    productPage();
+    delay(500);
+    softwareVersion();
+    delay(500);
+    initMemDisp();
    //presetPage();
   //effectPage();
   //paramPage();
-  pageLevel =2;
-  clearScreen();
-  paramPage(params[currentParam], prmVals[currentParam], prmVals[currentParam], curves[currentCurve]);
+    pageLevel =2;
+    clearScreen();
+    paramPage(params[currentParam], prmVals[currentParam], prmVals[currentParam], curves[currentCurve]);
 }
 
 void loop(){
-  
-  ///////////////// udpate current page///////////////:
-      
-      
-      switch(pageLevel){
-      
-        case 2:
-          
-       
-        break;
-      
-      
-      }
-       
-      
-      
-      
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   //// tab button
   if(bValid.update()){ 
@@ -162,31 +135,54 @@ void loop(){
   
   /////// encoding Wheel/////////////////////
 
-  
-  
+ itoa(encoderValue, valBuf, 10);
+ 
+ switch(tabIndx){
+ 
+   case 0:
+     Serial.println((encoderValue%10)%3);
+     if((encoderValue%10)%3 < 3){
+     
+       updateParam(tabIndx, params[(encoderValue%10)%3]);
+     
+     }
+   break;
+ 
+ }
+ 
+ 
 
 }
 
 
 void updateEncoder(){
   
+  
+  
+ 
+ 
   uint8_t MSB = digitalRead(encoderPin1); //MSB = most significant bit
   uint8_t LSB = digitalRead(encoderPin2); //LSB = least significant bit
 
   uint8_t encoded = (MSB << 1) |LSB; //converting the 2 pin value to single number
   uint8_t sum  = (lastEncoderValue << 2) | encoded; //adding it to the previous encoded value
   
+  
+    
+  
+  
+  
+  
   if(sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011){
     
-    if(encoderValue < 100){
+    
       encoderValue ++;
-    }
+ 
   }
   if(sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000){
-    
-    if(encoderValue > 0){
+
       encoderValue --;
-    }
+ 
   }
 
   lastEncoderValue = encoded; //store this value for next time

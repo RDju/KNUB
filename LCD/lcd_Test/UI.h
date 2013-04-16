@@ -48,6 +48,21 @@ void clearScreen(){
 
 }
 
+
+void updateParam(int prmIndx, char newVal[]){
+  
+  
+  lcd.write("sd");
+  lcd.write(paramTabs[prmIndx]);
+  lcd.write(";");
+  delay(5);
+  lcd.write("ss");
+  lcd.write(newVal);
+  lcd.write(";");
+  delay(5);
+
+}
+
 ///////////////////////////////////////////////////////
 
 
@@ -109,11 +124,58 @@ void effectPage(){
  delay(5);
 }
 
-void paramPage(char paramName[], char val1[], char val2[], char curvType[]){
+void paramPage(char paramName[], char val1[], char val2[], char curveType[]){
+ 
  lcd.write("sd0,0;");
  delay(5);
  lcd.write("ssParam :;");
  delay(5);
+ 
+ lcd.write("sd");
+ lcd.write(paramTabs[0]);
+ lcd.write(";");
+ delay(5);
+ 
+ lcd.write("ss");
+ lcd.write(paramName);
+ lcd.write(";");
+ delay(5);
+ 
+ lcd.write("sd");
+ lcd.write(paramTabs[1]);
+ lcd.write(";");
+ delay(5);
+ 
+ lcd.write("ss");
+ lcd.write(val1);
+ lcd.write(";");
+ delay(5);
+ 
+ lcd.write("sd");
+ lcd.write(paramTabs[2]);
+ lcd.write(";");
+ delay(5);
+ 
+ lcd.write("ss");
+ lcd.write(val2);
+ lcd.write(";");
+ delay(5);
+ 
+ lcd.write("sd");
+ lcd.write(paramTabs[3]);
+ lcd.write(";");
+ delay(5);
+ 
+ lcd.write("ss");
+ lcd.write(curveType);
+ lcd.write(";");
+ delay(5);
+
+ lcd.write("sd");
+ lcd.write(paramTabs[0]);
+ lcd.write(";");
+ delay(5);
+
 }
 
 
