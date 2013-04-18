@@ -53,8 +53,11 @@ RX 4
 #define validBut 9
 #define backBut 8
 
+volatile int lastValue = 0;
 volatile int lastEncoderValue = 0;
 volatile int encoderValue = 0;
+volatile int encoderValueParam = 0;
+volatile int encoderValueParamVal = 0;
 
 uint8_t lastMSB = 0;
 uint8_t lastLSB = 0;
@@ -67,7 +70,7 @@ int tabIndx = 0;
 int numTabs[] = {0, 2, 4};
 
 
-char* curves[] = {"LIN", "LOG", "ALOG"};
+char* curves[] = {"L00", "L01", "L02"};
 char* params[] = {"DIST", "TONE", "VOL "};
 char*  prmVals[] = {"10", "50", "60"};
 
@@ -129,10 +132,8 @@ void loop(){
         tabIndx = tabIndx%numTabs[pageLevel];
         tab(paramTabs[tabIndx]);
         
-        if(tabIndx > 0){
-          
-          customCursor(tabIndx);
-        }
+        customCursor(tabIndx);
+       
       }
     }  
   }
@@ -140,27 +141,35 @@ void loop(){
   
   /////// encoding Wheel/////////////////////
 
- itoa(encoderValue, valBuf, 10);
+if(encoderValue != lastValue){
  
  switch(tabIndx){
  
    case 0:
-    
-     if((encoderValue%10)%3 < 3){
-     
-       updateParam(tabIndx, params[(encoderValue%10)%3]);
-     
-     }
+       encoderValueParam = encoderValue%3;
+       updateParam(tabIndx, params[encoderValueParam]);
+   break;
+   case 1:
+     encoderValueParamVal = abs(encoderValue)%101;
+     itoa(encoderValueParamVal, valBuf, 10);
+     updateParam(tabIndx, valBuf);
+   break;
+   case 2:
+     encoderValueParamVal = abs(encoderValue)%101;
+     itoa(encoderValueParamVal, valBuf, 10);
+     updateParam(tabIndx, valBuf);
+   break;
+   case 3:
+       encoderValueParam = encoderValue%3;
+       updateParam(tabIndx, curves[encoderValueParam]);
+   
    break;
  
+   }
+   lastValue = encoderValue;
  }
- 
- Serial.println(prmChange);
- 
 
 }
-
-
 void updateEncoder(){
   
   
@@ -172,12 +181,6 @@ void updateEncoder(){
 
   uint8_t encoded = (MSB << 1) |LSB; //converting the 2 pin value to single number
   uint8_t sum  = (lastEncoderValue << 2) | encoded; //adding it to the previous encoded value
-  
-  
-    
-  
-  
-  
   
   if(sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011){
     

@@ -59,6 +59,8 @@ void updateParam(int prmIndx, char newVal[]){
   delay(5);
   lcd.write("ss");
   lcd.write(newVal);
+  lcd.write(" ");
+  lcd.write(" ");
   lcd.write(";");
   delay(5);
 
@@ -67,39 +69,48 @@ void updateParam(int prmIndx, char newVal[]){
 
 void customCursor(int cusTab){
   
-  if(cusTab == 0){
+  switch(cusTab){
   
-    lcd.write("sd");
-    lcd.write(customCursorTabs[3]);
-    lcd.write(";");
-    delay(5);
-    lcd.write("ss ;");
-    delay(5);
-  }else if(cusTab > 0){
-     lcd.write("sd");
-    lcd.write(customCursorTabs[cusTab]);
-    lcd.write(";");
-    delay(5);
-    lcd.write("ss ;");
-    delay(5);
-  
-  
-  
+    case 0:
+      lcd.write("sd1,10;");
+      delay(5);
+      lcd.write("ss ;");
+      delay(5);
+      break;
+    case 1:
+      lcd.write("sd1,0;");
+      delay(5);
+      lcd.write("ss>;");
+      delay(5);
+    break;
+    case 2:
+      lcd.write("sd1,0;");
+      delay(5);
+      lcd.write("ss ;");
+      delay(5);
+      lcd.write("sd1,5;");
+      delay(5);
+      lcd.write("ss>;");
+      delay(5);
+    break;
+    case 3:
+      lcd.write("sd1,5;");
+      delay(5);
+      lcd.write("ss ;");
+      delay(5);
+      lcd.write("sd1,10;");
+      delay(5);
+      lcd.write("ss>;");
+      delay(5);
+     break;
   
   }
   
   
   
   
-    
   
   
-  lcd.write("sd");
-  lcd.write(customCursorTabs[cusTab]);
-  lcd.write(";");
-  delay(5);
-  lcd.write("ss>;");
-  delay(5);
 
 }
 
