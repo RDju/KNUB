@@ -146,8 +146,17 @@ if(encoderValue != lastValue){
  switch(tabIndx){
  
    case 0:
-       encoderValueParam = encoderValue%3;
-       updateParam(tabIndx, params[encoderValueParam]);
+
+     encoderValue = encoderValue%50;
+     
+     if(encoderValue == 0){
+   
+       encoderValueParam += 1;
+       updateParam(tabIndx, params[encoderValueParam%3]);
+     
+       Serial.println(encoderValueParam);
+   }
+     
    break;
    case 1:
      encoderValueParamVal = abs(encoderValue)%101;
@@ -160,9 +169,11 @@ if(encoderValue != lastValue){
      updateParam(tabIndx, valBuf);
    break;
    case 3:
-       encoderValueParam = encoderValue%3;
-       updateParam(tabIndx, curves[encoderValueParam]);
-   
+     encoderValue = encoderValue%50;
+     if(encoderValue == 0){
+       encoderValueParam +=1;
+       updateParam(tabIndx, curves[encoderValueParam%3]);
+     }
    break;
  
    }
