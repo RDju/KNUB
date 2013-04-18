@@ -58,6 +58,10 @@ volatile int lastEncoderValue = 0;
 volatile int encoderValue = 0;
 volatile int encoderValueParam = 0;
 volatile int encoderValueParamVal = 0;
+volatile int scaledEncoderValueParam = 0;
+
+
+uint8_t txtParamIndx;
 
 uint8_t lastMSB = 0;
 uint8_t lastLSB = 0;
@@ -68,11 +72,14 @@ Bounce bValid = Bounce(validBut, 5);
 int pageLevel = 0;
 int tabIndx = 0;
 int numTabs[] = {0, 2, 4};
-
+int8_t encoderDir;
 
 char* curves[] = {"L00", "L01", "L02"};
 char* params[] = {"DIST", "TONE", "VOL "};
 char*  prmVals[] = {"10", "50", "60"};
+
+int8_t  paramVals[] = {10, 50};
+
 
 int currentParam = 0;
 int currentCurve = 0;
@@ -111,7 +118,7 @@ void setup(){
   //paramPage();
     pageLevel =2;
     clearScreen();
-    paramPage(params[currentParam], prmVals[currentParam], prmVals[currentParam], curves[currentCurve]);
+    paramPage(params[currentParam], prmVals[0], prmVals[1], curves[currentCurve]);
 }
 
 void loop(){
@@ -147,32 +154,51 @@ if(encoderValue != lastValue){
  
    case 0:
 
-     encoderValue = encoderValue%50;
-     
-     if(encoderValue == 0){
-   
-       encoderValueParam += 1;
-       updateParam(tabIndx, params[encoderValueParam%3]);
-     
-       Serial.println(encoderValueParam);
-   }
+     scaledEncoderValueParam = encoderValue%25;
+     if(scaledEncoderValueParam == 0){
+       txtParamIndx += encoderDir;
+       updateParam(tabIndx, params[txtParamIndx%3]);
+     }
      
    break;
    case 1:
-     encoderValueParamVal = abs(encoderValue)%101;
-     itoa(encoderValueParamVal, valBuf, 10);
-     updateParam(tabIndx, valBuf);
+     if(paramVals[tabIndx - 1]>0 && paramVals[tabIndx -1]<100){
+       paramVals[tabIndx - 1] += encoderDir;
+       itoa(paramVals[tabIndx - 1], valBuf, 10);
+       updateParam(tabIndx, valBuf);
+     }else if(paramVals[tabIndx - 1]== 0 && encoderDir ==1){
+       paramVals[tabIndx - 1] += encoderDir;
+       itoa(paramVals[tabIndx - 1], valBuf, 10);
+       updateParam(tabIndx, valBuf);
+       
+     }else if(paramVals[tabIndx - 1]== 100 && encoderDir ==-1){
+       paramVals[tabIndx - 1] += encoderDir;
+       itoa(paramVals[tabIndx - 1], valBuf, 10);
+       updateParam(tabIndx, valBuf);
+     }
    break;
    case 2:
-     encoderValueParamVal = abs(encoderValue)%101;
-     itoa(encoderValueParamVal, valBuf, 10);
-     updateParam(tabIndx, valBuf);
+     if(paramVals[tabIndx - 1]>0 && paramVals[tabIndx -1]<100){
+       paramVals[tabIndx - 1] += encoderDir;
+       itoa(paramVals[tabIndx - 1], valBuf, 10);
+       updateParam(tabIndx, valBuf);
+     }else if(paramVals[tabIndx - 1]== 0 && encoderDir ==1){
+       paramVals[tabIndx - 1] += encoderDir;
+       itoa(paramVals[tabIndx - 1], valBuf, 10);
+       updateParam(tabIndx, valBuf);
+       
+     }else if(paramVals[tabIndx - 1]== 100 && encoderDir ==-1){
+       paramVals[tabIndx - 1] += encoderDir;
+       itoa(paramVals[tabIndx - 1], valBuf, 10);
+       updateParam(tabIndx, valBuf);
+     }
+     
    break;
    case 3:
-     encoderValue = encoderValue%50;
-     if(encoderValue == 0){
-       encoderValueParam +=1;
-       updateParam(tabIndx, curves[encoderValueParam%3]);
+     scaledEncoderValueParam = encoderValue%25;
+     if(scaledEncoderValueParam == 0){
+       txtParamIndx += encoderDir;
+       updateParam(tabIndx, curves[txtParamIndx%3]);
      }
    break;
  
@@ -182,11 +208,6 @@ if(encoderValue != lastValue){
 
 }
 void updateEncoder(){
-  
-  
-  
- 
- 
   uint8_t MSB = digitalRead(encoderPin1); //MSB = most significant bit
   uint8_t LSB = digitalRead(encoderPin2); //LSB = least significant bit
 
@@ -195,15 +216,12 @@ void updateEncoder(){
   
   if(sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011){
     
-    
+      encoderDir = 1;
       encoderValue ++;
-      
- 
   }
   if(sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000){
-
-      encoderValue --;
-     
+      encoderDir = -1;
+      encoderValue -- ;
   }
 
   lastEncoderValue = encoded; //store this value for next time
