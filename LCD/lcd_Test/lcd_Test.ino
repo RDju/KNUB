@@ -166,9 +166,9 @@ void loop(){
   //////////////////////
   
   //// tab button
-  if(bValid.update()){ 
+ bValid.update(); 
   
-    if(bValid.read()== LOW){
+    if(bValid.read()== LOW && bValid.duration() >1000){
       
       
       switch (pageLevel){
@@ -192,26 +192,41 @@ void loop(){
           Serial.println(pageLevel);
         break;
         case 3:
-        tabIndx++;
-        tabIndx = tabIndx%numTabs[pageLevel];
-        tab(effectTabs[tabIndx]);
-        Serial.print("TABINDX: ");
-        Serial.println(tabIndx);
-        customCursor(tabIndx);
-        break;
+          pageLevel ++;
+          time2ChangePage = true;
+          /*
+          
+           */
+       break;
         case 4:
-        tabIndx++;
-        tabIndx = tabIndx%numTabs[pageLevel];
-        tab(paramTabs[tabIndx]);
+        /*
         
-        customCursor(tabIndx);
-        
-        break;
-      
-      
+        */
+          break;
         }
-     }  
-  }
+       }else if(bValid.read()== LOW && bValid.duration() < 50){
+       
+         switch(pageLevel){
+         
+           case 3:
+             tabIndx++;
+             tabIndx = tabIndx%numTabs[pageLevel];
+             tab(effectTabs[tabIndx]);
+          
+          
+           break;
+           case 4:
+             tabIndx++;
+             tabIndx = tabIndx%numTabs[pageLevel];
+             tab(paramTabs[tabIndx]);
+        
+             customCursor(tabIndx);
+             
+           break;
+          }
+       }
+      
+
   //////back button
   if(bckValid.update()){
      
@@ -223,11 +238,9 @@ void loop(){
           Serial.println(pageLevel);
         time2ChangePage = true;
       }
-    
-    }
-  
-  
-  }
+     }
+   }
+}
   
   //////////////////////////////////////////////
   
@@ -291,7 +304,7 @@ if(encoderValue != lastValue){
    lastValue = encoderValue;
  }
 */
-}
+
 void updateEncoder(){
   uint8_t MSB = digitalRead(encoderPin1); //MSB = most significant bit
   uint8_t LSB = digitalRead(encoderPin2); //LSB = least significant bit
