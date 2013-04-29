@@ -36,10 +36,11 @@ SoftwareSerial lcd(rxPin, txPin);
 int fxIndx = 0;
 int memTabIndx = 0;
 
-char* effectsName[] = {"RAT", "HOLY", "WAH", "DELAY"};
+
 
 char* fxTabs[] = {"0,7", "1,7"};
 char* paramTabs[] = {"0,7", "1,1", "1,6", "1,11"};
+char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
 
 /////////////// UTILS ////////////////
@@ -142,7 +143,7 @@ void customCursor(int cusTab){
 
 ///////////// PAGES ///////////////////////////////////
 
-void productPage(){
+void productPage(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
  lcd.write("sc;");
  delay(10);
  lcd.write("sd0,0;");
@@ -159,7 +160,7 @@ void productPage(){
  delay(5);
 }
 
-void softwareVersion(){
+void softwareVersion(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
 
  lcd.write("sc;");
  delay(10);
@@ -171,7 +172,7 @@ void softwareVersion(){
  delay(5);
 }
 
-void presetPage(){
+void presetPage(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
 
  lcd.write("sc;");
  delay(5);
@@ -184,17 +185,24 @@ void presetPage(){
  lcd.write("sd0,7;");
 }
 
-void effectPage(){
+void effectPage(char effectName[], char state[], char dummy2[], char dummy3[]){
 
- lcd.write("sc;");
- delay(5);
+
  lcd.write("sd0,0;");
  delay(5);
  lcd.write("ssEffect:;");
  delay(5);
+ lcd.write("ss");
+ lcd.write(effectName);
+ lcd.write(";");
+ delay(5);
  lcd.write("sd1,0;");
  delay(5);
  lcd.write("ssActive:;");
+ delay(5);
+ lcd.write("ss");
+ lcd.write(state);
+ lcd.write(";");
  delay(5);
 }
 
@@ -253,7 +261,7 @@ void paramPage(char paramName[], char val1[], char val2[], char curveType[]){
 }
 
 
-void (*drawFuncs[5])() = {productPage, softwareVersion, presetPage, effectPage};
+void (*drawFuncs[5])(char dummy[], char dummy1[], char dummy2[], char dummy3[]) = {productPage, softwareVersion, presetPage, effectPage, paramPage};
 
 
 

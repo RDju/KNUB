@@ -73,9 +73,12 @@ Bounce bckValid = Bounce(backBut, 5);
 
 int pageLevel = 0;
 int tabIndx = 0;
-int numTabs[] = {0, 2, 4};
+uint8_t currFx = 0;
+uint8_t numTabs[] = {0, 0, 0, 2, 4};
 int8_t encoderDir;
 
+char* effectsName[] = {"RAT"};
+char* statesOfEffects[] = {"ON", "OFF"};
 char* curves[] = {"L00", "L01", "L02"};
 char* params[] = {"DIST", "TONE", "VOL "};
 char*  prmVals[] = {"10", "50", "60"};
@@ -111,37 +114,53 @@ void setup(){
  
   Serial.println(sizeof(params)/sizeof(char*));
   
-    (*drawFuncs[0])();
+    (*drawFuncs[0])("", "", "", "");
     delay(500);
-    (*drawFuncs[1])();
+    (*drawFuncs[1])("", "", "", "");
     delay(500);
     initMemDisp();
-    pageLevel = 0;
     clearScreen();
     //paramPage(params[currentParam], prmVals[0], prmVals[1], curves[currentCurve]);
-    (*drawFuncs[2])();
-
+    (*drawFuncs[2])("", "", "", "");
+    pageLevel = 2;
 }
 
 void loop(){
   ////dealing with pages 
   if(time2ChangePage){
-    /*
-    if(pageLevel == 1){
-      clearScreen();
-      effectPage();
-   }
-    
-   if(pageLevel == 2){
+   
+   switch(pageLevel){
+   
+     case 0:
      clearScreen();
-     paramPage(params[currentParam], prmVals[0], prmVals[1], curves[currentCurve]);
-     
-   }
-   */
-   
-   
-   (*drawFuncs[pageLevel + 2])();
+       (*drawFuncs[pageLevel])("", "", "", "");
+        time2ChangePage = false;
+     break;
+     case 1:  
+     clearScreen();
+        (*drawFuncs[pageLevel])("", "", "", "");
+        time2ChangePage = false;
+     break;
+     case 2:
+     clearScreen();
+         (*drawFuncs[pageLevel])("", "", "", "");
+          time2ChangePage = false;
+     break;
+     case 3:
+     clearScreen();
+         (*drawFuncs[pageLevel])(effectsName[currFx], statesOfEffects[currFx], "", "");
     time2ChangePage = false;
+     break;
+     case 4:
+     clearScreen();
+         (*drawFuncs[pageLevel])(params[currentParam], prmVals[0], prmVals[1], curves[currentCurve]);
+    time2ChangePage = false;
+     break;
+   
+   
+   }
+       
+   
   
   }
   //////////////////////
@@ -151,34 +170,57 @@ void loop(){
   
     if(bValid.read()== LOW){
       
-      if(pageLevel <2){
-      ///to be replace by switch-case
-      /*
-      tabIndx++;
-      tabIndx = tabIndx%numTabs[pageLevel];
-      tab(fxTabs[tabIndx]);
-      */
-      pageLevel ++;
-      time2ChangePage = true;
-     
-    }else if(pageLevel== 2){
       
+      switch (pageLevel){
+      
+        case 0:
+          pageLevel ++;
+          time2ChangePage = true;
+          Serial.print("UP: ");
+          Serial.println(pageLevel);
+        break;
+        case 1:
+          pageLevel ++;
+          time2ChangePage = true;
+           Serial.print("UP: ");
+          Serial.println(pageLevel);
+        break;
+        case 2:
+          pageLevel ++;
+          time2ChangePage = true;
+           Serial.print("UP: ");
+          Serial.println(pageLevel);
+        break;
+        case 3:
+        tabIndx++;
+        tabIndx = tabIndx%numTabs[pageLevel];
+        tab(effectTabs[tabIndx]);
+        Serial.print("TABINDX: ");
+        Serial.println(tabIndx);
+        customCursor(tabIndx);
+        break;
+        case 4:
         tabIndx++;
         tabIndx = tabIndx%numTabs[pageLevel];
         tab(paramTabs[tabIndx]);
         
         customCursor(tabIndx);
-       
-      }
-    }  
+        
+        break;
+      
+      
+        }
+     }  
   }
   //////back button
   if(bckValid.update()){
      
     if(bckValid.read()==LOW){
-      Serial.println("back!");
+      
       if(pageLevel > 0){
         pageLevel --;
+          Serial.print("DOWN : ");
+          Serial.println(pageLevel);
         time2ChangePage = true;
       }
     
