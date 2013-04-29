@@ -1,4 +1,15 @@
+/*
 
+for easy memeory management use struct do define what knub preset is :
+
+typedef struct knubPreset knubPreset;
+struct knubPreset {
+
+  ///
+
+
+};
+*/
 void writeSingleKnub(int device, unsigned int address, byte knubValue){
 
   

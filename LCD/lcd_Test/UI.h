@@ -1,3 +1,31 @@
+/*
+put all the drawing fuctions into an array of function pointers
+like :
+
+void fun1()
+{
+
+}
+void fun2()
+{
+
+}
+void fun3()
+{
+
+}
+void (*func_ptr[3]) = {fun1, fun2, fun3};
+
+then called like this : (*func_ptr[option])();
+
+
+
+
+
+
+
+*/
+
 #define txPin 6
 #define rxPin 5
 
@@ -40,6 +68,7 @@ void tab(char wichTab[]){
   lcd.write(";");
   delay(5);
 }
+
 
 
 void clearScreen(){
@@ -105,13 +134,6 @@ void customCursor(int cusTab){
      break;
   
   }
-  
-  
-  
-  
-  
-  
-
 }
 
 
@@ -231,7 +253,7 @@ void paramPage(char paramName[], char val1[], char val2[], char curveType[]){
 }
 
 
-
+void (*drawFuncs[5])() = {productPage, softwareVersion, presetPage, effectPage};
 
 
 

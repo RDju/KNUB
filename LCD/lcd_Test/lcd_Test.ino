@@ -60,6 +60,7 @@ volatile int encoderValueParam = 0;
 volatile int encoderValueParamVal = 0;
 volatile int scaledEncoderValueParam = 0;
 
+boolean time2ChangePage;
 
 uint8_t txtParamIndx;
 
@@ -68,6 +69,7 @@ uint8_t lastLSB = 0;
 
 char valBuf[4];
 Bounce bValid = Bounce(validBut, 5);
+Bounce bckValid = Bounce(backBut, 5);
 
 int pageLevel = 0;
 int tabIndx = 0;
@@ -80,14 +82,13 @@ char*  prmVals[] = {"10", "50", "60"};
 
 int8_t  paramVals[] = {10, 50};
 
-
 int currentParam = 0;
 int currentCurve = 0;
-
 
 boolean prmChange;
  
 void setup(){
+  
   lcd.begin(9600);
 
   initDisplay();
@@ -97,6 +98,8 @@ void setup(){
 
   pinMode(validBut, INPUT);
   digitalWrite(validBut, HIGH);
+  pinMode(backBut, INPUT);
+  digitalWrite(backBut, HIGH);
   
   digitalWrite(encoderPin1, HIGH); //turn pullup resistor on
   digitalWrite(encoderPin2, HIGH); //turn pullup resistor on
@@ -108,32 +111,57 @@ void setup(){
  
   Serial.println(sizeof(params)/sizeof(char*));
   
-    productPage();
+    (*drawFuncs[0])();
     delay(500);
-    softwareVersion();
+    (*drawFuncs[1])();
     delay(500);
     initMemDisp();
-   //presetPage();
-  //effectPage();
-  //paramPage();
-    pageLevel =2;
+    pageLevel = 0;
     clearScreen();
-    paramPage(params[currentParam], prmVals[0], prmVals[1], curves[currentCurve]);
+    //paramPage(params[currentParam], prmVals[0], prmVals[1], curves[currentCurve]);
+    (*drawFuncs[2])();
+
 }
 
 void loop(){
+  ////dealing with pages 
+  if(time2ChangePage){
+    /*
+    if(pageLevel == 1){
+      clearScreen();
+      effectPage();
+   }
+    
+   if(pageLevel == 2){
+     clearScreen();
+     paramPage(params[currentParam], prmVals[0], prmVals[1], curves[currentCurve]);
+     
+   }
+   */
+   
+   
+   (*drawFuncs[pageLevel + 2])();
+    time2ChangePage = false;
+  
+  }
+  //////////////////////
   
   //// tab button
   if(bValid.update()){ 
   
     if(bValid.read()== LOW){
       
-      if(pageLevel == 1){
+      if(pageLevel <2){
       ///to be replace by switch-case
+      /*
       tabIndx++;
       tabIndx = tabIndx%numTabs[pageLevel];
       tab(fxTabs[tabIndx]);
-      }else if(pageLevel== 2){
+      */
+      pageLevel ++;
+      time2ChangePage = true;
+     
+    }else if(pageLevel== 2){
       
         tabIndx++;
         tabIndx = tabIndx%numTabs[pageLevel];
@@ -144,10 +172,25 @@ void loop(){
       }
     }  
   }
+  //////back button
+  if(bckValid.update()){
+     
+    if(bckValid.read()==LOW){
+      Serial.println("back!");
+      if(pageLevel > 0){
+        pageLevel --;
+        time2ChangePage = true;
+      }
+    
+    }
+  
+  
+  }
+  
   //////////////////////////////////////////////
   
   /////// encoding Wheel/////////////////////
-
+/*
 if(encoderValue != lastValue){
  
  switch(tabIndx){
@@ -205,7 +248,7 @@ if(encoderValue != lastValue){
    }
    lastValue = encoderValue;
  }
-
+*/
 }
 void updateEncoder(){
   uint8_t MSB = digitalRead(encoderPin1); //MSB = most significant bit
