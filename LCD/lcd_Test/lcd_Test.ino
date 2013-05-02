@@ -106,7 +106,7 @@ int currentParam = 0;
 int currentCurve = 0;
 
 boolean prmChange;
- 
+
 void setup(){
   
   lcd.begin(9600);
@@ -210,6 +210,20 @@ void loop(){
           pageLevel ++;
           time2ChangePage = true;
           
+        }else if(bValid.read()==LOW && bValid.duration()>10 && bValid.duration()<50 ){
+               
+            
+                Serial.print("TAB: ");
+             Serial.println(tabIndx);
+             tabIndx++;
+             Serial.print("TAB: ");
+             Serial.println(tabIndx);
+             tabIndx = tabIndx%numTabs[pageLevel];
+             tab(effectTabs[tabIndx]);
+           
+              
+             
+        
         }   
            
        break;
