@@ -3,9 +3,6 @@
 #include <stdlib.h>
 #include "UI.h"
 /*
-
-
-
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -69,6 +66,9 @@ switch(pageLevel){
              Serial.println(tabIndx);
            break;
 */
+
+
+
 
 #define encoderPin1 2
 #define encoderPin2 3
@@ -246,66 +246,67 @@ void loop(){
   /////// encoding Wheel/////////////////////
 
 if(encoderValue != lastValue){
- 
-   if(pageLevel == 4){
-     switch(tabIndx){
- 
-   case 0:
-
-     scaledEncoderValueParam = encoderValue%25;
-     if(scaledEncoderValueParam == 0){
-       txtParamIndx += encoderDir;
-       updateParam(tabIndx, params[txtParamIndx%3]);
-     }
-     
-   break;
-   case 1:
-     if(paramVals[tabIndx - 1]>0 && paramVals[tabIndx -1]<100){
-       paramVals[tabIndx - 1] += encoderDir;
-       itoa(paramVals[tabIndx - 1], valBuf, 10);
-       updateParam(tabIndx, valBuf);
-     }else if(paramVals[tabIndx - 1]== 0 && encoderDir ==1){
-       paramVals[tabIndx - 1] += encoderDir;
-       itoa(paramVals[tabIndx - 1], valBuf, 10);
-       updateParam(tabIndx, valBuf);
+   switch(pageLevel){
+     case 4 :
+       switch(tabIndx){
+         case 0:
+            scaledEncoderValueParam = encoderValue%25;
+            if(scaledEncoderValueParam == 0){
+                 txtParamIndx += encoderDir;
+                 updateParam(tabIndx, params[txtParamIndx%3]);
+             }
+        break;
+        case 1:
+           ///MUST FIND A BETTER WAY OF DEALING WITH THIS
+           
+           if(paramVals[tabIndx - 1]>0 && paramVals[tabIndx -1]<100){
+               paramVals[tabIndx - 1] += encoderDir;
+               itoa(paramVals[tabIndx - 1], valBuf, 10);
+               updateParam(tabIndx, valBuf);
+          }else if(paramVals[tabIndx - 1]== 0 && encoderDir ==1){
+                   paramVals[tabIndx - 1] += encoderDir;
+                   itoa(paramVals[tabIndx - 1], valBuf, 10);
+                   updateParam(tabIndx, valBuf);
        
-     }else if(paramVals[tabIndx - 1]== 100 && encoderDir ==-1){
-       paramVals[tabIndx - 1] += encoderDir;
-       itoa(paramVals[tabIndx - 1], valBuf, 10);
-       updateParam(tabIndx, valBuf);
-     }
-   break;
-   case 2:
-     if(paramVals[tabIndx - 1]>0 && paramVals[tabIndx -1]<100){
-       paramVals[tabIndx - 1] += encoderDir;
-       itoa(paramVals[tabIndx - 1], valBuf, 10);
-       updateParam(tabIndx, valBuf);
-     }else if(paramVals[tabIndx - 1]== 0 && encoderDir ==1){
-       paramVals[tabIndx - 1] += encoderDir;
-       itoa(paramVals[tabIndx - 1], valBuf, 10);
-       updateParam(tabIndx, valBuf);
+          }else if(paramVals[tabIndx - 1]== 100 && encoderDir ==-1){
+                   paramVals[tabIndx - 1] += encoderDir;
+                   itoa(paramVals[tabIndx - 1], valBuf, 10);
+                   updateParam(tabIndx, valBuf);
+          }
+       break;
+       case 2:
+           if(paramVals[tabIndx - 1]>0 && paramVals[tabIndx -1]<100){
+              paramVals[tabIndx - 1] += encoderDir;
+              itoa(paramVals[tabIndx - 1], valBuf, 10);
+              updateParam(tabIndx, valBuf);
+          }else if(paramVals[tabIndx - 1]== 0 && encoderDir ==1){
+                   paramVals[tabIndx - 1] += encoderDir;
+                   itoa(paramVals[tabIndx - 1], valBuf, 10);
+                   updateParam(tabIndx, valBuf);
        
-     }else if(paramVals[tabIndx - 1]== 100 && encoderDir ==-1){
-       paramVals[tabIndx - 1] += encoderDir;
-       itoa(paramVals[tabIndx - 1], valBuf, 10);
-       updateParam(tabIndx, valBuf);
+          }else if(paramVals[tabIndx - 1]== 100 && encoderDir ==-1){
+                   paramVals[tabIndx - 1] += encoderDir;
+                   itoa(paramVals[tabIndx - 1], valBuf, 10);
+                   updateParam(tabIndx, valBuf);
+         }
+       break;
+       case 3:
+           scaledEncoderValueParam = encoderValue%25;
+           if(scaledEncoderValueParam == 0){
+              txtParamIndx += encoderDir;
+              updateParam(tabIndx, curves[txtParamIndx%3]);
+           }
+       break;
      }
-     
-   break;
+     break;
    case 3:
-     scaledEncoderValueParam = encoderValue%25;
-     if(scaledEncoderValueParam == 0){
-       txtParamIndx += encoderDir;
-       updateParam(tabIndx, curves[txtParamIndx%3]);
-     }
    break;
- 
    }
  }
    lastValue = encoderValue;
  
   }
-}
+
 void updateEncoder(){
   uint8_t MSB = digitalRead(encoderPin1); //MSB = most significant bit
   uint8_t LSB = digitalRead(encoderPin2); //LSB = least significant bit
