@@ -108,10 +108,11 @@ char* curves[] = {"L00", "L01", "L02"};
 char* params[] = {"DIST", "TONE", "VOL "};
 char*  prmVals[] = {"10", "50", "60"};
 
-int8_t  paramVals[] = {10, 50};
+uint8_t  paramVals[] = {10, 50};
+uint8_t  currentPreset = 1;
 
-int currentParam = 0;
-int currentCurve = 0;
+uint8_t currentParam = 0;
+uint8_t currentCurve = 0;
 
 boolean prmChange;
 
@@ -197,7 +198,7 @@ void loop(){
          }
         break;
         case 2:
-          if(bValid.click == 1){
+          if(bValid.click == 2){
             pageLevel ++;
             time2ChangePage = true;
           }
@@ -317,6 +318,20 @@ if(encoderValue != lastValue){
             }
         break;
       }
+    break;
+    case 2:
+        if(encoderDir == 1){
+        
+          currentPreset += encoderDir;
+          itoa(currentPreset, valBuf, 10);
+          updatePreset(valBuf);
+        }else if(encoderDir == -1 && currentPreset > 0){
+        
+          currentPreset += encoderDir;
+          itoa(currentPreset, valBuf, 10);
+          updatePreset(valBuf);
+        }
+    break;
    }
  }
    lastValue = encoderValue;

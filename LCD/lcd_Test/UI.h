@@ -116,6 +116,21 @@ void updatePedalState(char state[]){
   delay(longDel);
 }
 
+void updatePreset(char preset[]){
+
+
+  lcd.write("sd0,7;");
+  delay(longDel);
+  lcd.write("ss");
+  lcd.write(preset);
+  lcd.write(" ");
+  lcd.write(" ");
+  lcd.write(";");
+  delay(longDel);
+
+
+}
+
 void customCursor(uint8_t cusTab, uint8_t pageLev){
   
   
@@ -223,17 +238,18 @@ void softwareVersion(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
  delay(longDel);
 }
 
-void presetPage(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
+void presetPage(char presetNum[], char dummy1[], char dummy2[], char dummy3[]){
 
  lcd.write("sc;");
  delay(longDel);
  lcd.write("sd0,0;");
  delay(longDel);
+ lcd.write("ssPRESET:;");
+ delay(longDel);
  lcd.write("ss");
- lcd.print("PRESET:    ");
+ lcd.write(presetNum);
  lcd.write(";");
  delay(longDel);
- lcd.write("sd0,7;");
 }
 
 void effectPage(char effectName[], char state[], char dummy2[], char dummy3[]){
