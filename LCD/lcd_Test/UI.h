@@ -1,23 +1,5 @@
-/*
-put all the drawing fuctions into an array of function pointers
-like :
 
-void fun1()
-{
 
-}
-void fun2()
-{
-
-}
-void fun3()
-{
-
-}
-void (*func_ptr[3]) = {fun1, fun2, fun3};
-
-then called like this : (*func_ptr[option])();
-*/
 #define shortDel 2
 #define longDel 5
 #define txPin 6
@@ -140,12 +122,24 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
     switch(cusTab){
   
       case 0:
-        lcd.write("sd1,10;");
+      lcd.write("sd1,10;");
+      delay(longDel);
+      lcd.write("ss ;");
+      delay(longDel);
+        lcd.write("sd0,5;");
         delay(longDel);
         lcd.write("ss ;");
         delay(longDel);
+        lcd.write("ss>;");
+        delay(longDel);
+        
+        
       break;
       case 1:
+        lcd.write("sd0,5;");
+        delay(longDel);
+        lcd.write("ss :;");
+        delay(longDel);
         lcd.write("sd1,0;");
         delay(longDel);
         lcd.write("ss>;");

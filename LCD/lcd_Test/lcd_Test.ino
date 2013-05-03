@@ -163,12 +163,18 @@ void loop(){
      break;
      case 2:
      clearScreen();
+         
          (*drawFuncs[pageLevel])("", "", "", "");
+         itoa(currentPreset, valBuf, 10);
+         updatePreset(valBuf);
           time2ChangePage = false;
      break;
      case 3:
      clearScreen();
          (*drawFuncs[pageLevel])(effectsName[currFx], statesOfEffects[currFx], "", "");
+         tabIndx = tabIndx%numTabs[pageLevel];
+             tab(effectTabs[tabIndx]);
+             customCursor(tabIndx,pageLevel);
     time2ChangePage = false;
      break;
      case 4:
