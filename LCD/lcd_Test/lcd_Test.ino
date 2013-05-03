@@ -103,7 +103,7 @@ uint8_t numTabs[] = {0, 0, 0, 2, 4};
 int8_t encoderDir;
 
 char* effectsName[] = {"RAT", "HOLY", "DELAY"};
-char* statesOfEffects[] = {"ON", "OFF", "ON"};
+char* statesOfEffects[] = {"OFF", "ON"};
 char* curves[] = {"L00", "L01", "L02"};
 char* params[] = {"DIST", "TONE", "VOL "};
 char*  prmVals[] = {"10", "50", "60"};
@@ -204,7 +204,7 @@ void loop(){
         break;
         case 3:
         
-        if(bValid.click == 2){
+        if(bValid.click == 2 && tabIndx == 0){
           pageLevel ++;
           time2ChangePage = true;
           
@@ -300,12 +300,27 @@ if(encoderValue != lastValue){
      }
      break;
    case 3:
-   break;
+      switch(tabIndx){
+       
+        case 0:
+            scaledEncoderValueParam = encoderValue%25;
+            if(scaledEncoderValueParam == 0){
+                 txtParamIndx += encoderDir;
+                 updatePedalName(effectsName[txtParamIndx%3]);
+            }
+        break;
+        case 1:
+            if(encoderDir == 1){
+                updatePedalState(statesOfEffects[encoderDir]);
+            }else if(encoderDir == -1){
+                updatePedalState(statesOfEffects[0]);
+            }
+        break;
+      }
    }
  }
    lastValue = encoderValue;
- 
-  }
+}
 
 void updateEncoder(){
   uint8_t MSB = digitalRead(encoderPin1); //MSB = most significant bit

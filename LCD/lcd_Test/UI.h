@@ -95,13 +95,25 @@ void updatePedalName(char pName[]){
 
   lcd.write("sd0,7;");
   delay(longDel);
+  
+  delay(longDel);
   lcd.write("ss");
   lcd.write(pName);
+  lcd.write(" ");
+  lcd.write(" ");
   lcd.write(";");
   delay(longDel);
+}
 
+void updatePedalState(char state[]){
 
-
+  lcd.write("sd1,7;");
+  delay(longDel);
+  lcd.write("ss");
+  lcd.write(state);
+  lcd.write(" ");
+  lcd.write(";");
+  delay(longDel);
 }
 
 void customCursor(uint8_t cusTab, uint8_t pageLev){
