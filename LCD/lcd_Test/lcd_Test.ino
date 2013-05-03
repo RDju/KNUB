@@ -1,8 +1,14 @@
-#include <Bounce.h>
+#include <ClickButton.h>
 #include <SoftwareSerial.h>
 #include <stdlib.h>
 #include "UI.h"
 /*
+
+
+
+!!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 1. Clean the Screen
 CMD : sc  Parameter : Null;
 Example : sc; [ Screen clean ]
@@ -85,8 +91,10 @@ uint8_t lastMSB = 0;
 uint8_t lastLSB = 0;
 
 char valBuf[4];
-Bounce bValid = Bounce(validBut, 5);
-Bounce bckValid = Bounce(backBut, 5);
+
+ClickButton bValid(validBut, LOW, CLICKBTN_PULLUP);
+ClickButton bckValid(backBut, LOW, CLICKBTN_PULLUP);
+
 
 int pageLevel = 0;
 int tabIndx = 0;
@@ -115,15 +123,10 @@ void setup(){
    
   pinMode(encoderPin1, INPUT); 
   pinMode(encoderPin2, INPUT);
-
-  pinMode(validBut, INPUT);
-  digitalWrite(validBut, HIGH);
-  pinMode(backBut, INPUT);
-  digitalWrite(backBut, HIGH);
-  
-  digitalWrite(encoderPin1, HIGH); //turn pullup resistor on
-  digitalWrite(encoderPin2, HIGH); //turn pullup resistor on
-
+  digitalWrite(encoderPin1, HIGH);
+  digitalWrite(encoderPin2, HIGH);
+ 
+ 
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
@@ -143,11 +146,10 @@ void setup(){
 }
 
 void loop(){
+  
   ////dealing with pages 
   if(time2ChangePage){
-   
    switch(pageLevel){
-   
      case 0:
      clearScreen();
        (*drawFuncs[pageLevel])("", "", "", "");
@@ -173,79 +175,66 @@ void loop(){
          (*drawFuncs[pageLevel])(params[currentParam], prmVals[0], prmVals[1], curves[currentCurve]);
     time2ChangePage = false;
      break;
-   
-   
    }
-       
-   
-  
   }
   //////////////////////
   
   //// tab button
-  bValid.update();
+  bValid.Update();
   
+  if(bValid.click !=0){
     switch (pageLevel){
-      
         case 0:
-        if(bValid.read()== LOW ){
+          if(bValid.click == 1){     
           pageLevel ++;
           time2ChangePage = true;
-        }
+          }
         break;
         case 1:
-        if(bValid.read()== LOW ){
+         if(bValid.click == 1){
           pageLevel ++;
           time2ChangePage = true;
-        }
+         }
         break;
         case 2:
-        if(bValid.read()== LOW ){
-          pageLevel ++;
-          time2ChangePage = true;
-        }  
+          if(bValid.click == 1){
+            pageLevel ++;
+            time2ChangePage = true;
+          }
         break;
         case 3:
-        if(bValid.read()== LOW && bValid.duration() > 500){
+        
+        if(bValid.click == 2){
           pageLevel ++;
           time2ChangePage = true;
           
-        }else if(bValid.read()==LOW && bValid.duration()>10 && bValid.duration()<50 ){
-               
-            
-                Serial.print("TAB: ");
-             Serial.println(tabIndx);
+        }else if(bValid.click == 1){
              tabIndx++;
-             Serial.print("TAB: ");
-             Serial.println(tabIndx);
              tabIndx = tabIndx%numTabs[pageLevel];
              tab(effectTabs[tabIndx]);
-           
-              
-             
-        
+             customCursor(tabIndx,pageLevel);
         }   
            
        break;
         case 4:
-        /*
+          if(bValid.click == 1){
+          
+             tabIndx++;
+             tabIndx = tabIndx%numTabs[pageLevel];
+             tab(paramTabs[tabIndx]);
         
-        */
-          break;
+             customCursor(tabIndx, pageLevel);
         }
-     
-       
- 
-
+        break;
+        }
+    }
   //////back button
-  if(bckValid.update()){
+  if(bckValid.Update()){
      
-    if(bckValid.read()==LOW){
+    if(bckValid.click==1){
       
       if(pageLevel > 2){
         pageLevel --;
-          Serial.print("DOWN : ");
-          Serial.println(pageLevel);
         time2ChangePage = true;
       }
      }
@@ -258,8 +247,8 @@ void loop(){
 
 if(encoderValue != lastValue){
  
- if(pageLevel == 4){
- switch(tabIndx){
+   if(pageLevel == 4){
+     switch(tabIndx){
  
    case 0:
 
@@ -328,10 +317,12 @@ void updateEncoder(){
     
       encoderDir = 1;
       encoderValue ++;
+    
   }
   if(sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000){
       encoderDir = -1;
       encoderValue -- ;
+   
   }
 
   lastEncoderValue = encoded; //store this value for next time

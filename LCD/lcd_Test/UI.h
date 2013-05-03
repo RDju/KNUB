@@ -80,7 +80,7 @@ void clearScreen(){
 }
 
 
-void updateParam(int prmIndx, char newVal[]){
+void updateParam(uint8_t prmIndx, char newVal[]){
   
   
   lcd.write("sd");
@@ -97,45 +97,77 @@ void updateParam(int prmIndx, char newVal[]){
 }
 
 
-void customCursor(int cusTab){
+void customCursor(uint8_t cusTab, uint8_t pageLev){
   
-  switch(cusTab){
   
-    case 0:
-      lcd.write("sd1,10;");
-      delay(5);
-      lcd.write("ss ;");
+  switch(pageLev){
+  
+    case 4:
+    switch(cusTab){
+  
+      case 0:
+        lcd.write("sd1,10;");
+        delay(5);
+        lcd.write("ss ;");
+        delay(5);
+      break;
+      case 1:
+        lcd.write("sd1,0;");
+        delay(5);
+        lcd.write("ss>;");
       delay(5);
       break;
-    case 1:
-      lcd.write("sd1,0;");
+      case 2:
+        lcd.write("sd1,0;");
+        delay(5);
+        lcd.write("ss ;");
+        delay(5);
+        lcd.write("sd1,5;");
+        delay(5);
+        lcd.write("ss>;");
       delay(5);
-      lcd.write("ss>;");
-      delay(5);
-    break;
-    case 2:
-      lcd.write("sd1,0;");
-      delay(5);
-      lcd.write("ss ;");
-      delay(5);
-      lcd.write("sd1,5;");
-      delay(5);
-      lcd.write("ss>;");
-      delay(5);
-    break;
-    case 3:
-      lcd.write("sd1,5;");
-      delay(5);
-      lcd.write("ss ;");
-      delay(5);
-      lcd.write("sd1,10;");
-      delay(5);
-      lcd.write("ss>;");
+      break;
+      case 3:
+        lcd.write("sd1,5;");
+        delay(5);
+        lcd.write("ss ;");
+        delay(5);
+        lcd.write("sd1,10;");
+        delay(5);
+        lcd.write("ss>;");
       delay(5);
      break;
+    }
+    break;
+    case 3:
+      switch(cusTab){
   
+      case 0:
+        lcd.write("sd0,6;");
+        delay(5);
+        lcd.write("ss>;");
+        delay(5);
+        lcd.write("sd1,6;");
+        delay(5);
+        lcd.write("ss:;");
+      delay(5);
+      break;
+      case 1:
+        lcd.write("sd1,6;");
+        delay(5);
+        lcd.write("ss>;");
+        delay(5);
+        lcd.write("sd0,6;");
+        delay(5);
+        lcd.write("ss:;");
+      delay(5);
+      break;
+    }
+    break;
   }
 }
+
+
 
 
 ///////////////////////////////////////////////////////
