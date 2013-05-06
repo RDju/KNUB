@@ -1,7 +1,9 @@
 #include <ClickButton.h>
 #include <SoftwareSerial.h>
 #include <stdlib.h>
+#include <Wire.h>
 #include "UI.h"
+#include "memory.h"
 /*
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
 
@@ -45,26 +47,6 @@ Example:
 sm0; [ shift left ]
 sm1; [ shift right ]
 
-TX 2
-RX 4
-switch(pageLevel){
-         
-           case 3:
-             tabIndx++;
-             tabIndx = tabIndx%numTabs[pageLevel];
-             tab(effectTabs[tabIndx]);
-          
-          
-           break;
-           case 4:
-             tabIndx++;
-             tabIndx = tabIndx%numTabs[pageLevel];
-             tab(paramTabs[tabIndx]);
-        
-             customCursor(tabIndx);
-             
-             Serial.println(tabIndx);
-           break;
 */
 
 
@@ -102,11 +84,6 @@ uint8_t currFx = 0;
 uint8_t numTabs[] = {0, 0, 0, 2, 4};
 int8_t encoderDir;
 
-char* effectsName[] = {"RAT", "HOLY", "DELAY"};
-char* statesOfEffects[] = {"OFF", "ON"};
-char* curves[] = {"L00", "L01", "L02"};
-char* params[] = {"DIST", "TONE", "VOL "};
-char*  prmVals[] = {"10", "50", "60"};
 
 uint8_t  paramVals[] = {10, 50};
 uint8_t  currentPreset = 1;
@@ -115,6 +92,21 @@ uint8_t currentParam = 0;
 uint8_t currentCurve = 0;
 
 boolean prmChange;
+
+aKnubPreset presets[2] = {
+
+  "RIFF",
+  3,
+  {{"RAT", 3, {{"DIST", 5, 127, 1}, {"TONE", 64, 64, 1}, {"VOL", 70, 70, 1}}}, {"HOLY", 1, {{"BLEND", 0, 127, 1}}}, {"DELAY", 2, {{"DELAY", 15, 56, 1}, {"FEED", 64, 127, 1}}}},
+  
+  "SOLO",
+  3,
+  {{"RAT", 3, {{"DIST", 127, 127, 1}, {"TONE", 110, 64, 1}, {"VOL", 30, 70, 1}}}, {"HOLY", 1, {{"BLEND", 0, 127, 1}}}, {"DELAY", 2, {{"DELAY", 0, 0, 1}, {"FEED", 0, 0, 1}}}}
+
+};
+
+
+
 
 void setup(){
   
@@ -133,7 +125,7 @@ void setup(){
   
   Serial.begin(9600);
  
-  Serial.println(sizeof(params)/sizeof(char*));
+
   
     (*drawFuncs[0])("", "", "", "");
     delay(500);

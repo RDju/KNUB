@@ -1,15 +1,7 @@
-/*
-
-for easy memeory management use struct do define what knub preset is :
-
-typedef struct knubPreset knubPreset;
-struct knubPreset {
-
-  ///
 
 
-};
-*/
+
+
 struct aKnub{
   char name[8];
   byte value1;
@@ -22,7 +14,6 @@ struct fxPedal{
 
   char name[8];
   byte numKnub;
-  char* knubsNames[4];
   aKnub knubs[4];
 };
 typedef struct fxPedal fxPedal;
@@ -32,7 +23,7 @@ struct aKnubPreset{
   
   char name[8];
   byte numFxPed;
-  char* fxPedalsNames[8]; 
+  
   fxPedal fxPedals[8];
 };
 typedef struct aKnubPreset aKnubPreset;
