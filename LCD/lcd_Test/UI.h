@@ -98,7 +98,7 @@ void updatePedalState(char state[]){
   delay(longDel);
 }
 
-void updatePreset(char preset[]){
+void updatePreset(char preset[], char pName[]){
 
 
   lcd.write("sd0,7;");
@@ -109,7 +109,14 @@ void updatePreset(char preset[]){
   lcd.write(" ");
   lcd.write(";");
   delay(longDel);
-
+  lcd.write("sd1,0;");
+  delay(longDel);
+  lcd.write("ss");
+  lcd.write(pName);
+  lcd.write(" ");
+  lcd.write(" ");
+  lcd.write(";");
+  delay(longDel);
 
 }
 
