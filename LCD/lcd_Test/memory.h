@@ -13,7 +13,9 @@ typedef struct aKnub aKnub;
 struct fxPedal{
 
   char name[8];
+  
   byte numKnub;
+  boolean isOn;
   aKnub knubs[4];
 };
 typedef struct fxPedal fxPedal;
