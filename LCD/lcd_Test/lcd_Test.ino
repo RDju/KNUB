@@ -328,12 +328,12 @@ if(encoderValue != lastValue){
         
           currentPreset += encoderDir;
           itoa(currentPreset, valBuf, 10);
-          updatePreset(valBuf);
+          updatePreset(valBuf, presets[currentPreset].name);
         }else if(encoderDir == -1 && currentPreset > 0){
         
           currentPreset += encoderDir;
           itoa(currentPreset, valBuf, 10);
-          updatePreset(valBuf);
+          updatePreset(valBuf, presets[currentPreset].name);
         }
     break;
    }
