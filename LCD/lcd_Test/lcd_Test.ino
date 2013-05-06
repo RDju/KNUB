@@ -258,7 +258,7 @@ if(encoderValue != lastValue){
             scaledEncoderValueParam = encoderValue%25;
             if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
-                 updateParam(tabIndx, params[txtParamIndx%3]);
+                 updateParam(tabIndx, presets[currentPreset].fxPedals[currentFx].knubs[txtParamIndx%3].name);
              }
         break;
         case 1:
@@ -299,7 +299,7 @@ if(encoderValue != lastValue){
            scaledEncoderValueParam = encoderValue%25;
            if(scaledEncoderValueParam == 0){
               txtParamIndx += encoderDir;
-              updateParam(tabIndx, curves[txtParamIndx%3]);
+              //updateParam(tabIndx, curves[txtParamIndx%3]);
            }
        break;
      }
@@ -311,14 +311,14 @@ if(encoderValue != lastValue){
             scaledEncoderValueParam = encoderValue%25;
             if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
-                 updatePedalName(effectsName[txtParamIndx%3]);
+                 updatePedalName(presets[currentPreset].fxPedals[txtParamIndx%3].name);
             }
         break;
         case 1:
             if(encoderDir == 1){
-                updatePedalState(statesOfEffects[encoderDir]);
+                updatePedalState(fxState[encoderDir]);
             }else if(encoderDir == -1){
-                updatePedalState(statesOfEffects[0]);
+                updatePedalState(fxState[0]);
             }
         break;
       }
