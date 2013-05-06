@@ -50,8 +50,6 @@ sm1; [ shift right ]
 */
 
 
-
-
 #define encoderPin1 2
 #define encoderPin2 3
 
@@ -86,23 +84,27 @@ int8_t encoderDir;
 
 
 uint8_t  paramVals[] = {10, 50};
-uint8_t  currentPreset = 0;
-uint8_t currentFx;
 
+uint8_t  currentPreset = 0;
+uint8_t currentFx = 0;
 uint8_t currentParam = 0;
+
 uint8_t currentCurve = 0;
 
 boolean prmChange;
+
+char* fxState[2] = {"OFF", "ON"};
+
 
 aKnubPreset presets[2] = {
 
   "RIFF",
   3,
-  {{"RAT", 3, true, {{"DIST", 5, 127, 1}, {"TONE", 64, 64, 1}, {"VOL", 70, 70, 1}}}, {"HOLY", 1, true, {{"BLEND", 0, 127, 1}}}, {"DELAY", 2, true, {{"DELAY", 15, 56, 1}, {"FEED", 64, 127, 1}}}},
+  {{"RAT", 3, 1, {{"DIST", 5, 127}, {"TONE", 64, 64}, {"VOL", 70, 70}}}, {"HOLY", 1, 1, {{"BLEND", 0, 127}}}, {"DELAY", 2, 1, {{"DELAY", 15, 56}, {"FEED", 64, 127}}}},
   
   "SOLO",
   3,
-  {{"RAT", 3, true, {{"DIST", 127, 127, 1}, {"TONE", 110, 64, 1}, {"VOL", 30, 70, 1}}}, {"HOLY", 1, false, {{"BLEND", 0, 127, 1}}}, {"DELAY", 2, false, {{"DELAY", 0, 0, 1}, {"FEED", 0, 0, 1}}}}
+  {{"RAT", 3, 1, {{"DIST", 127, 127}, {"TONE", 110, 64}, {"VOL", 30, 70}}}, {"HOLY", 1, 0, {{"BLEND", 0, 127}}}, {"DELAY", 2, 0, {{"DELAY", 0, 0}, {"FEED", 0, 0}}}}
 
 };
 
@@ -164,7 +166,7 @@ void loop(){
      break;
      case 3:
      clearScreen();
-         (*drawFuncs[pageLevel])(presets[currentPreset].fxPedals[currentFx].name, presets[currentPreset].fxPedals[currentFx].isOn, "", "");
+         (*drawFuncs[pageLevel])(presets[currentPreset].fxPedals[currentFx].name, fxState[presets[currentPreset].fxPedals[currentFx].isOn], "", "");
          tabIndx = tabIndx%numTabs[pageLevel];
              tab(effectTabs[tabIndx]);
              customCursor(tabIndx,pageLevel);
@@ -173,9 +175,9 @@ void loop(){
      case 4:
      clearScreen();
          (*drawFuncs[pageLevel])(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].name, 
-                                 presets[currentPreset].fxPedals[currentFx].knubs[currentParam].value1, 
-                                 presets[currentPreset].fxPedals[currentFx].knubs[currentParam].value2, 
-                                 presets[currentPreset].fxPedals[currentFx].knubs[currentParam].curveType);
+                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].value1), 
+                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].value2),
+                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].curveType));
     time2ChangePage = false;
      break;
    }

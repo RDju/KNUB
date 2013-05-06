@@ -4,9 +4,9 @@
 
 struct aKnub{
   char name[8];
-  byte value1;
-  byte value2;
-  byte curveType;
+  uint8_t value1;
+  uint8_t value2;
+  uint8_t curveType;
 };
 typedef struct aKnub aKnub;
 
@@ -14,8 +14,8 @@ struct fxPedal{
 
   char name[8];
   
-  byte numKnub;
-  boolean isOn;
+  uint8_t numKnub;
+  uint8_t isOn;
   aKnub knubs[4];
 };
 typedef struct fxPedal fxPedal;
@@ -24,7 +24,7 @@ typedef struct fxPedal fxPedal;
 struct aKnubPreset{
   
   char name[8];
-  byte numFxPed;
+  uint8_t numFxPed;
   
   fxPedal fxPedals[8];
 };

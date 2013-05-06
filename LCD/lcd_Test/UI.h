@@ -12,7 +12,7 @@ SoftwareSerial lcd(rxPin, txPin);
 int fxIndx = 0;
 int memTabIndx = 0;
 
-
+char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
 char* paramTabs[] = {"0,7", "1,1", "1,6", "1,11"};
@@ -202,7 +202,13 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
   }
 }
 
+char* toString(uint8_t val){
 
+  itoa(val, tmpStr, 10);
+  return tmpStr;
+
+
+}
 
 
 ///////////////////////////////////////////////////////
