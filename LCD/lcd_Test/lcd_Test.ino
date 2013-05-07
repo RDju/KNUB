@@ -172,8 +172,9 @@ void loop(){
           time2ChangePage = false;
      break;
      case 3:
-     tabIndx = 0;
+     
      clearScreen();
+     tabIndx = 0;
          (*drawFuncs[pageLevel])(presets[currentPreset].fxPedals[currentFx].name, fxState[presets[currentPreset].fxPedals[currentFx].isOn], "", "");
          tabIndx = tabIndx%numTabs[pageLevel];
              tab(effectTabs[tabIndx]);
@@ -237,11 +238,20 @@ void loop(){
           time2ChangePage = true;
           
         }else if(bValid.click == 1){
+             /*
              tabIndx++;
              tabIndx = tabIndx%numTabs[pageLevel];
              tab(effectTabs[tabIndx]);
              customCursor(tabIndx,pageLevel);
-        }   
+             */ 
+            if(presets[currentPreset].fxPedals[currentFx].isOn == 1){
+                presets[currentPreset].fxPedals[currentFx].isOn = 0;
+                updatePedalState(fxState[0]);
+            }else if(presets[currentPreset].fxPedals[currentFx].isOn == 0){
+                presets[currentPreset].fxPedals[currentFx].isOn = 1;  
+                updatePedalState(fxState[1]);
+            } 
+      }   
            
        break;
         case 4:
@@ -378,11 +388,7 @@ if(encoderValue != lastValue){
                }
         break;
         case 1:
-            if(encoderDir == 1){
-                updatePedalState(fxState[encoderDir]);
-            }else if(encoderDir == -1){
-                updatePedalState(fxState[0]);
-            }
+            
         break;
       }
     break;
