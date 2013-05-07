@@ -352,16 +352,19 @@ if(encoderValue != lastValue){
       }
     break;
     case 2:
-        if(encoderDir == 1){
-        
-          currentPreset += encoderDir;
-          itoa(currentPreset, valBuf, 10);
-          updatePreset(valBuf, presets[currentPreset].name);
+    
+        scaledEncoderValueParam = encoderValue%25;
+        if(scaledEncoderValueParam == 0){
+            if(encoderDir == 1){     
+                  currentPreset += encoderDir;
+                 itoa(currentPreset, valBuf, 10);
+                 updatePreset(valBuf, presets[currentPreset].name);
         }else if(encoderDir == -1 && currentPreset > 0){
         
           currentPreset += encoderDir;
           itoa(currentPreset, valBuf, 10);
           updatePreset(valBuf, presets[currentPreset].name);
+          }
         }
     break;
    }
