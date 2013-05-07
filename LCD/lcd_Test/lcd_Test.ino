@@ -7,6 +7,9 @@
 /*
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
 
+
+change the way params are updated via the encoder use function to wich you'll pass pointer so as to save up RAM space.
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 1. Clean the Screen
 CMD : sc  Parameter : Null;
@@ -85,9 +88,11 @@ int8_t encoderDir;
 
 uint8_t  paramVals[] = {10, 50};
 
-uint8_t  currentPreset = 0;
+uint8_t currentPreset = 0;
 uint8_t currentFx = 0;
 uint8_t currentParam = 0;
+
+uint8_t currentParamVal;
 
 uint8_t currentCurve = 0;
 
@@ -100,11 +105,11 @@ aKnubPreset presets[2] = {
 
   "RIFF",
   3,
-  {{"RAT", 3, 1, {{"DIST", {5, 127, 1}}, {"TONE", {64, 64, 1}}, {"VOL", {70, 70, 1}}}}, {"HOLY", 1, 0, {{"BLEND", {0, 127, 1}}}}, {"DELAY", 2, 1, {{"DELAY", {15, 56, 1}}, {"FEED", {64, 127, 1}}}}},
+  {{"RAT", 3, 1, {{"DIST", {5, 100, 1}}, {"TONE", {64, 64, 1}}, {"VOL", {70, 70, 1}}}}, {"HOLY", 1, 0, {{"BLEND", {0, 100, 1}}}}, {"DELAY", 2, 1, {{"DELAY", {15, 56, 1}}, {"FEED", {64, 100, 1}}}}},
   
   "SOLO",
   3,
-  {{"RAT", 3, 1, {{"DIST", {127, 127, 1}}, {"TONE", {110, 64, 1}}, {"VOL", {30, 70, 1}}}}, {"HOLY", 1, 0, {{"BLEND", {0, 127, 1}}}}, {"DELAY", 2, 0, {{"DELAY", {0, 0, 1}}, {"FEED", {0, 0, 1}}}}}
+  {{"RAT", 3, 1, {{"DIST", {100, 100, 1}}, {"TONE", {100, 64, 1}}, {"VOL", {30, 70, 1}}}}, {"HOLY", 1, 0, {{"BLEND", {0, 100, 1}}}}, {"DELAY", 2, 0, {{"DELAY", {0, 10, 1}}, {"FEED", {10, 0, 1}}}}}
 
 };
 
@@ -281,38 +286,52 @@ if(encoderValue != lastValue){
         case 1:
            ///MUST FIND A BETTER WAY OF DEALING WITH THIS
            
-           if(paramVals[tabIndx - 1]>0 && paramVals[tabIndx -1]<100){
-               paramVals[tabIndx - 1] += encoderDir;
-               itoa(paramVals[tabIndx - 1], valBuf, 10);
+           currentParamVal = presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0];
+           
+           if(currentParamVal>0 && currentParamVal<100){
+               currentParamVal += encoderDir;
+               
+               Serial.println(currentParamVal);
+               itoa(currentParamVal, valBuf, 10);
                updateParam(tabIndx, valBuf);
-          }else if(paramVals[tabIndx - 1]== 0 && encoderDir ==1){
-                   paramVals[tabIndx - 1] += encoderDir;
-                   itoa(paramVals[tabIndx - 1], valBuf, 10);
+               presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0] = currentParamVal;
+          }else if(currentParamVal== 0 && encoderDir ==1){
+                   currentParamVal += encoderDir;
+                   itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
-       
-          }else if(paramVals[tabIndx - 1]== 100 && encoderDir ==-1){
-                   paramVals[tabIndx - 1] += encoderDir;
-                   itoa(paramVals[tabIndx - 1], valBuf, 10);
+                   presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0] = currentParamVal;
+          }else if(currentParamVal== 100 && encoderDir ==-1){
+                   currentParamVal += encoderDir;
+                   itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
+                   presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0] = currentParamVal;
           }
        break;
        case 2:
-           if(paramVals[tabIndx - 1]>0 && paramVals[tabIndx -1]<100){
-              paramVals[tabIndx - 1] += encoderDir;
-              itoa(paramVals[tabIndx - 1], valBuf, 10);
+           
+           currentParamVal = presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[1];
+           
+           if(currentParamVal>0 && currentParamVal<100){
+              currentParamVal += encoderDir;
+              itoa(currentParamVal, valBuf, 10);
               updateParam(tabIndx, valBuf);
-          }else if(paramVals[tabIndx - 1]== 0 && encoderDir ==1){
-                   paramVals[tabIndx - 1] += encoderDir;
-                   itoa(paramVals[tabIndx - 1], valBuf, 10);
+              presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[1] = currentParamVal;
+          }else if(currentParamVal== 0 && encoderDir ==1){
+                   currentParamVal += encoderDir;
+                   itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
-       
-          }else if(paramVals[tabIndx - 1]== 100 && encoderDir ==-1){
-                   paramVals[tabIndx - 1] += encoderDir;
-                   itoa(paramVals[tabIndx - 1], valBuf, 10);
+                   presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[1] = currentParamVal;
+          }else if(currentParamVal== 100 && encoderDir ==-1){
+                   currentParamVal += encoderDir;
+                   itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
+                   presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[1] = currentParamVal;
          }
        break;
        case 3:
+           ///not acitve yet
+           currentParamVal = presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[2];
+           
            scaledEncoderValueParam = encoderValue%25;
            if(scaledEncoderValueParam == 0){
               txtParamIndx += encoderDir;
