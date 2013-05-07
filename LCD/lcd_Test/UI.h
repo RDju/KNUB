@@ -335,7 +335,18 @@ void paramPage(char paramName[], char val1[], char val2[], char curveType[]){
 }
 
 
-void (*drawFuncs[5])(char dummy[], char dummy1[], char dummy2[], char dummy3[]) = {productPage, softwareVersion, presetPage, effectPage, paramPage};
+
+
+void savePage(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
+
+  lcd.write("sd0,0;");
+  delay(longDel);
+  lcd.write("ssSAVING...;");
+  delay(longDel);
+}
+
+
+void (*drawFuncs[6])(char dummy[], char dummy1[], char dummy2[], char dummy3[]) = {productPage, softwareVersion, presetPage, effectPage, paramPage, savePage};
 
 
 

@@ -194,6 +194,15 @@ void loop(){
                  }
     time2ChangePage = false;
      break;
+     case 5:
+       clearScreen();
+       (*drawFuncs[pageLevel])("", "",  "",  "");
+       time2ChangePage = false;
+       delay(saveTime*5);
+       pageLevel = 4;
+       time2ChangePage = true;
+       
+     break;
    }
   }
   //////////////////////
@@ -243,6 +252,13 @@ void loop(){
              tab(paramTabs[tabIndx]);
         
              customCursor(tabIndx, pageLevel);
+        }else if(tabIndx == 0 && bValid.click == 2){
+        
+            ///save this param
+            pageLevel = 5;
+            time2ChangePage = true;
+        
+        
         }
         break;
         }
@@ -291,7 +307,7 @@ if(encoderValue != lastValue){
            if(currentParamVal>0 && currentParamVal<100){
                currentParamVal += encoderDir;
                
-               Serial.println(currentParamVal);
+               (currentParamVal);
                itoa(currentParamVal, valBuf, 10);
                updateParam(tabIndx, valBuf);
                presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0] = currentParamVal;
@@ -356,7 +372,7 @@ if(encoderValue != lastValue){
                    
                    currentFx += encoderDir;
                    currentFx -= 1;
-                   Serial.println(currentFx);
+                   (currentFx);
                  
                  }
                }

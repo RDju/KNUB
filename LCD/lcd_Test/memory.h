@@ -1,5 +1,5 @@
 
-
+#define saveTime 100
 
 
 struct aKnub{
