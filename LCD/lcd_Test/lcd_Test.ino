@@ -100,11 +100,11 @@ aKnubPreset presets[2] = {
 
   "RIFF",
   3,
-  {{"RAT", 3, 1, {{"DIST", 5, 127, 1}, {"TONE", 64, 64, 1}, {"VOL", 70, 70, 1}}}, {"HOLY", 1, 0, {{"BLEND", 0, 127, 1}}}, {"DELAY", 2, 1, {{"DELAY", 15, 56, 1}, {"FEED", 64, 127, 1}}}},
+  {{"RAT", 3, 1, {{"DIST", {5, 127, 1}}, {"TONE", {64, 64, 1}}, {"VOL", {70, 70, 1}}}}, {"HOLY", 1, 0, {{"BLEND", {0, 127, 1}}}}, {"DELAY", 2, 1, {{"DELAY", {15, 56, 1}}, {"FEED", {64, 127, 1}}}}},
   
   "SOLO",
   3,
-  {{"RAT", 3, 1, {{"DIST", 127, 127, 1}, {"TONE", 110, 64, 1}, {"VOL", 30, 70, 1}}}, {"HOLY", 1, 0, {{"BLEND", 0, 127, 1}}}, {"DELAY", 2, 0, {{"DELAY", 0, 0, 1}, {"FEED", 0, 0, 1}}}}
+  {{"RAT", 3, 1, {{"DIST", {127, 127, 1}}, {"TONE", {110, 64, 1}}, {"VOL", {30, 70, 1}}}}, {"HOLY", 1, 0, {{"BLEND", {0, 127, 1}}}}, {"DELAY", 2, 0, {{"DELAY", {0, 0, 1}}, {"FEED", {0, 0, 1}}}}}
 
 };
 
@@ -179,9 +179,14 @@ void loop(){
      tabIndx = 0;
      clearScreen();
          (*drawFuncs[pageLevel])(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].name, 
-                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].value1), 
-                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].value2),
-                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].curveType));
+                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0]), 
+                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[1]),
+                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[2]));
+    for(int i =0; i<presets[currentPreset].fxPedals[currentFx].numKnub; i++){
+                 
+                   updateParam(i+1, toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[i]));
+                 
+                 }
     time2ChangePage = false;
      break;
    }
@@ -267,7 +272,7 @@ if(encoderValue != lastValue){
                  
                  for(int i =0; i<presets[currentPreset].fxPedals[currentFx].numKnub; i++){
                  
-                   updateParam(i+1, presets[currentPreset])
+                   updateParam(i+1, toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[i]));
                  
                  }
                  

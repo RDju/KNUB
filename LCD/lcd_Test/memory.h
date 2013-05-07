@@ -4,9 +4,7 @@
 
 struct aKnub{
   char name[8];
-  uint8_t value1;
-  uint8_t value2;
-  uint8_t curveType;
+  uint8_t params[3];
 };
 typedef struct aKnub aKnub;
 
