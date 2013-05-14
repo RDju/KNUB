@@ -40,7 +40,7 @@ void writeSingleKnub(int device, unsigned int address, byte knubValue){
   Wire.write(knubValue);
   Wire.endTransmission();
 
-  delay(5);
+
 }
 
 byte readSingleKnub(int device, unsigned int address){
@@ -55,7 +55,7 @@ byte readSingleKnub(int device, unsigned int address){
    Wire.requestFrom(device,1);
     if (Wire.available()) rVal = Wire.read();
   return rVal;
-  delay(5);
+
 }
 
 
@@ -72,7 +72,7 @@ void writeKnubPreset( int device,unsigned int address, byte *preset){
   
   }
   Wire.endTransmission();
-  delay(5);
+
 }
 void readKnubPreset(int device, unsigned int address, byte *preset){
 
@@ -85,7 +85,7 @@ void readKnubPreset(int device, unsigned int address, byte *preset){
     
     for (byte  c = 0; c < 8; c++ )
       if (Wire.available()) preset[c] = Wire.read();
-  delay(5);
+
 }
 
 
