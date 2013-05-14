@@ -1,50 +1,29 @@
 #include <Wire.h>
+#include "memory.h"
 
 #define eepromAddr1  B01010000
 
-byte saveMe = 127;
-
+byte saveMe = 255;
+byte loadMe;
 
 void setup(){
 
   Serial.begin(9600);
 
+  for(unsigned int i = 0; i<5;i++){
+  writeSingleKnub(eepromAddr1, i, saveMe);
+  delay(50);
+  }
 
-  writeSingleKnub(eepromAddr1, 0, saveMe);
 }
 
 
 void loop(){
 
-  byte loadMe = readSingleKnub(eepromAddr1, 0);
-  
+  loadMe = readSingleKnub(eepromAddr1, 0);
+  delay(5);
   Serial.println(loadMe);
 
 }
 
-void writeSingleKnub(byte device, uint16_t address, byte knubValue){
-
-  
-  Wire.beginTransmission((device << 1)+0);
-  Wire.write(lowByte(address));
-  Wire.write(highByte(address));
-  Wire.write(knubValue);
-  Wire.endTransmission();
-
-};
-
-byte readSingleKnub(byte device, uint16_t address){
-
-  byte rVal;
-  
-  Wire.beginTransmission((device << 1)+1);
-  Wire.write(lowByte(address));
-  Wire.write(highByte(address));
-  Wire.endTransmission();
-
-   Wire.requestFrom((int)device,1);
-    if (Wire.available()) rVal = Wire.read();
-  return rVal;
-  
-};
 
