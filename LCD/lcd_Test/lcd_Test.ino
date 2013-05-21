@@ -82,7 +82,7 @@ aKnubPreset presets[2] = {
 void setup(){
   
   lcd.begin(9600);
-  //Serial.begin(9600);
+  Serial.begin(9600);
   Wire.begin();
   initDisplay();
    
@@ -97,11 +97,11 @@ void setup(){
   
   
   
-  writeKnubPresetName(eepromAddr1, 0+(currentPreset*maxNameLength), &presets[currentPreset]);
+  writeKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[currentPreset]);
   currentPreset = 1;
   delay(50);
   
-  writeKnubPresetName(eepromAddr1, 0+(currentPreset*maxNameLength), &presets[currentPreset]);
+  writeKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[currentPreset]);
   currentPreset = 0;
   delay(50);
   
@@ -115,7 +115,7 @@ void setup(){
     (*drawFuncs[2])("", "", "", "");
     itoa(currentPreset, valBuf, 10);
     updatePreset(valBuf, presets[currentPreset].name);
-    
+    pageLevel = 2;
   
 }
 
@@ -365,18 +365,18 @@ if(encoderValue != lastValue){
             if(encoderDir == 1){     
                  currentPreset += encoderDir;
                  itoa(currentPreset, valBuf, 10);
+              
+                 readKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[0]);
                  
-                 //readKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[0]);
-                 
-                 updatePreset(valBuf, presets[0].name);
+                 updatePreset(valBuf, presets[currentPreset].name);
         }else if(encoderDir == -1 && currentPreset > 0){
         
           currentPreset += encoderDir;
           itoa(currentPreset, valBuf, 10);
-            
-          //readKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[0]);  
           
-          updatePreset(valBuf, presets[0].name);
+          readKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[0]);  
+          
+          updatePreset(valBuf, presets[currentPreset].name);
           }
         }
     break;
