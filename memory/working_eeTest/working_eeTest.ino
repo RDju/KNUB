@@ -51,7 +51,7 @@
 
   void setup() 
   {
-    char somedata[] = "this is data from the eeprom"; // data to write
+    char somedata[] = "hello world"; // data to write
     Wire.begin(); // initialise the connection
     Serial.begin(9600);
     i2c_eeprom_write_page(0x50, 0, (byte *)somedata, sizeof(somedata)); // write to EEPROM 
