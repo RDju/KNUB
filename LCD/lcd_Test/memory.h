@@ -3,14 +3,14 @@
 #define maxNameLength 8
 
 struct aKnub{
-  char name[8];
+  char name[maxNameLength];
   uint8_t params[3];
 };
 typedef struct aKnub aKnub;
 
 struct fxPedal{
 
-  char name[8];
+  char name[maxNameLength];
   
   uint8_t numKnub;
   uint8_t isOn;
@@ -21,14 +21,14 @@ typedef struct fxPedal fxPedal;
 
 struct aKnubPreset{
   
-  char name[8];
+  char name[maxNameLength];
   uint8_t numFxPed;
   
   fxPedal fxPedals[8];
 };
 typedef struct aKnubPreset aKnubPreset;
 
-void writeKnubPreset( int device,unsigned int address, aKnubPreset * kpreset){
+void writeKnubPresetName( int device,unsigned int address, aKnubPreset * kpreset){
 
   Wire.beginTransmission(device);
   Wire.write(int(address >> 8));
@@ -42,7 +42,7 @@ void writeKnubPreset( int device,unsigned int address, aKnubPreset * kpreset){
   Wire.endTransmission();
 
 }
-void readKnubPreset(int device, unsigned int address, aKnubPreset *kpreset){
+void readKnubPresetName(int device, unsigned int address, aKnubPreset *kpreset){
 
   Wire.beginTransmission(device);
   Wire.write(int(address >> 8));

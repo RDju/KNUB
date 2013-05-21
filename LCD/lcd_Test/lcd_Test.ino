@@ -59,6 +59,8 @@ sm1; [ shift right ]
 #define validBut 9
 #define backBut 8
 
+#define eepromAddr1  B01010000
+
 volatile int lastValue = 0;
 volatile int lastEncoderValue = 0;
 volatile int encoderValue = 0;
