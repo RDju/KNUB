@@ -138,8 +138,9 @@ void setup(){
   attachInterrupt(1, updateEncoder, CHANGE);
   
   Serial.begin(9600);
- 
-  writeByte(0x50, 0, 127); 
+  Wire.begin();
+  
+  writeKnubPresetName(eepromAddr1, 0, &presets[currentPreset]);
   delay(50);
   
     (*drawFuncs[0])("", "", "", "");
@@ -159,9 +160,9 @@ void setup(){
 
 void loop(){
   
-  //readKnubPresetName(eepromAddr1, 0, fromMem); 
-  byte readFromEE = readByte(0x50, 0);
-  Serial.println(readFromEE);
+  readKnubPresetName(eepromAddr1, 0, &presets[currentPreset+1]); 
+
+  Serial.println(presets[currentPreset+1].name);
   delay(1000);
   /*
   
