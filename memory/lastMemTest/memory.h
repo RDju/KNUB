@@ -38,19 +38,19 @@ void writeByte( int deviceaddress, unsigned int eeaddress, byte data ) {
     Wire.write(rdata);
     Wire.endTransmission();
   }
-
- 
-  void writeKnubPresetName( int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset ) {
+/*
+  // WARNING: address is a page address, 6-bit end will wrap around
+  // also, data can be maximum of about 30 bytes, because the Wire library has a buffer of 32 bytes
+  void i2c_eeprom_write_page( int deviceaddress, unsigned int eeaddresspage, byte* data, byte length ) {
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddresspage >> 8)); // MSB
     Wire.write((int)(eeaddresspage & 0xFF)); // LSB
     byte c;
-    for ( c = 0; c < maxNameLength; c++)
-      Wire.write(kpreset->name[c]);
+    for ( c = 0; c < length; c++)
+      Wire.write(data[c]);
     Wire.endTransmission();
   }
-  
-  
+*/
   byte readByte( int deviceaddress, unsigned int eeaddress ) {
     byte rdata = 0x00;
     Wire.beginTransmission(deviceaddress);
@@ -61,18 +61,18 @@ void writeByte( int deviceaddress, unsigned int eeaddress, byte data ) {
     if (Wire.available()) rdata = Wire.read();
     return rdata;
   }
- 
- 
-  void readKnubPresetName( int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset) {
+  /*
+  // maybe let's not read more than 30 or 32 bytes at a time!
+  void i2c_eeprom_read_buffer( int deviceaddress, unsigned int eeaddress, byte *buffer, int length ) {
     
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddress >> 8)); // MSB
     Wire.write((int)(eeaddress & 0xFF)); // LSB
     Wire.endTransmission();
     
-    Wire.requestFrom(deviceaddress,maxNameLength);
+    Wire.requestFrom(deviceaddress,length);
     int c = 0;
-    for ( c = 0; c < maxNameLength; c++ )
-      if (Wire.available()) kpreset->name[c] = Wire.read();
+    for ( c = 0; c < length; c++ )
+      if (Wire.available()) buffer[c] = Wire.read();
   }
-
+  */

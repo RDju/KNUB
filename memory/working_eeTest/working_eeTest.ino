@@ -3,11 +3,11 @@
 
 
   void i2c_eeprom_write_byte( int deviceaddress, unsigned int eeaddress, byte data ) {
-    int rdata = data;
+    //int rdata = data;
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddress >> 8)); // MSB
     Wire.write((int)(eeaddress & 0xFF)); // LSB
-    Wire.write(rdata);
+    Wire.write(data);
     Wire.endTransmission();
   }
 
@@ -36,10 +36,12 @@
 
   // maybe let's not read more than 30 or 32 bytes at a time!
   void i2c_eeprom_read_buffer( int deviceaddress, unsigned int eeaddress, byte *buffer, int length ) {
+    
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddress >> 8)); // MSB
     Wire.write((int)(eeaddress & 0xFF)); // LSB
     Wire.endTransmission();
+    
     Wire.requestFrom(deviceaddress,length);
     int c = 0;
     for ( c = 0; c < length; c++ )
@@ -54,8 +56,8 @@
     char somedata[] = "hello world"; // data to write
     Wire.begin(); // initialise the connection
     Serial.begin(9600);
-    i2c_eeprom_write_page(0x50, 0, (byte *)somedata, sizeof(somedata)); // write to EEPROM 
-
+    //i2c_eeprom_write_page(0x50, 0, (byte *)somedata, sizeof(somedata)); // write to EEPROM 
+    i2c_eeprom_write_byte(0x50, 0, 111);
     delay(10); //add a small delay
 
     Serial.println("Memory written");
@@ -65,7 +67,7 @@
   {
     int addr=0; //first address
     byte b = i2c_eeprom_read_byte(0x50, 0); // access the first address from the memory
-
+    /*
     while (b!=0) 
     {
       Serial.print((char)b); //print content to serial port
@@ -73,6 +75,8 @@
       b = i2c_eeprom_read_byte(0x50, addr); //access an address from the memory
     }
     Serial.println(" ");
+    */
+    Serial.println(b);
     delay(2000);
 
   }

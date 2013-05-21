@@ -102,6 +102,10 @@ boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
 
+char fromMem[8] = "noGood";
+char toMem[8] = "testMem";
+
+
 
 aKnubPreset presets[2] = {
 
@@ -121,7 +125,7 @@ aKnubPreset presets[2] = {
 void setup(){
   
   lcd.begin(9600);
-
+ 
   initDisplay();
    
   pinMode(encoderPin1, INPUT); 
@@ -135,7 +139,8 @@ void setup(){
   
   Serial.begin(9600);
  
-
+  writeByte(0x50, 0, 127); 
+  delay(50);
   
     (*drawFuncs[0])("", "", "", "");
     delay(500);
@@ -143,14 +148,22 @@ void setup(){
     delay(500);
     initMemDisp();
     clearScreen();
-    //paramPage(params[currentParam], prmVals[0], prmVals[1], curves[currentCurve]);
+    
     (*drawFuncs[2])("", "", "", "");
     itoa(currentPreset, valBuf, 10);
     updatePreset(valBuf, presets[currentPreset].name);
     pageLevel = 2;
+    
+  
 }
 
 void loop(){
+  
+  //readKnubPresetName(eepromAddr1, 0, fromMem); 
+  byte readFromEE = readByte(0x50, 0);
+  Serial.println(readFromEE);
+  delay(1000);
+  /*
   
   ////dealing with pages 
   if(time2ChangePage){
@@ -240,12 +253,7 @@ void loop(){
           time2ChangePage = true;
           
         }else if(bValid.click == 1){
-             /*
-             tabIndx++;
-             tabIndx = tabIndx%numTabs[pageLevel];
-             tab(effectTabs[tabIndx]);
-             customCursor(tabIndx,pageLevel);
-             */ 
+         
             if(presets[currentPreset].fxPedals[currentFx].isOn == 1){
                 presets[currentPreset].fxPedals[currentFx].isOn = 0;
                 updatePedalState(fxState[0]);
@@ -413,6 +421,7 @@ if(encoderValue != lastValue){
    }
  }
    lastValue = encoderValue;
+ */
 }
 
 void updateEncoder(){

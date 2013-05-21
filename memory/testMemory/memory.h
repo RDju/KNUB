@@ -43,7 +43,7 @@ typedef struct aKnubPreset aKnubPreset;
 
 void writeSingleKnub(int device, unsigned int address, byte knubValue){
 
-  int wrdata=knubValue;
+ int wrdata=knubValue;
   Wire.beginTransmission(device);
   Wire.write(int(address >> 8));
   Wire.write(int(address & 0xFF));
