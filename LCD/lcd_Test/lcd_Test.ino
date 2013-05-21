@@ -11,47 +11,7 @@
 change the way params are updated via the encoder use function to wich you'll pass pointer so as to save up RAM space.
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-1. Clean the Screen
-CMD : sc  Parameter : Null;
-Example : sc; [ Screen clean ]
- 
-2. Set backlight
-CMD : sb  Parameter :1 or 0 [1: Set the backlight on; 0: Set the backlight off ]
-Example :
-sb1; [ Backlight on ]
-sb0; [ Backlight off ]
- 
-3. Set coordinate
-CMD : sd  Parameter :C,R [C: the column (C = [0:1]); R: the row (R = [0:15])]
-Example :
-sd0,0;  [ move the coordinate to column 0 and row 0 ]
-sd1,15;  [ move the coordinate to column 1 and row 15 ]
- 
-4. Send string
-CMD : ss  Parameter : Char String
-Example:
-ss12345;  [ Send the char string and display on LCD ]
- 
-5. Set the cursor on/off
-CMD su Parameter: 0/1 [0: Set the cursor off, 1: Set the cursor on]
-Example:
-su0; [ Cursor off ]
-su1; [ Cursor on ]
- 
-6. Set the cursor type
-CMD sf, Parameter: 0/1 [0: Set the cursor blink off, 1: Set the cursor blink on]
-Example:
-sf0; [ Set the cursor blink off ]
-sf1; [ Set the cursor blink on ]
- 
-7. Move the cursor
-CMD sm  Parameter: 0/1 [0: Move the cursor left , 1: Move the cursor right ]
-Example:
-sm0; [ shift left ]
-sm1; [ shift right ]
-
 */
-
 
 #define encoderPin1 2
 #define encoderPin2 3
@@ -102,9 +62,6 @@ boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
 
-char fromMem[8] = "noGood";
-char toMem[8] = "testMem";
-
 
 
 aKnubPreset presets[2] = {
@@ -116,7 +73,7 @@ aKnubPreset presets[2] = {
   "SOLO",
   3,
   {{"RAT", 3, 1, {{"DIST", {100, 100, 1}}, {"TONE", {100, 64, 1}}, {"VOL", {30, 70, 1}}}}, {"HOLY", 1, 0, {{"BLEND", {0, 100, 1}}}}, {"DELAY", 2, 0, {{"DELAY", {0, 10, 1}}, {"FEED", {10, 0, 1}}}}}
-
+ 
 };
 
 
@@ -125,7 +82,8 @@ aKnubPreset presets[2] = {
 void setup(){
   
   lcd.begin(9600);
- 
+  //Serial.begin(9600);
+  Wire.begin();
   initDisplay();
    
   pinMode(encoderPin1, INPUT); 
@@ -137,10 +95,14 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
-  Serial.begin(9600);
-  Wire.begin();
   
-  writeKnubPresetName(eepromAddr1, 0, &presets[currentPreset]);
+  
+  writeKnubPresetName(eepromAddr1, 0+(currentPreset*maxNameLength), &presets[currentPreset]);
+  currentPreset = 1;
+  delay(50);
+  
+  writeKnubPresetName(eepromAddr1, 0+(currentPreset*maxNameLength), &presets[currentPreset]);
+  currentPreset = 0;
   delay(50);
   
     (*drawFuncs[0])("", "", "", "");
@@ -153,19 +115,12 @@ void setup(){
     (*drawFuncs[2])("", "", "", "");
     itoa(currentPreset, valBuf, 10);
     updatePreset(valBuf, presets[currentPreset].name);
-    pageLevel = 2;
     
   
 }
 
 void loop(){
-  
-  readKnubPresetName(eepromAddr1, 0, &presets[currentPreset+1]); 
 
-  Serial.println(presets[currentPreset+1].name);
-  delay(1000);
-  /*
-  
   ////dealing with pages 
   if(time2ChangePage){
    switch(pageLevel){
@@ -408,21 +363,27 @@ if(encoderValue != lastValue){
         scaledEncoderValueParam = encoderValue%25;
         if(scaledEncoderValueParam == 0){
             if(encoderDir == 1){     
-                  currentPreset += encoderDir;
+                 currentPreset += encoderDir;
                  itoa(currentPreset, valBuf, 10);
-                 updatePreset(valBuf, presets[currentPreset].name);
+                 
+                 //readKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[0]);
+                 
+                 updatePreset(valBuf, presets[0].name);
         }else if(encoderDir == -1 && currentPreset > 0){
         
           currentPreset += encoderDir;
           itoa(currentPreset, valBuf, 10);
-          updatePreset(valBuf, presets[currentPreset].name);
+            
+          //readKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[0]);  
+          
+          updatePreset(valBuf, presets[0].name);
           }
         }
     break;
    }
  }
    lastValue = encoderValue;
- */
+
 }
 
 void updateEncoder(){

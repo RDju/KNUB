@@ -1,3 +1,44 @@
+/*
+1. Clean the Screen
+CMD : sc  Parameter : Null;
+Example : sc; [ Screen clean ]
+ 
+2. Set backlight
+CMD : sb  Parameter :1 or 0 [1: Set the backlight on; 0: Set the backlight off ]
+Example :
+sb1; [ Backlight on ]
+sb0; [ Backlight off ]
+ 
+3. Set coordinate
+CMD : sd  Parameter :C,R [C: the column (C = [0:1]); R: the row (R = [0:15])]
+Example :
+sd0,0;  [ move the coordinate to column 0 and row 0 ]
+sd1,15;  [ move the coordinate to column 1 and row 15 ]
+ 
+4. Send string
+CMD : ss  Parameter : Char String
+Example:
+ss12345;  [ Send the char string and display on LCD ]
+ 
+5. Set the cursor on/off
+CMD su Parameter: 0/1 [0: Set the cursor off, 1: Set the cursor on]
+Example:
+su0; [ Cursor off ]
+su1; [ Cursor on ]
+ 
+6. Set the cursor type
+CMD sf, Parameter: 0/1 [0: Set the cursor blink off, 1: Set the cursor blink on]
+Example:
+sf0; [ Set the cursor blink off ]
+sf1; [ Set the cursor blink on ]
+ 
+7. Move the cursor
+CMD sm  Parameter: 0/1 [0: Move the cursor left , 1: Move the cursor right ]
+Example:
+sm0; [ shift left ]
+sm1; [ shift right ]
+
+*/
 
 
 #define shortDel 2
