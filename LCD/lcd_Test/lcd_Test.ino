@@ -45,11 +45,12 @@ int pageLevel = 0;
 int tabIndx = 0;
 uint8_t currFx = 0;
 
-
 int8_t encoderDir;
 
-
 uint8_t currentPresetID = 0;
+boolean isActive;
+boolean isEdited;
+
 uint8_t currentFx = 0;
 uint8_t currentParam = 0;
 uint8_t currentParamVal;
@@ -79,16 +80,14 @@ void setup(){
   pinMode(encoderPin2, INPUT);
   digitalWrite(encoderPin1, HIGH);
   digitalWrite(encoderPin2, HIGH);
- 
- 
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
   writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
+  
   currentPresetID = 0;
 
-  
-  
+    //startUp sequence
     (*drawFuncs[0])("", "", "", "");
     delay(500);
     (*drawFuncs[1])("", "", "", "");
@@ -124,7 +123,7 @@ void loop(){
          (*drawFuncs[pageLevel])("", "", "", "");
          itoa(currentPresetID, valBuf, 10);
          updatePreset(valBuf, activePreset.name);
-          time2ChangePage = false;
+         time2ChangePage = false;
      break;
      case 3:
      
@@ -183,6 +182,9 @@ void loop(){
         case 2:
           if(bValid.click == 2){
             pageLevel ++;
+            if(isEdited == false){
+              isEdited = true;
+            }
             time2ChangePage = true;
           }
         break;
