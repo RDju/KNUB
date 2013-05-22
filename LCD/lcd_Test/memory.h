@@ -22,6 +22,7 @@ typedef struct fxPedal fxPedal;
 struct aKnubPreset{
   
   char name[maxNameLength];
+  uint8_t ID;
   uint8_t numFxPed;
   
   fxPedal fxPedals[8];
@@ -40,7 +41,7 @@ void writeByte( int deviceaddress, unsigned int eeaddress, byte data ) {
   }
 
  
-  void writeKnubPresetName( int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset ) {
+  void writeKnubName( int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset ) {
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddresspage >> 8)); // MSB
     Wire.write((int)(eeaddresspage & 0xFF)); // LSB
@@ -63,7 +64,7 @@ void writeByte( int deviceaddress, unsigned int eeaddress, byte data ) {
   }
  
  
-  void readKnubPresetName( int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset) {
+  void readKnubName( int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset) {
     
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddress >> 8)); // MSB

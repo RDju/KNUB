@@ -44,40 +44,29 @@ ClickButton bckValid(backBut, LOW, CLICKBTN_PULLUP);
 int pageLevel = 0;
 int tabIndx = 0;
 uint8_t currFx = 0;
-uint8_t numTabs[] = {0, 0, 0, 2, 4};
+
+
 int8_t encoderDir;
 
 
-uint8_t  paramVals[] = {10, 50};
-
-uint8_t currentPreset = 0;
+uint8_t currentPresetID = 0;
 uint8_t currentFx = 0;
 uint8_t currentParam = 0;
-
 uint8_t currentParamVal;
-
 uint8_t currentCurve = 0;
 
 boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
 
+////this is the dummy Preset
 
-
-aKnubPreset presets[2] = {
-
-  "RIFF",
+aKnubPreset activePreset = {"RIFF",0,
   3,
-  {{"RAT", 3, 1, {{"DIST", {5, 100, 1}}, {"TONE", {64, 64, 1}}, {"VOL", {70, 70, 1}}}}, {"HOLY", 1, 0, {{"BLEND", {0, 100, 1}}}}, {"DELAY", 2, 1, {{"DELAY", {15, 56, 1}}, {"FEED", {64, 100, 1}}}}},
-  
-  "SOLO",
-  3,
-  {{"RAT", 3, 1, {{"DIST", {100, 100, 1}}, {"TONE", {100, 64, 1}}, {"VOL", {30, 70, 1}}}}, {"HOLY", 1, 0, {{"BLEND", {0, 100, 1}}}}, {"DELAY", 2, 0, {{"DELAY", {0, 10, 1}}, {"FEED", {10, 0, 1}}}}}
- 
-};
-
-
-
+  {{"RAT", 3, 1, {{"DIST", {5, 100, 1}}, {"TONE", {64, 64, 1}}, {"VOL", {70, 70, 1}}}}, 
+   {"HOLY", 1, 0, {{"BLEND", {0, 100, 1}}}}, 
+   {"DELAY", 2, 1, {{"DELAY", {15, 56, 1}}, {"FEED", {64, 100, 1}}}}
+ }};
 
 void setup(){
   
@@ -95,15 +84,10 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
+  writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
+  currentPresetID = 0;
+
   
-  
-  writeKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[currentPreset]);
-  currentPreset = 1;
-  delay(50);
-  
-  writeKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[currentPreset]);
-  currentPreset = 0;
-  delay(50);
   
     (*drawFuncs[0])("", "", "", "");
     delay(500);
@@ -113,8 +97,8 @@ void setup(){
     clearScreen();
     
     (*drawFuncs[2])("", "", "", "");
-    itoa(currentPreset, valBuf, 10);
-    updatePreset(valBuf, presets[currentPreset].name);
+    itoa(currentPresetID, valBuf, 10);
+    updatePreset(valBuf, activePreset.name);
     pageLevel = 2;
   
 }
@@ -138,15 +122,15 @@ void loop(){
      clearScreen();
          tabIndx = 0;
          (*drawFuncs[pageLevel])("", "", "", "");
-         itoa(currentPreset, valBuf, 10);
-         updatePreset(valBuf, presets[currentPreset].name);
+         itoa(currentPresetID, valBuf, 10);
+         updatePreset(valBuf, activePreset.name);
           time2ChangePage = false;
      break;
      case 3:
      
      clearScreen();
      tabIndx = 0;
-         (*drawFuncs[pageLevel])(presets[currentPreset].fxPedals[currentFx].name, fxState[presets[currentPreset].fxPedals[currentFx].isOn], "", "");
+         (*drawFuncs[pageLevel])(activePreset.fxPedals[currentFx].name, fxState[activePreset.fxPedals[currentFx].isOn], "", "");
          tabIndx = tabIndx%numTabs[pageLevel];
              tab(effectTabs[tabIndx]);
              customCursor(tabIndx,pageLevel);
@@ -155,13 +139,13 @@ void loop(){
      case 4:
      tabIndx = 0;
      clearScreen();
-         (*drawFuncs[pageLevel])(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].name, 
-                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0]), 
-                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[1]),
-                                 toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[2]));
-    for(int i =0; i<presets[currentPreset].fxPedals[currentFx].numKnub; i++){
+         (*drawFuncs[pageLevel])(activePreset.fxPedals[currentFx].knubs[currentParam].name, 
+                                 toString(activePreset.fxPedals[currentFx].knubs[currentParam].params[0]), 
+                                 toString(activePreset.fxPedals[currentFx].knubs[currentParam].params[1]),
+                                 toString(activePreset.fxPedals[currentFx].knubs[currentParam].params[2]));
+    for(int i =0; i<activePreset.fxPedals[currentFx].numKnub; i++){
                  
-                   updateParam(i+1, toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[i]));
+                   updateParam(i+1, toString(activePreset.fxPedals[currentFx].knubs[currentParam].params[i]));
                  
                  }
     time2ChangePage = false;
@@ -210,11 +194,11 @@ void loop(){
           
         }else if(bValid.click == 1){
          
-            if(presets[currentPreset].fxPedals[currentFx].isOn == 1){
-                presets[currentPreset].fxPedals[currentFx].isOn = 0;
+            if(activePreset.fxPedals[currentFx].isOn == 1){
+                activePreset.fxPedals[currentFx].isOn = 0;
                 updatePedalState(fxState[0]);
-            }else if(presets[currentPreset].fxPedals[currentFx].isOn == 0){
-                presets[currentPreset].fxPedals[currentFx].isOn = 1;  
+            }else if(activePreset.fxPedals[currentFx].isOn == 0){
+                activePreset.fxPedals[currentFx].isOn = 1;  
                 updatePedalState(fxState[1]);
             } 
       }   
@@ -233,8 +217,6 @@ void loop(){
             ///save this param
             pageLevel = 5;
             time2ChangePage = true;
-        
-        
         }
         break;
         }
@@ -265,11 +247,11 @@ if(encoderValue != lastValue){
             if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
                  currentParam = txtParamIndx%3;
-                 updateParam(tabIndx, presets[currentPreset].fxPedals[currentFx].knubs[currentParam].name);
+                 updateParam(tabIndx,activePreset.fxPedals[currentFx].knubs[currentParam].name);
                  
-                 for(int i =0; i<presets[currentPreset].fxPedals[currentFx].numKnub; i++){
+                 for(int i =0; i<activePreset.fxPedals[currentFx].numKnub; i++){
                  
-                   updateParam(i+1, toString(presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[i]));
+                   updateParam(i+1, toString(activePreset.fxPedals[currentFx].knubs[currentParam].params[i]));
                  
                  }
                  
@@ -278,7 +260,7 @@ if(encoderValue != lastValue){
         case 1:
            ///MUST FIND A BETTER WAY OF DEALING WITH THIS
            
-           currentParamVal = presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0];
+           currentParamVal = activePreset.fxPedals[currentFx].knubs[currentParam].params[0];
            
            if(currentParamVal>0 && currentParamVal<100){
                currentParamVal += encoderDir;
@@ -286,43 +268,43 @@ if(encoderValue != lastValue){
                (currentParamVal);
                itoa(currentParamVal, valBuf, 10);
                updateParam(tabIndx, valBuf);
-               presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0] = currentParamVal;
+               activePreset.fxPedals[currentFx].knubs[currentParam].params[0] = currentParamVal;
           }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
                    itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
-                   presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0] = currentParamVal;
+                   activePreset.fxPedals[currentFx].knubs[currentParam].params[0] = currentParamVal;
           }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
                    itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
-                   presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[0] = currentParamVal;
+                   activePreset.fxPedals[currentFx].knubs[currentParam].params[0] = currentParamVal;
           }
        break;
        case 2:
            
-           currentParamVal = presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[1];
+           currentParamVal = activePreset.fxPedals[currentFx].knubs[currentParam].params[1];
            
            if(currentParamVal>0 && currentParamVal<100){
               currentParamVal += encoderDir;
               itoa(currentParamVal, valBuf, 10);
               updateParam(tabIndx, valBuf);
-              presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[1] = currentParamVal;
+              activePreset.fxPedals[currentFx].knubs[currentParam].params[1] = currentParamVal;
           }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
                    itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
-                   presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[1] = currentParamVal;
+                   activePreset.fxPedals[currentFx].knubs[currentParam].params[1] = currentParamVal;
           }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
                    itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
-                   presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[1] = currentParamVal;
+                   activePreset.fxPedals[currentFx].knubs[currentParam].params[1] = currentParamVal;
          }
        break;
        case 3:
            ///not acitve yet
-           currentParamVal = presets[currentPreset].fxPedals[currentFx].knubs[currentParam].params[2];
+           currentParamVal = activePreset.fxPedals[currentFx].knubs[currentParam].params[2];
            
            scaledEncoderValueParam = encoderValue%25;
            if(scaledEncoderValueParam == 0){
@@ -341,8 +323,8 @@ if(encoderValue != lastValue){
                  txtParamIndx += encoderDir;
                  currentFx = txtParamIndx%3;
                  
-                 updatePedalName(presets[currentPreset].fxPedals[currentFx].name);
-                 updatePedalState(fxState[presets[currentPreset].fxPedals[currentFx].isOn]);
+                 updatePedalName(activePreset.fxPedals[currentFx].name);
+                 updatePedalState(fxState[activePreset.fxPedals[currentFx].isOn]);
                  
                  if(currentFx != 0){
                    
@@ -363,20 +345,20 @@ if(encoderValue != lastValue){
         scaledEncoderValueParam = encoderValue%25;
         if(scaledEncoderValueParam == 0){
             if(encoderDir == 1){     
-                 currentPreset += encoderDir;
-                 itoa(currentPreset, valBuf, 10);
+                 currentPresetID += encoderDir;
+                 itoa(currentPresetID, valBuf, 10);
               
-                 readKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[0]);
+                 readKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
                  
-                 updatePreset(valBuf, presets[currentPreset].name);
-        }else if(encoderDir == -1 && currentPreset > 0){
+                 updatePreset(valBuf, activePreset.name);
+        }else if(encoderDir == -1 && currentPresetID > 0){
         
-          currentPreset += encoderDir;
-          itoa(currentPreset, valBuf, 10);
+          currentPresetID += encoderDir;
+          itoa(currentPresetID, valBuf, 10);
           
-          readKnubPresetName(eepromAddr1, currentPreset*maxNameLength, &presets[0]);  
+          readKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);  
           
-          updatePreset(valBuf, presets[currentPreset].name);
+          updatePreset(valBuf, activePreset.name);
           }
         }
     break;
