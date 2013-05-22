@@ -154,7 +154,7 @@ void loop(){
        (*drawFuncs[pageLevel])("", "",  "",  "");
        time2ChangePage = false;
        delay(saveTime*5);
-       pageLevel = 4;
+       pageLevel = 2;
        time2ChangePage = true;
        
      break;
@@ -217,21 +217,31 @@ void loop(){
         }else if(tabIndx == 0 && bValid.click == 2){
         
             ///save this param
-            pageLevel = 5;
-            time2ChangePage = true;
+            //pageLevel = 5;
+            //time2ChangePage = true;
         }
         break;
         }
     }
   //////back button
-  if(bckValid.Update()){
+  bckValid.Update();
      
+   if(bckValid.click != 0){
     if(bckValid.click==1){
       
       if(pageLevel > 2){
         pageLevel --;
         time2ChangePage = true;
       }
+        
+      }else if(bckValid.click == 2 && pageLevel == 2){
+       
+          Serial.println("saving");
+          pageLevel = 5;
+          Serial.println(pageLevel);
+          isEdited = false;
+          time2ChangePage = true;
+     
      }
    }
 

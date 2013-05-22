@@ -156,7 +156,7 @@ void updatePreset(char preset[], char pName[], boolean editMode){
   if(editMode){
     lcd.write("ss");
     lcd.write(pName);
-    lcd.write("(O_O)");
+    lcd.write("{O_O}");
     lcd.write(";");
     delay(longDel);
   }else{
