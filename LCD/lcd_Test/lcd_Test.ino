@@ -97,7 +97,7 @@ void setup(){
     
     (*drawFuncs[2])("", "", "", "");
     itoa(currentPresetID, valBuf, 10);
-    updatePreset(valBuf, activePreset.name);
+    updatePreset(valBuf, activePreset.name, isEdited);
     pageLevel = 2;
   
 }
@@ -122,7 +122,7 @@ void loop(){
          tabIndx = 0;
          (*drawFuncs[pageLevel])("", "", "", "");
          itoa(currentPresetID, valBuf, 10);
-         updatePreset(valBuf, activePreset.name);
+         updatePreset(valBuf, activePreset.name, isEdited);
          time2ChangePage = false;
      break;
      case 3:
@@ -352,7 +352,7 @@ if(encoderValue != lastValue){
               
                  readKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
                  
-                 updatePreset(valBuf, activePreset.name);
+                 updatePreset(valBuf, activePreset.name, isEdited);
         }else if(encoderDir == -1 && currentPresetID > 0){
         
           currentPresetID += encoderDir;
@@ -360,7 +360,7 @@ if(encoderValue != lastValue){
           
           readKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);  
           
-          updatePreset(valBuf, activePreset.name);
+          updatePreset(valBuf, activePreset.name, isEdited);
           }
         }
     break;

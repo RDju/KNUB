@@ -139,7 +139,7 @@ void updatePedalState(char state[]){
   delay(longDel);
 }
 
-void updatePreset(char preset[], char pName[]){
+void updatePreset(char preset[], char pName[], boolean editMode){
 
 
   lcd.write("sd0,7;");
@@ -152,13 +152,20 @@ void updatePreset(char preset[], char pName[]){
   delay(longDel);
   lcd.write("sd1,0;");
   delay(longDel);
-  lcd.write("ss");
-  lcd.write(pName);
-  lcd.write(" ");
-  lcd.write(" ");
-  lcd.write(";");
-  delay(longDel);
-
+  
+  if(editMode){
+    lcd.write("ss");
+    lcd.write(pName);
+    lcd.write("(O_O)");
+    lcd.write(";");
+    delay(longDel);
+  }else{
+    lcd.write("ss");
+    lcd.write(pName);
+    lcd.write(";");
+    delay(longDel);
+  
+  }
 }
 
 void customCursor(uint8_t cusTab, uint8_t pageLev){
