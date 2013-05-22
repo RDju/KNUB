@@ -168,6 +168,35 @@ void updatePreset(char preset[], char pName[], boolean editMode){
   }
 }
 
+void clearAllTabs(){
+
+  lcd.write("sd1,10;");
+      delay(longDel);
+      
+      lcd.write("ss ;");
+      delay(longDel);
+      
+      lcd.write("sd1,5;");
+      delay(longDel);
+      
+      lcd.write("ss ;");
+      delay(longDel);
+      
+      lcd.write("sd1,0;");
+      delay(longDel);
+      
+      lcd.write("ss ;");
+      delay(longDel);
+        
+      lcd.write("sd0,6;");
+      delay(longDel);
+        
+      lcd.write("ss ;");
+      delay(longDel);
+
+
+
+}
 void customCursor(uint8_t cusTab, uint8_t pageLev){
   
   
@@ -177,13 +206,11 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
     switch(cusTab){
   
       case 0:
-      lcd.write("sd1,10;");
-      delay(longDel);
-      lcd.write("ss ;");
-      delay(longDel);
-        lcd.write("sd0,5;");
-        delay(longDel);
-        lcd.write("ss ;");
+      
+        clearAllTabs();
+        lcd.write("sd");
+        lcd.write("0,6");
+        lcd.write(";");
         delay(longDel);
         lcd.write("ss>;");
         delay(longDel);
@@ -191,34 +218,31 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
         
       break;
       case 1:
-        lcd.write("sd0,5;");
-        delay(longDel);
-        lcd.write("ss :;");
-        delay(longDel);
-        lcd.write("sd1,0;");
+        clearAllTabs();
+        lcd.write("sd");
+        lcd.write("1,0");
+        lcd.write(";");
         delay(longDel);
         lcd.write("ss>;");
-      delay(longDel);
+        delay(longDel);
       break;
       case 2:
-        lcd.write("sd1,0;");
-        delay(longDel);
-        lcd.write("ss ;");
-        delay(longDel);
-        lcd.write("sd1,5;");
+         clearAllTabs();
+         lcd.write("sd");
+        lcd.write("1,5");
+        lcd.write(";");
         delay(longDel);
         lcd.write("ss>;");
-      delay(longDel);
+        delay(longDel);
       break;
       case 3:
-        lcd.write("sd1,5;");
-        delay(longDel);
-        lcd.write("ss ;");
-        delay(longDel);
-        lcd.write("sd1,10;");
+        clearAllTabs();
+        lcd.write("sd");
+        lcd.write("1,10");
+        lcd.write(";");
         delay(longDel);
         lcd.write("ss>;");
-      delay(longDel);
+        delay(longDel);
      break;
     }
     break;
@@ -332,7 +356,7 @@ void paramPage(char paramName[], char val1[], char val2[], char curveType[]){
  
  lcd.write("sd0,0;");
  delay(longDel);
- lcd.write("ssParam :;");
+ lcd.write("ssParam:;");
  delay(longDel);
  
  lcd.write("sd");

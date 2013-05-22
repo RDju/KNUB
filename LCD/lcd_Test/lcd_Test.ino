@@ -227,12 +227,12 @@ void loop(){
   bckValid.Update();
      
    if(bckValid.click != 0){
-    if(bckValid.click==1){
+    if(bckValid.click==2 && pageLevel > 2){
       
-      if(pageLevel > 2){
+  
         pageLevel --;
         time2ChangePage = true;
-      }
+   
         
       }else if(bckValid.click == 2 && pageLevel == 2){
        
@@ -241,6 +241,14 @@ void loop(){
           Serial.println(pageLevel);
           isEdited = false;
           time2ChangePage = true;
+     
+     }else if(bckValid.click == 1 && pageLevel == 4){
+             tabIndx--;
+             tabIndx = tabIndx%numTabs[pageLevel];
+             tab(paramTabs[tabIndx]);
+        
+             customCursor(tabIndx, pageLevel);
+       
      
      }
    }
