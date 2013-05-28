@@ -163,8 +163,8 @@ void loop(){
          
     /*     
     (*drawFuncs[pageLevel])(activePreset.knubbies[currentFx].knubs[currentParam].name, 
-                                 toString(activePreset.knubbies[currentFx].knubs[currentParam].params[0]), 
-                                 toString(activePreset.knubbies[currentFx].knubs[currentParam].params[1]),
+                                 toString(currentParamVal = activePreset.knubbies[currentParam].params[0];), 
+                                 toString(currentParamVal = activePreset.knubbies.[currentParam].params[1]),
                                  toString(activePreset.knubbies[currentFx].knubs[currentParam].params[2]));
     for(int i =0; i<activePreset.knubbies[currentFx].numKnub; i++){
                  
@@ -292,20 +292,23 @@ if(encoderValue != lastValue){
             if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
                  currentParam = txtParamIndx%3;
-                 updateParam(tabIndx,activePreset.knubbies[currentFx].knubs[currentParam].name);
                  
-                 for(int i =0; i<activePreset.knubbies[currentFx].numKnub; i++){
+                 updateParam(tabIndx,activePreset.knubbies[currentParam].name);
+                 updateParam(tabIndx+1,activePreset.knubbies[currentParam].modSource);
+                 updateParam(tabIndx+2,boolToString(activePreset.knubbies[currentParam].state));
+                 updateParam(tabIndx+3,toString(activePreset.knubbies[currentParam].numLoop));
+                 updateParam(tabIndx,toString(activePreset.knubbies[currentParam].params[0]));
+                 updateParam(tabIndx,toString(activePreset.knubbies[currentParam].params[1]));
+                 updateParam(tabIndx,toString(activePreset.knubbies[currentParam].params[2]));
                  
-                   updateParam(i+1, toString(activePreset.knubbies[currentFx].knubs[currentParam].params[i]));
                  
-                 }
                  
              }
         break;
         case 1:
            ///MUST FIND A BETTER WAY OF DEALING WITH THIS
            
-           currentParamVal = activePreset.knubbies[currentFx].knubs[currentParam].params[0];
+           currentParamVal = activePreset.knubbies[currentParam].params[0];
            
            if(currentParamVal>0 && currentParamVal<100){
                currentParamVal += encoderDir;
@@ -313,43 +316,43 @@ if(encoderValue != lastValue){
                (currentParamVal);
                itoa(currentParamVal, valBuf, 10);
                updateParam(tabIndx, valBuf);
-               activePreset.knubbies[currentFx].knubs[currentParam].params[0] = currentParamVal;
+               currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
                    itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
-                   activePreset.knubbies[currentFx].knubs[currentParam].params[0] = currentParamVal;
+                   currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
                    itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
-                   activePreset.knubbies[currentFx].knubs[currentParam].params[0] = currentParamVal;
+                   currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }
        break;
        case 2:
            
-           currentParamVal = activePreset.knubbies[currentFx].knubs[currentParam].params[1];
+           currentParamVal = activePreset.knubbies[currentParam].params[1];
            
            if(currentParamVal>0 && currentParamVal<100){
               currentParamVal += encoderDir;
               itoa(currentParamVal, valBuf, 10);
               updateParam(tabIndx, valBuf);
-              activePreset.knubbies[currentFx].knubs[currentParam].params[1] = currentParamVal;
+              currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
           }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
                    itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
-                   activePreset.knubbies[currentFx].knubs[currentParam].params[1] = currentParamVal;
+                   currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
           }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
                    itoa(currentParamVal, valBuf, 10);
                    updateParam(tabIndx, valBuf);
-                   activePreset.knubbies[currentFx].knubs[currentParam].params[1] = currentParamVal;
+                   currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
          }
        break;
        case 3:
            ///not acitve yet
-           currentParamVal = activePreset.knubbies[currentFx].knubs[currentParam].params[2];
+           currentParamVal = activePreset.knubbies[currentParam].params[2];
            
            scaledEncoderValueParam = encoderValue%25;
            if(scaledEncoderValueParam == 0){
@@ -360,6 +363,7 @@ if(encoderValue != lastValue){
      }
      break;
    case 3:
+      /*
       switch(tabIndx){
        
         case 0:
@@ -379,6 +383,7 @@ if(encoderValue != lastValue){
                  
                  }
                }
+        */
         break;
         case 1:
             
