@@ -56,7 +56,7 @@ uint8_t numTabs[] = {0, 0, 0, 2, 7};
 char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
-char* paramTabs[] = {"0,7", "1,1", "1,6", "1,11"};
+char* paramTabs[] = {"0,0", "0,8", "0,13", "0,15", "1,0", "1,4", "1,8"};
 char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
 
@@ -113,7 +113,7 @@ void updateParam(uint8_t prmIndx, char newVal[]){
 
 }
 
-
+/*
 void updatePedalName(char pName[]){
 
   lcd.write("sd0,7;");
@@ -138,7 +138,7 @@ void updatePedalState(char state[]){
   lcd.write(";");
   delay(longDel);
 }
-
+*/
 void updatePreset(char preset[], char pName[], boolean editMode){
 
 
@@ -170,33 +170,18 @@ void updatePreset(char preset[], char pName[], boolean editMode){
 
 void clearAllTabs(){
 
-  lcd.write("sd1,10;");
+  for(int i=0; i<numTabs[4]; i++){
+    
+      lcd.write("sd");
+      lcd.write(paramTabs[i]);
+      lcd.write(";");
       delay(longDel);
-      
-      lcd.write("ss ;");
-      delay(longDel);
-      
-      lcd.write("sd1,5;");
-      delay(longDel);
-      
-      lcd.write("ss ;");
-      delay(longDel);
-      
-      lcd.write("sd1,0;");
-      delay(longDel);
-      
-      lcd.write("ss ;");
-      delay(longDel);
-        
-      lcd.write("sd0,6;");
-      delay(longDel);
-        
-      lcd.write("ss ;");
-      delay(longDel);
-
-
-
+  
+  }
 }
+  
+  
+
 void customCursor(uint8_t cusTab, uint8_t pageLev){
   
   
