@@ -19,8 +19,7 @@ change the way params are updated via the encoder use function to wich you'll pa
 #define validBut 9
 #define backBut 8
 
-#define eepromAddr1  B01010000
-#define modSources {"MID", "OSC", "EXP"}
+#define eepromAddr1  B01010000 
 
 volatile int lastValue = 0;
 volatile int lastEncoderValue = 0;
@@ -57,22 +56,23 @@ uint8_t currentParam = 0;
 uint8_t currentParamVal;
 uint8_t currentCurve = 0;
 
+uint8_t currModIndx  = 0;
 boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
-
+char* modSources[3] = {"mid", "osc", "exp"};
 ////this is the dummy Preset
 
 aKnubPreset activePreset = {"RIFF",0,
   
-  {{"DIST", {10, 127, 1}, "MID", true, 1, "EXTERN"}, 
-  {"TONE", {10, 127, 1}, "MID", true, 1, "EXTERN"},
-  {"VOL", {10, 127, 1}, "MID", true, 1, "EXTERN"},
-  {"BLEND", {10, 127, 1}, "MID", true, 1, "EXTERN"}, 
-  {"DELAY", {10, 127, 1}, "MID", true, 1, "EXTERN"},
-  {"FEED", {10, 127, 1}, "MID", true, 1, "EXTERN"},
-  {"FREQ", {10, 127, 1}, "MID", true, 1, "EXTERN"},
-  {"AMNT", {10, 127, 1}, "MID", true, 1, "EXTERN"}}
+  {{"DIST", {10, 127, 1}, modSources[0], true, 1, "EXTERN"}, 
+  {"TONE", {10, 127, 1}, modSources[0], true, 1, "EXTERN"},
+  {"VOL", {10, 127, 1}, modSources[0], true, 1, "EXTERN"},
+  {"BLEND", {10, 127, 1}, modSources[0], true, 1, "EXTERN"}, 
+  {"DELAY", {10, 127, 1}, modSources[0], true, 1, "EXTERN"},
+  {"FEED", {10, 127, 1}, modSources[0], true, 1, "EXTERN"},
+  {"FREQ", {10, 127, 1}, modSources[0], true, 1, "EXTERN"},
+  {"AMNT", {10, 127, 1}, modSources[0], true, 1, "EXTERN"}}
 };
 
 void setup(){
@@ -104,8 +104,22 @@ void setup(){
     (*drawFuncs[2])("", "", "", "", "", "", "", "", "");
     itoa(currentPresetID, valBuf, 10);
     updatePreset(valBuf, activePreset.name, isEdited);
-    pageLevel = 2;
-  
+    pageLevel = 4;
+    clearScreen();
+    (*drawFuncs[pageLevel])(
+     
+               activePreset.knubbies[currentParam].name,
+               toString(activePreset.knubbies[currentParam].params[0]), 
+               toString(activePreset.knubbies[currentParam].params[1]),
+               toString(activePreset.knubbies[currentParam].params[2]),
+               activePreset.knubbies[currentParam].modSource, 
+               boolToString(activePreset.knubbies[currentParam].state), 
+               toString(activePreset.knubbies[currentParam].numLoop), 
+               activePreset.knubbies[currentParam].switchType,
+               ""
+          
+     
+     );
 }
 
 void loop(){
@@ -214,12 +228,13 @@ void loop(){
           }
         break;
         case 3:
-        /*
-        if(bValid.click == 2 && tabIndx == 0){
+        
+        if(bValid.click == 2){
           pageLevel ++;
           time2ChangePage = true;
           
-        }else if(bValid.click == 1){
+        }/*
+        else if(bValid.click == 1){
          
             if(activePreset.knubbies[currentFx].isOn == 1){
                 activePreset.knubbies[currentFx].isOn = 0;
@@ -305,7 +320,17 @@ if(encoderValue != lastValue){
                  
              }
         break;
+        
         case 1:
+              scaledEncoderValueParam = encoderValue%25;
+              if(scaledEncoderValueParam == 0){
+                 txtParamIndx += encoderDir;
+                 currModIndx = txtParamIndx%3;
+             
+                 updateParam(1, modSources[currModIndx]);
+            } 
+            break;
+        case 4:
            ///MUST FIND A BETTER WAY OF DEALING WITH THIS
            
            currentParamVal = activePreset.knubbies[currentParam].params[0];
@@ -329,7 +354,7 @@ if(encoderValue != lastValue){
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }
        break;
-       case 2:
+       case 5:
            
            currentParamVal = activePreset.knubbies[currentParam].params[1];
            
@@ -350,7 +375,7 @@ if(encoderValue != lastValue){
                    currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
          }
        break;
-       case 3:
+       case 6:
            ///not acitve yet
            currentParamVal = activePreset.knubbies[currentParam].params[2];
            

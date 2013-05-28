@@ -56,7 +56,7 @@ uint8_t numTabs[] = {0, 0, 0, 2, 7};
 char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
-char* paramTabs[] = {"0,0", "0,8", "0,13", "0,15", "1,0", "1,4", "1,8"};
+char* paramTabs[] = {"0,0", "0,8", "0,12", "0,15", "1,3", "1,6", "1,10"};
 char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
 
@@ -267,7 +267,7 @@ char* toString(uint8_t val){
 
 char* boolToString(boolean bval){
 
-  if(bval){
+  if(bval == true){
     
     return "ON ";
   }else{
@@ -448,14 +448,14 @@ void knubbiePage(char knubbieName[], char knubbieV1[], char knubbieV2[], char kn
 
 
   //state
-  lcd.write("sd0,13");
+  lcd.write("sd0,12");
   delay(longDel);
   lcd.write("ss");
   lcd.write(knubbieState);
   delay(longDel);
   
   //loop
-  lcd.write("ss0,15;");
+  lcd.write("sd0,15;");
   delay(longDel);
   lcd.write("ss");
   lcd.write(knubbieLoop);
@@ -463,7 +463,7 @@ void knubbiePage(char knubbieName[], char knubbieV1[], char knubbieV2[], char kn
   delay(longDel);  
 
   //val1
-  lcd.write("ss1,0;");
+  lcd.write("sd1,2;");
   delay(longDel);
   lcd.write("ss");
   lcd.write(knubbieV1);
@@ -471,7 +471,7 @@ void knubbiePage(char knubbieName[], char knubbieV1[], char knubbieV2[], char kn
   delay(longDel); 
  
  //val2
-  lcd.write("ss1,4;");
+  lcd.write("sd1,6;");
   delay(longDel);
   lcd.write("ss");
   lcd.write(knubbieV2);
@@ -480,7 +480,7 @@ void knubbiePage(char knubbieName[], char knubbieV1[], char knubbieV2[], char kn
 
  //curve
  
-  lcd.write("ss1,8;");
+  lcd.write("sd1,10;");
   delay(longDel);
   lcd.write("ss");
   lcd.write(knubbieCrv);
@@ -488,7 +488,7 @@ void knubbiePage(char knubbieName[], char knubbieV1[], char knubbieV2[], char kn
   delay(longDel); 
 }
 
-void (*drawFuncs[6])(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]) = {productPage, softwareVersion, presetPage, knubbiePage, savePage};
+void (*drawFuncs[6])(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]) = {productPage, softwareVersion, presetPage, knubbiePage, knubbiePage, savePage};
 
 
 
