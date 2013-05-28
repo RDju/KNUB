@@ -99,20 +99,16 @@ void setup(){
     (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
     delay(500);
     initMemDisp();
-    clearScreen();
-    
-    (*drawFuncs[2])("", "", "", "", "", "", "", "", "");
-    
-    itoa(currentPresetID, valBuf, 10);
-    
-    updatePreset(valBuf, activePreset.name, isEdited);
     
     clearScreen();
-    
-    pageLevel = 3;
-     (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
+    pageLevel = 2;
+         tabIndx = 0;
+         (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
          itoa(currentPresetID, valBuf, 10);
          updatePreset(valBuf, activePreset.name, isEdited);
+    
+    
+     
  }
 
 void loop(){
@@ -261,23 +257,11 @@ if(encoderValue != lastValue){
             if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
                  currentParam = txtParamIndx%8;
-                 
-                 /*
-                 updateParam(tabIndx,activePreset.knubbies[currentParam].name);
-                 updateParam(tabIndx+1,activePreset.knubbies[currentParam].modSource);
-                 updateParam(tabIndx+2,boolToString(activePreset.knubbies[currentParam].state));
-                 updateParam(tabIndx+3,toString(activePreset.knubbies[currentParam].numLoop));
-                 updateParam(tabIndx+4,toString(activePreset.knubbies[currentParam].params[0]));
-                 updateParam(tabIndx+5,toString(activePreset.knubbies[currentParam].params[1]));
-                 updateParam(tabIndx+6,toString(activePreset.knubbies[currentParam].params[2]));
-                 */
+            
                  updateParam(0, toString(currentParam + 1));
                  updateParam(1,activePreset.knubbies[currentParam].name);
                  updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
                  updateParam(3,activePreset.knubbies[currentParam].modSource);
-                 
-                 
-                 
                  updateParam(4,toString(activePreset.knubbies[currentParam].params[0]));
                  updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
                  updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));  
