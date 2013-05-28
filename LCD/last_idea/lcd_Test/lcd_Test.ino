@@ -69,7 +69,7 @@ aKnubPreset activePreset = {"RIFF",0,
   {"TONE", {50, 50, 1}, "mid", true},
   {"VOL", {3, 127, 1}, "mid", true},
   {"BLEND", {110, 0, 1}, "osc", false}, 
-  {"DELAY", {10, 20, 1}, "osc", false},
+  {"DELAY", {10, 20, 1}, "osc", true},
   {"FEED", {0, 127, 1}, "exp", true},
   {"FREQ", {115, 20, 1}, "exp", true},
   {"AMNT", {10, 127, 1}, "exp", true}}

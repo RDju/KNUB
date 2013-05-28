@@ -56,7 +56,7 @@ uint8_t numTabs[] = {0, 0, 0, 2, 7};
 char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
-char* paramTabs[] = {"0,0", "0,2", "0,10", "0,13", "1,2", "1,6", "1,13"};
+char* paramTabs[] = {"0,0", "0,2", "0,13", "1,13", "1,0", "1,4", "1,9"};
 //char* paramTabs[] = {"0,0", "0,7", "0,12", "0,15", "1,2", "1,6", "1,13"};
 char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
@@ -270,10 +270,10 @@ char* boolToString(boolean bval){
 
   if(bval == true){
     
-    return "O";
+    return "[x]";
   }else{
   
-    return "X";
+    return "[ ]";
   }
 }
 
