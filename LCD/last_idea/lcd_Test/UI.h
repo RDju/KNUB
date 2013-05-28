@@ -56,7 +56,8 @@ uint8_t numTabs[] = {0, 0, 0, 2, 7};
 char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
-char* paramTabs[] = {"0,0", "0,7", "0,12", "0,15", "1,2", "1,6", "1,13"};
+char* paramTabs[] = {"0,0", "0,2", "0,10", "0,13", "1,2", "1,6", "1,13"};
+//char* paramTabs[] = {"0,0", "0,7", "0,12", "0,15", "1,2", "1,6", "1,13"};
 char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
 
@@ -309,98 +310,6 @@ void softwareVersion(char dummy[], char dummy1[], char dummy2[], char dummy3[], 
  lcd.write(";");
  delay(longDel);
 }
-/*
-void presetPage(char presetNum[], char dummy1[], char dummy2[], char dummy3[]){
-
- lcd.write("sc;");
- delay(longDel);
- lcd.write("sd0,0;");
- delay(longDel);
- lcd.write("ssPRESET:;");
- delay(longDel);
- lcd.write("ss");
- lcd.write(presetNum);
- lcd.write(";");
- delay(longDel);
-}
-/*
-void effectPage(char effectName[], char state[], char dummy2[], char dummy3[]){
-
-
- lcd.write("sd0,0;");
- delay(longDel);
- lcd.write("ssEffect:;");
- delay(longDel);
- lcd.write("ss");
- lcd.write(effectName);
- lcd.write(";");
- delay(longDel);
- lcd.write("sd1,0;");
- delay(longDel);
- lcd.write("ssActive:;");
- delay(longDel);
- lcd.write("ss");
- lcd.write(state);
- lcd.write(";");
- delay(longDel);
-}
-
-void paramPage(char paramName[], char val1[], char val2[], char curveType[]){
- 
- lcd.write("sd0,0;");
- delay(longDel);
- lcd.write("ssParam:;");
- delay(longDel);
- 
- lcd.write("sd");
- lcd.write(paramTabs[0]);
- lcd.write(";");
- delay(longDel);
- 
- lcd.write("ss");
- lcd.write(paramName);
- lcd.write(";");
- delay(longDel);
- 
- lcd.write("sd");
- lcd.write(paramTabs[1]);
- lcd.write(";");
- delay(longDel);
- 
- lcd.write("ss");
- lcd.write(val1);
- lcd.write(";");
- delay(longDel);
- 
- lcd.write("sd");
- lcd.write(paramTabs[2]);
- lcd.write(";");
- delay(longDel);
- 
- lcd.write("ss");
- lcd.write(val2);
- lcd.write(";");
- delay(longDel);
- 
- lcd.write("sd");
- lcd.write(paramTabs[3]);
- lcd.write(";");
- delay(longDel);
- 
- lcd.write("ss");
- lcd.write(curveType);
- lcd.write(";");
- delay(longDel);
-
- lcd.write("sd");
- lcd.write(paramTabs[0]);
- lcd.write(";");
- delay(longDel);
-
-}
-*/
-
-
 
 void savePage(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
@@ -425,37 +334,37 @@ void presetPage(char presetNum[], char dummy1[], char dummy2[], char dummy3[], c
  delay(longDel);
 }
 
-void knubbiePage(char knubbieName[], char knubbieV1[], char knubbieV2[], char knubbieCrv[], char knubbieMod[], char knubbieState[], char knubbieLoop[], char knubbieSwitch[], char dummy[8]){
+void knubbiePage(char knubbieName[], char knubbieV1[], char knubbieV2[], char knubbieCrv[], char knubbieMod[], char knubbieState[], char knubbieLoop[], char knubbieSwitch[], char knubNum[]){
   
   //name
   lcd.write("sd0,0;");
   delay(longDel);
   lcd.write("ss");
-  lcd.write(knubbieName);
+  lcd.write(knubNum);
   lcd.write(";");
   delay(longDel);
   
   //mod
-  lcd.write("sd0,7;");
+  lcd.write("sd0,2;");
   delay(longDel);
   lcd.write("ss");
-  lcd.write(knubbieMod);
+  lcd.write(knubbieName);
   lcd.write(";");
   delay(longDel);
 
 
   //state
-  lcd.write("sd0,12");
+  lcd.write("sd0,10");
   delay(longDel);
   lcd.write("ss");
-  lcd.write(knubbieState);
+  lcd.write(knubbieMod);
   delay(longDel);
   
   //loop
   lcd.write("sd0,15;");
   delay(longDel);
   lcd.write("ss");
-  lcd.write(knubbieLoop);
+  lcd.write(knubbieState);
   lcd.write(";");
   delay(longDel);  
 

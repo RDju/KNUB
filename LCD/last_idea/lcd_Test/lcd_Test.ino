@@ -144,15 +144,18 @@ void loop(){
      case 4:
      tabIndx = 0;
      clearScreen();
-      
-                 updateParam(0,activePreset.knubbies[currentParam].name);
-                 updateParam(1,activePreset.knubbies[currentParam].modSource);
+                 
+                 updateParam(0, toString(currentParam + 1));
+                 updateParam(1,activePreset.knubbies[currentParam].name);
                  updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
-                 updateParam(3,toString(activePreset.knubbies[currentParam].numLoop));
+                 updateParam(3,activePreset.knubbies[currentParam].modSource);
+                 
+                 //updateParam(3,toString(activePreset.knubbies[currentParam].numLoop));
+                 
                  updateParam(4,toString(activePreset.knubbies[currentParam].params[0]));
                  updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
                  updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));    
-    
+                 
     time2ChangePage = false;
      break;
      case 5:
@@ -209,7 +212,7 @@ void loop(){
              tabIndx = tabIndx%numTabs[pageLevel];
              tab(paramTabs[tabIndx]);
         
-             //customCursor(tabIndx, pageLevel);
+             customCursor(tabIndx, pageLevel);
           }
         break;
         }
@@ -259,6 +262,7 @@ if(encoderValue != lastValue){
                  txtParamIndx += encoderDir;
                  currentParam = txtParamIndx%8;
                  
+                 /*
                  updateParam(tabIndx,activePreset.knubbies[currentParam].name);
                  updateParam(tabIndx+1,activePreset.knubbies[currentParam].modSource);
                  updateParam(tabIndx+2,boolToString(activePreset.knubbies[currentParam].state));
@@ -266,7 +270,17 @@ if(encoderValue != lastValue){
                  updateParam(tabIndx+4,toString(activePreset.knubbies[currentParam].params[0]));
                  updateParam(tabIndx+5,toString(activePreset.knubbies[currentParam].params[1]));
                  updateParam(tabIndx+6,toString(activePreset.knubbies[currentParam].params[2]));
+                 */
+                 updateParam(0, toString(currentParam + 1));
+                 updateParam(1,activePreset.knubbies[currentParam].name);
+                 updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
+                 updateParam(3,activePreset.knubbies[currentParam].modSource);
                  
+                 
+                 
+                 updateParam(4,toString(activePreset.knubbies[currentParam].params[0]));
+                 updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
+                 updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));  
                  
                  
              }
