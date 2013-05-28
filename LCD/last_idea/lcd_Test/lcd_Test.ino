@@ -71,9 +71,7 @@ aKnubPreset activePreset = {"RIFF",0,
  {"BLEND", {50, 100, 1}, "MID", false, 2, "intern"},
  {"DELAY", {50, 100, 1}, "MID", true, 3, "intern"},
  {"FEED", {50, 100, 1}, "MID", true, 3, "intern"},
- {"", {0, 0, 0}, "", true, 4, ""},
- {"", {0, 0, 0}, "", true, 4, ""}}  
-}
+}};
 
 void setup(){
   
@@ -94,14 +92,14 @@ void setup(){
   currentPresetID = 0;
 
     //startUp sequence
-    (*drawFuncs[0])("", "", "", "");
+    (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
     delay(500);
-    (*drawFuncs[1])("", "", "", "");
+    (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
     delay(500);
     initMemDisp();
     clearScreen();
     
-    (*drawFuncs[2])("", "", "", "");
+    (*drawFuncs[2])("", "", "", "", "", "", "", "", "");
     itoa(currentPresetID, valBuf, 10);
     updatePreset(valBuf, activePreset.name, isEdited);
     pageLevel = 2;
@@ -132,7 +130,7 @@ void loop(){
          time2ChangePage = false;
      break;
      case 3:
-     
+     /*
      clearScreen();
      tabIndx = 0;
          (*drawFuncs[pageLevel])(activePreset.knubbies[currentFx].name, fxState[activePreset.knubbies[currentFx].isOn], "", "");
@@ -140,11 +138,28 @@ void loop(){
              tab(effectTabs[tabIndx]);
              customCursor(tabIndx,pageLevel);
     time2ChangePage = false;
+     */
      break;
      case 4:
      tabIndx = 0;
      clearScreen();
-         (*drawFuncs[pageLevel])(activePreset.knubbies[currentFx].knubs[currentParam].name, 
+         
+     (*drawFuncs[pageLevel])(
+     
+               activePreset.knubbies[currentParam].name,
+               toString(activePreset.knubbies[currentParam].params[0]), 
+               toString(activePreset.knubbies[currentParam].params[1]),
+               toString(activePreset.knubbies[currentParam].params[2]),
+               activePreset.knubbies[currentParam].modSource, 
+               boolToString(activePreset.knubbies[currentParam].sate), 
+               toString(activePrest.knubbies[currentParam].numLoop), 
+               activePreset.knubbies[currentParam].switchType
+          
+     
+     );    
+         
+    /*     
+    (*drawFuncs[pageLevel])(activePreset.knubbies[currentFx].knubs[currentParam].name, 
                                  toString(activePreset.knubbies[currentFx].knubs[currentParam].params[0]), 
                                  toString(activePreset.knubbies[currentFx].knubs[currentParam].params[1]),
                                  toString(activePreset.knubbies[currentFx].knubs[currentParam].params[2]));
@@ -153,6 +168,7 @@ void loop(){
                    updateParam(i+1, toString(activePreset.knubbies[currentFx].knubs[currentParam].params[i]));
                  
                  }
+    */
     time2ChangePage = false;
      break;
      case 5:

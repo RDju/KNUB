@@ -263,10 +263,21 @@ char* toString(uint8_t val){
 
   itoa(val, tmpStr, 10);
   return tmpStr;
+}
+
+char* boolToString(boolean bval){
+
+  if(bval){
+    
+    return "ON ";
+  }else{
+  
+    return "OFF";
+  
+  }
 
 
 }
-
 
 ///////////////////////////////////////////////////////
 
