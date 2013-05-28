@@ -363,9 +363,9 @@ if(encoderValue != lastValue){
      }
      break;
    case 3:
-      /*
+      
       switch(tabIndx){
-       
+       /*
         case 0:
             scaledEncoderValueParam = encoderValue%25;
             if(scaledEncoderValueParam == 0){
@@ -383,12 +383,13 @@ if(encoderValue != lastValue){
                  
                  }
                }
-        */
+        
         break;
         case 1:
             
         break;
-      }
+      */  
+    }
     break;
     case 2:
     
