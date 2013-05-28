@@ -65,14 +65,14 @@ char* modSources[3] = {"mid", "osc", "exp"};
 
 aKnubPreset activePreset = {"RIFF",0,
   
-  {{"DIST", {22, 115, 1}, "mid", true, 1, "EXTERN"}, 
-  {"TONE", {50, 50, 1}, "mid", true, 1, "EXTERN"},
-  {"VOL", {3, 127, 1}, "mid", true, 1, "EXTERN"},
-  {"BLEND", {110, 0, 1}, "osc", false, 1, "EXTERN"}, 
-  {"DELAY", {10, 20, 1}, "osc", false, 1, "EXTERN"},
-  {"FEED", {0, 127, 1}, "exp", true, 1, "EXTERN"},
-  {"FREQ", {115, 20, 1}, "exp", true, 1, "EXTERN"},
-  {"AMNT", {10, 127, 1}, "exp", true, 1, "EXTERN"}}
+  {{"DIST", {22, 115, 1}, "mid", true}, 
+  {"TONE", {50, 50, 1}, "mid", true},
+  {"VOL", {3, 127, 1}, "mid", true},
+  {"BLEND", {110, 0, 1}, "osc", false}, 
+  {"DELAY", {10, 20, 1}, "osc", false},
+  {"FEED", {0, 127, 1}, "exp", true},
+  {"FREQ", {115, 20, 1}, "exp", true},
+  {"AMNT", {10, 127, 1}, "exp", true}}
 };
 
 void setup(){
@@ -106,10 +106,7 @@ void setup(){
          (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
          itoa(currentPresetID, valBuf, 10);
          updatePreset(valBuf, activePreset.name, isEdited);
-    
-    
-     
- }
+}
 
 void loop(){
 
@@ -145,9 +142,6 @@ void loop(){
                  updateParam(1,activePreset.knubbies[currentParam].name);
                  updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
                  updateParam(3,activePreset.knubbies[currentParam].modSource);
-                 
-                 //updateParam(3,toString(activePreset.knubbies[currentParam].numLoop));
-                 
                  updateParam(4,toString(activePreset.knubbies[currentParam].params[0]));
                  updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
                  updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));    
