@@ -65,14 +65,14 @@ char* modSources[3] = {"mid", "osc", "exp"};
 
 aKnubPreset activePreset = {"RIFF",0,
   
-  {{"DIST", {10, 127, 1}, modSources[0], true, 1, "EXTERN"}, 
-  {"TONE", {10, 127, 1}, modSources[0], true, 1, "EXTERN"},
-  {"VOL", {10, 127, 1}, modSources[0], true, 1, "EXTERN"},
-  {"BLEND", {10, 127, 1}, modSources[0], true, 1, "EXTERN"}, 
-  {"DELAY", {10, 127, 1}, modSources[0], true, 1, "EXTERN"},
-  {"FEED", {10, 127, 1}, modSources[0], true, 1, "EXTERN"},
-  {"FREQ", {10, 127, 1}, modSources[0], true, 1, "EXTERN"},
-  {"AMNT", {10, 127, 1}, modSources[0], true, 1, "EXTERN"}}
+  {{"DIST", {22, 115, 1}, "mid", true, 1, "EXTERN"}, 
+  {"TONE", {50, 50, 1}, "mid", true, 1, "EXTERN"},
+  {"VOL", {3, 127, 1}, "mid", true, 1, "EXTERN"},
+  {"BLEND", {10, 127, 1}, "mid", true, 1, "EXTERN"}, 
+  {"DELAY", {10, 127, 1}, "mid", true, 1, "EXTERN"},
+  {"FEED", {10, 127, 1}, "mid", true, 1, "EXTERN"},
+  {"FREQ", {10, 127, 1}, "mid", true, 1, "EXTERN"},
+  {"AMNT", {10, 127, 1}, "mid", true, 1, "EXTERN"}}
 };
 
 void setup(){
@@ -102,10 +102,14 @@ void setup(){
     clearScreen();
     
     (*drawFuncs[2])("", "", "", "", "", "", "", "", "");
+    
     itoa(currentPresetID, valBuf, 10);
+    
     updatePreset(valBuf, activePreset.name, isEdited);
     pageLevel = 4;
+    
     clearScreen();
+    
     (*drawFuncs[pageLevel])(
      
                activePreset.knubbies[currentParam].name,
@@ -120,6 +124,14 @@ void setup(){
           
      
      );
+     updateParam(0,activePreset.knubbies[currentParam].name);
+                 updateParam(1,activePreset.knubbies[currentParam].modSource);
+                 updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
+                 updateParam(3,toString(activePreset.knubbies[currentParam].numLoop));
+                 updateParam(4,toString(activePreset.knubbies[currentParam].params[0]));
+                 updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
+                 updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));
+     
 }
 
 void loop(){
@@ -306,15 +318,15 @@ if(encoderValue != lastValue){
             scaledEncoderValueParam = encoderValue%25;
             if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
-                 currentParam = txtParamIndx%3;
+                 currentParam = txtParamIndx%8;
                  
                  updateParam(tabIndx,activePreset.knubbies[currentParam].name);
                  updateParam(tabIndx+1,activePreset.knubbies[currentParam].modSource);
                  updateParam(tabIndx+2,boolToString(activePreset.knubbies[currentParam].state));
                  updateParam(tabIndx+3,toString(activePreset.knubbies[currentParam].numLoop));
-                 updateParam(tabIndx,toString(activePreset.knubbies[currentParam].params[0]));
-                 updateParam(tabIndx,toString(activePreset.knubbies[currentParam].params[1]));
-                 updateParam(tabIndx,toString(activePreset.knubbies[currentParam].params[2]));
+                 updateParam(tabIndx+4,toString(activePreset.knubbies[currentParam].params[0]));
+                 updateParam(tabIndx+5,toString(activePreset.knubbies[currentParam].params[1]));
+                 updateParam(tabIndx+6,toString(activePreset.knubbies[currentParam].params[2]));
                  
                  
                  

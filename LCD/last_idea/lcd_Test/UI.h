@@ -56,7 +56,7 @@ uint8_t numTabs[] = {0, 0, 0, 2, 7};
 char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
-char* paramTabs[] = {"0,0", "0,8", "0,12", "0,15", "1,3", "1,6", "1,10"};
+char* paramTabs[] = {"0,0", "0,8", "0,12", "0,15", "1,2", "1,6", "1,10"};
 char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
 
