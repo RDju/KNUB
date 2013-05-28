@@ -64,14 +64,16 @@ char* fxState[2] = {"OFF", "ON"};
 ////this is the dummy Preset
 
 aKnubPreset activePreset = {"RIFF",0,
-
-{{"DIST", {50, 100, 1}, "MID", true, 1, "intern"}, 
- {"TONE", {10, 127, 1}, "MID", true, 1, "intern"},
- {"VOL", {100, 30, 1}, "MID", true, 1, "intern"},
- {"BLEND", {50, 100, 1}, "MID", false, 2, "intern"},
- {"DELAY", {50, 100, 1}, "MID", true, 3, "intern"},
- {"FEED", {50, 100, 1}, "MID", true, 3, "intern"},
-}};
+  
+  {{"DIST", {10, 127, 1}, "MID", true, 1, "EXTERN"}, 
+  {"TONE", {10, 127, 1}, "MID", true, 1, "EXTERN"},
+  {"VOL", {10, 127, 1}, "MID", true, 1, "EXTERN"},
+  {"BLEND", {10, 127, 1}, "MID", true, 1, "EXTERN"}, 
+  {"DELAY", {10, 127, 1}, "MID", true, 1, "EXTERN"},
+  {"FEED", {10, 127, 1}, "MID", true, 1, "EXTERN"},
+  {"FREQ", {10, 127, 1}, "MID", true, 1, "EXTERN"},
+  {"AMNT", {10, 127, 1}, "MID", true, 1, "EXTERN"}}
+};
 
 void setup(){
   
@@ -113,18 +115,18 @@ void loop(){
    switch(pageLevel){
      case 0:
      clearScreen();
-       (*drawFuncs[pageLevel])("", "", "", "");
+       (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
         time2ChangePage = false;
      break;
      case 1:  
      clearScreen();
-        (*drawFuncs[pageLevel])("", "", "", "");
+        (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
         time2ChangePage = false;
      break;
      case 2:
      clearScreen();
          tabIndx = 0;
-         (*drawFuncs[pageLevel])("", "", "", "");
+         (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
          itoa(currentPresetID, valBuf, 10);
          updatePreset(valBuf, activePreset.name, isEdited);
          time2ChangePage = false;
@@ -151,9 +153,10 @@ void loop(){
                toString(activePreset.knubbies[currentParam].params[1]),
                toString(activePreset.knubbies[currentParam].params[2]),
                activePreset.knubbies[currentParam].modSource, 
-               boolToString(activePreset.knubbies[currentParam].sate), 
-               toString(activePrest.knubbies[currentParam].numLoop), 
-               activePreset.knubbies[currentParam].switchType
+               boolToString(activePreset.knubbies[currentParam].state), 
+               toString(activePreset.knubbies[currentParam].numLoop), 
+               activePreset.knubbies[currentParam].switchType,
+               ""
           
      
      );    
@@ -173,7 +176,7 @@ void loop(){
      break;
      case 5:
        clearScreen();
-       (*drawFuncs[pageLevel])("", "",  "",  "");
+       (*drawFuncs[pageLevel])("", "",  "",  "", "", "", "", "", "");
        time2ChangePage = false;
        delay(saveTime*5);
        pageLevel = 2;
@@ -211,7 +214,7 @@ void loop(){
           }
         break;
         case 3:
-        
+        /*
         if(bValid.click == 2 && tabIndx == 0){
           pageLevel ++;
           time2ChangePage = true;
@@ -226,7 +229,7 @@ void loop(){
                 updatePedalState(fxState[1]);
             } 
       }   
-           
+       */    
        break;
         case 4:
           if(bValid.click == 1){

@@ -5,10 +5,10 @@
 struct aKnub{
   char name[maxNameLength];
   uint8_t params[3];
-  char modSource[3];
+  char modSource[4];
   boolean state;
   uint8_t numLoop;
-  char switchType[6];
+  char switchType[7];
   
 };
 typedef struct aKnub aKnub;
