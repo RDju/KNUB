@@ -106,10 +106,14 @@ void setup(){
     itoa(currentPresetID, valBuf, 10);
     
     updatePreset(valBuf, activePreset.name, isEdited);
-    pageLevel = 4;
+    
     
     clearScreen();
-    
+    pageLevel = 3;
+     (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
+         itoa(currentPresetID, valBuf, 10);
+         updatePreset(valBuf, activePreset.name, isEdited);
+    /*
     (*drawFuncs[pageLevel])(
      
                activePreset.knubbies[currentParam].name,
@@ -132,6 +136,7 @@ void setup(){
                  updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
                  updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));
      
+    */
 }
 
 void loop(){
@@ -171,7 +176,7 @@ void loop(){
      case 4:
      tabIndx = 0;
      clearScreen();
-         
+     /*   
      (*drawFuncs[pageLevel])(
      
                activePreset.knubbies[currentParam].name,
@@ -185,8 +190,15 @@ void loop(){
                ""
           
      
-     );    
-         
+     );
+   */    
+     updateParam(0,activePreset.knubbies[currentParam].name);
+                 updateParam(1,activePreset.knubbies[currentParam].modSource);
+                 updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
+                 updateParam(3,toString(activePreset.knubbies[currentParam].numLoop));
+                 updateParam(4,toString(activePreset.knubbies[currentParam].params[0]));
+                 updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
+                 updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));    
     /*     
     (*drawFuncs[pageLevel])(activePreset.knubbies[currentFx].knubs[currentParam].name, 
                                  toString(currentParamVal = activePreset.knubbies[currentParam].params[0];), 
