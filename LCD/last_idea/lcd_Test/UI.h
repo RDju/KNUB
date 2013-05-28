@@ -52,7 +52,7 @@ SoftwareSerial lcd(rxPin, txPin);
 
 int fxIndx = 0;
 int memTabIndx = 0;
-uint8_t numTabs[] = {0, 0, 0, 2, 4};
+uint8_t numTabs[] = {0, 0, 0, 2, 7};
 char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
@@ -288,7 +288,7 @@ char* toString(uint8_t val){
 
 ///////////// PAGES ///////////////////////////////////
 
-void productPage(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
+void productPage(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
  lcd.write("sc;");
  delay(10);
  lcd.write("sd0,0;");
@@ -305,7 +305,7 @@ void productPage(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
  delay(longDel);
 }
 
-void softwareVersion(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
+void softwareVersion(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
  lcd.write("sc;");
  delay(10);
@@ -316,7 +316,7 @@ void softwareVersion(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
  lcd.write(";");
  delay(longDel);
 }
-
+/*
 void presetPage(char presetNum[], char dummy1[], char dummy2[], char dummy3[]){
 
  lcd.write("sc;");
@@ -409,7 +409,7 @@ void paramPage(char paramName[], char val1[], char val2[], char curveType[]){
 
 
 
-void savePage(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
+void savePage(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
   lcd.write("sd0,0;");
   delay(longDel);
@@ -418,7 +418,7 @@ void savePage(char dummy[], char dummy1[], char dummy2[], char dummy3[]){
 }
 
 
-void presetPage(char presetNum[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[]){
+void presetPage(char presetNum[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
  lcd.write("sc;");
  delay(longDel);
