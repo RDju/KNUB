@@ -56,7 +56,7 @@ uint8_t numTabs[] = {0, 0, 0, 2, 7};
 char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
-char* paramTabs[] = {"0,0", "0,8", "0,12", "0,15", "1,2", "1,6", "1,13"};
+char* paramTabs[] = {"0,0", "0,7", "0,12", "0,15", "1,2", "1,6", "1,13"};
 char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
 
@@ -194,10 +194,10 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
       
         clearAllTabs();
         lcd.write("sd");
-        lcd.write("0,6");
+        lcd.write(paramTabs[1]);
         lcd.write(";");
         delay(longDel);
-        lcd.write("ss>;");
+        lcd.write("ss-;");
         delay(longDel);
         
         
@@ -269,10 +269,10 @@ char* boolToString(boolean bval){
 
   if(bval == true){
     
-    return "ON ";
+    return "O";
   }else{
   
-    return "OFF";
+    return "X";
   }
 }
 
@@ -436,7 +436,7 @@ void knubbiePage(char knubbieName[], char knubbieV1[], char knubbieV2[], char kn
   delay(longDel);
   
   //mod
-  lcd.write("sd0,8;");
+  lcd.write("sd0,7;");
   delay(longDel);
   lcd.write("ss");
   lcd.write(knubbieMod);

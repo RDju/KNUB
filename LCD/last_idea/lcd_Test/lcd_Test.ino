@@ -68,11 +68,11 @@ aKnubPreset activePreset = {"RIFF",0,
   {{"DIST", {22, 115, 1}, "mid", true, 1, "EXTERN"}, 
   {"TONE", {50, 50, 1}, "mid", true, 1, "EXTERN"},
   {"VOL", {3, 127, 1}, "mid", true, 1, "EXTERN"},
-  {"BLEND", {10, 127, 1}, "mid", true, 1, "EXTERN"}, 
-  {"DELAY", {10, 127, 1}, "mid", true, 1, "EXTERN"},
-  {"FEED", {10, 127, 1}, "mid", true, 1, "EXTERN"},
-  {"FREQ", {10, 127, 1}, "mid", true, 1, "EXTERN"},
-  {"AMNT", {10, 127, 1}, "mid", true, 1, "EXTERN"}}
+  {"BLEND", {110, 0, 1}, "osc", false, 1, "EXTERN"}, 
+  {"DELAY", {10, 20, 1}, "osc", false, 1, "EXTERN"},
+  {"FEED", {0, 127, 1}, "exp", true, 1, "EXTERN"},
+  {"FREQ", {115, 20, 1}, "exp", true, 1, "EXTERN"},
+  {"AMNT", {10, 127, 1}, "exp", true, 1, "EXTERN"}}
 };
 
 void setup(){
@@ -107,37 +107,13 @@ void setup(){
     
     updatePreset(valBuf, activePreset.name, isEdited);
     
-    
     clearScreen();
+    
     pageLevel = 3;
      (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
          itoa(currentPresetID, valBuf, 10);
          updatePreset(valBuf, activePreset.name, isEdited);
-    /*
-    (*drawFuncs[pageLevel])(
-     
-               activePreset.knubbies[currentParam].name,
-               toString(activePreset.knubbies[currentParam].params[0]), 
-               toString(activePreset.knubbies[currentParam].params[1]),
-               toString(activePreset.knubbies[currentParam].params[2]),
-               activePreset.knubbies[currentParam].modSource, 
-               boolToString(activePreset.knubbies[currentParam].state), 
-               toString(activePreset.knubbies[currentParam].numLoop), 
-               activePreset.knubbies[currentParam].switchType,
-               ""
-          
-     
-     );
-     updateParam(0,activePreset.knubbies[currentParam].name);
-                 updateParam(1,activePreset.knubbies[currentParam].modSource);
-                 updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
-                 updateParam(3,toString(activePreset.knubbies[currentParam].numLoop));
-                 updateParam(4,toString(activePreset.knubbies[currentParam].params[0]));
-                 updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
-                 updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));
-     
-    */
-}
+ }
 
 void loop(){
 
@@ -163,53 +139,20 @@ void loop(){
          time2ChangePage = false;
      break;
      case 3:
-     /*
-     clearScreen();
-     tabIndx = 0;
-         (*drawFuncs[pageLevel])(activePreset.knubbies[currentFx].name, fxState[activePreset.knubbies[currentFx].isOn], "", "");
-         tabIndx = tabIndx%numTabs[pageLevel];
-             tab(effectTabs[tabIndx]);
-             customCursor(tabIndx,pageLevel);
-    time2ChangePage = false;
-     */
+  
      break;
      case 4:
      tabIndx = 0;
      clearScreen();
-     /*   
-     (*drawFuncs[pageLevel])(
-     
-               activePreset.knubbies[currentParam].name,
-               toString(activePreset.knubbies[currentParam].params[0]), 
-               toString(activePreset.knubbies[currentParam].params[1]),
-               toString(activePreset.knubbies[currentParam].params[2]),
-               activePreset.knubbies[currentParam].modSource, 
-               boolToString(activePreset.knubbies[currentParam].state), 
-               toString(activePreset.knubbies[currentParam].numLoop), 
-               activePreset.knubbies[currentParam].switchType,
-               ""
-          
-     
-     );
-   */    
-     updateParam(0,activePreset.knubbies[currentParam].name);
+      
+                 updateParam(0,activePreset.knubbies[currentParam].name);
                  updateParam(1,activePreset.knubbies[currentParam].modSource);
                  updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
                  updateParam(3,toString(activePreset.knubbies[currentParam].numLoop));
                  updateParam(4,toString(activePreset.knubbies[currentParam].params[0]));
                  updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
                  updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));    
-    /*     
-    (*drawFuncs[pageLevel])(activePreset.knubbies[currentFx].knubs[currentParam].name, 
-                                 toString(currentParamVal = activePreset.knubbies[currentParam].params[0];), 
-                                 toString(currentParamVal = activePreset.knubbies.[currentParam].params[1]),
-                                 toString(activePreset.knubbies[currentFx].knubs[currentParam].params[2]));
-    for(int i =0; i<activePreset.knubbies[currentFx].numKnub; i++){
-                 
-                   updateParam(i+1, toString(activePreset.knubbies[currentFx].knubs[currentParam].params[i]));
-                 
-                 }
-    */
+    
     time2ChangePage = false;
      break;
      case 5:
@@ -257,18 +200,7 @@ void loop(){
           pageLevel ++;
           time2ChangePage = true;
           
-        }/*
-        else if(bValid.click == 1){
-         
-            if(activePreset.knubbies[currentFx].isOn == 1){
-                activePreset.knubbies[currentFx].isOn = 0;
-                updatePedalState(fxState[0]);
-            }else if(activePreset.knubbies[currentFx].isOn == 0){
-                activePreset.knubbies[currentFx].isOn = 1;  
-                updatePedalState(fxState[1]);
-            } 
-      }   
-       */    
+        }   
        break;
         case 4:
           if(bValid.click == 1){
@@ -277,13 +209,8 @@ void loop(){
              tabIndx = tabIndx%numTabs[pageLevel];
              tab(paramTabs[tabIndx]);
         
-             customCursor(tabIndx, pageLevel);
-        }else if(tabIndx == 0 && bValid.click == 2){
-        
-            ///save this param
-            //pageLevel = 5;
-            //time2ChangePage = true;
-        }
+             //customCursor(tabIndx, pageLevel);
+          }
         break;
         }
     }
@@ -294,7 +221,7 @@ void loop(){
     if(bckValid.click==2 && pageLevel > 2){
       
   
-        pageLevel --;
+        pageLevel = 2;
         time2ChangePage = true;
    
         
@@ -311,7 +238,7 @@ void loop(){
              tabIndx = tabIndx%numTabs[pageLevel];
              tab(paramTabs[tabIndx]);
         
-             customCursor(tabIndx, pageLevel);
+             //customCursor(tabIndx, pageLevel);
        
      
      }
