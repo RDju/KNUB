@@ -281,19 +281,21 @@ if(encoderValue != lastValue){
            if(currentParamVal>0 && currentParamVal<100){
                currentParamVal += encoderDir;
                
-               (currentParamVal);
-               itoa(currentParamVal, valBuf, 10);
-               updateParam2(1, valBuf);
+               
+               //itoa(currentParamVal, valBuf, 10);
+               
+               
+               updateParam2(1, customDigits[currentParamVal]);
                currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
-                   itoa(currentParamVal, valBuf, 10);
-                   updateParam2(1, valBuf);
+                   //itoa(currentParamVal, valBuf, 10);
+                   updateParam2(1, customDigits[currentParamVal]);
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
-                   itoa(currentParamVal, valBuf, 10);
-                   updateParam2(1, valBuf);
+                   //itoa(currentParamVal, valBuf, 10);
+                   updateParam2(1, customDigits[currentParamVal]);
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }
        break;

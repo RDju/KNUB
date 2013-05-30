@@ -56,10 +56,19 @@ uint8_t numTabs[] = {0, 0, 0, 2, 6};
 char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
-char* paramTabs[] = {"0,0", "0,2", "0,13", "1,13", "1,1", "1,5", "1,10"};
-char* chParamTabs[] = {"0,12", "1,0", "1,4", "1,9", "1,12"};
+char* paramTabs[] = {"0,0", "0,2", "0,13", "1,13", "1,2", "1,6", "1,10"};
+char* chParamTabs[] = {"0,12", "1,0", "1,5", "1,9", "1,12"};
 char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
+
+char* customDigits[100] = {
+"000","001","002","003","004","005","006","007","008","009","011","012","013","014","015","016","017","018",
+"019","020","021","022","023","024","025","026","027","028","029","030","031","032","033","034","035","036",
+"037","038","039","040","041","042","043","044","045","046","047","048","049","050","051","052","053","054",
+"055","056","057","058","059","060","061","062","063","064","065","066","067","068","069","070","071","072",
+"073","074","075","076","077","078","079","080","081","082","083","084","085","086","087","088","089","090",
+"091","092","093","094","095","096","097","098","099","100"
+};
 
 /////////////// UTILS ////////////////
 void initDisplay(){
@@ -120,7 +129,7 @@ void updateParam2(uint8_t prmIndx, char newVal[]){
   lcd.write("sd");
   lcd.write(chParamTabs[prmIndx]);
   lcd.write(";");
-  delay(longDel);
+  delay(longDel);  
   lcd.write("ss");
   lcd.write(newVal);
   //lcd.write(" ");
@@ -216,7 +225,7 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
         //lcd.write(paramTabs[cusTab + 1]);
         //lcd.write(";");
         //delay(longDel);
-        //lcd.write("ss-;");
+        //lcd.write("ss";");
         //delay(longDel);
         
         
@@ -227,7 +236,7 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
         lcd.write(chParamTabs[0]);
         lcd.write(";");
         delay(longDel);
-        lcd.write("ss-;");
+        lcd.write("ss>;");
         delay(longDel);
       break;
       case 2:
@@ -236,7 +245,7 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
         lcd.write(chParamTabs[1]);
         lcd.write(";");
         delay(longDel);
-        lcd.write("ss-;");
+        lcd.write("ss>;");
         delay(longDel);
       break;
       case 3:
@@ -245,7 +254,7 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
         lcd.write(chParamTabs[2]);
         lcd.write(";");
         delay(longDel);
-        lcd.write("ss-;");
+        lcd.write("ss>;");
         delay(longDel);
      break;
      case 4:
@@ -254,7 +263,7 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
         lcd.write(chParamTabs[3]);
         lcd.write(";");
         delay(longDel);
-        lcd.write("ss-;");
+        lcd.write("ss>;");
         delay(longDel);
      break;
      case 5:
@@ -263,7 +272,7 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
         lcd.write(chParamTabs[4]);
         lcd.write(";");
         delay(longDel);
-        lcd.write("ss-;");
+        lcd.write("ss>;");
         delay(longDel);
      break;
     }
