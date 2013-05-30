@@ -52,12 +52,12 @@ SoftwareSerial lcd(rxPin, txPin);
 
 int fxIndx = 0;
 int memTabIndx = 0;
-uint8_t numTabs[] = {0, 0, 0, 2, 7};
+uint8_t numTabs[] = {0, 0, 0, 2, 6};
 char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
-char* paramTabs[] = {"0,0", "0,2", "0,13", "1,13", "1,0", "1,4", "1,9"};
-//char* paramTabs[] = {"0,0", "0,7", "0,12", "0,15", "1,2", "1,6", "1,13"};
+char* paramTabs[] = {"0,0", "0,2", "0,13", "1,13", "1,1", "1,5", "1,10"};
+char* chParamTabs[] = {"0,12", "1,0", "1,4", "1,9", "1,12"};
 char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
 
@@ -109,6 +109,22 @@ void updateParam(uint8_t prmIndx, char newVal[]){
   lcd.write(newVal);
   lcd.write(" ");
   lcd.write(" ");
+  lcd.write(";");
+  delay(longDel);
+
+}
+
+void updateParam2(uint8_t prmIndx, char newVal[]){
+  
+  
+  lcd.write("sd");
+  lcd.write(chParamTabs[prmIndx]);
+  lcd.write(";");
+  delay(longDel);
+  lcd.write("ss");
+  lcd.write(newVal);
+  //lcd.write(" ");
+  //lcd.write(" ");
   lcd.write(";");
   delay(longDel);
 
@@ -171,11 +187,13 @@ void updatePreset(char preset[], char pName[], boolean editMode){
 
 void clearAllTabs(){
 
-  for(int i=0; i<numTabs[4]; i++){
+  for(int i=0; i<5; i++){
     
       lcd.write("sd");
-      lcd.write(paramTabs[i]);
+      lcd.write(chParamTabs[i]);
       lcd.write(";");
+      delay(longDel);
+      lcd.write("ss ;");
       delay(longDel);
   
   }
@@ -194,40 +212,58 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
       case 0:
       
         clearAllTabs();
-        lcd.write("sd");
-        lcd.write(paramTabs[1]);
-        lcd.write(";");
-        delay(longDel);
-        lcd.write("ss-;");
-        delay(longDel);
+        //lcd.write("sd");
+        //lcd.write(paramTabs[cusTab + 1]);
+        //lcd.write(";");
+        //delay(longDel);
+        //lcd.write("ss-;");
+        //delay(longDel);
         
         
       break;
       case 1:
         clearAllTabs();
         lcd.write("sd");
-        lcd.write("1,0");
+        lcd.write(chParamTabs[0]);
         lcd.write(";");
         delay(longDel);
-        lcd.write("ss>;");
+        lcd.write("ss-;");
         delay(longDel);
       break;
       case 2:
          clearAllTabs();
          lcd.write("sd");
-        lcd.write("1,5");
+        lcd.write(chParamTabs[1]);
         lcd.write(";");
         delay(longDel);
-        lcd.write("ss>;");
+        lcd.write("ss-;");
         delay(longDel);
       break;
       case 3:
         clearAllTabs();
         lcd.write("sd");
-        lcd.write("1,10");
+        lcd.write(chParamTabs[2]);
         lcd.write(";");
         delay(longDel);
-        lcd.write("ss>;");
+        lcd.write("ss-;");
+        delay(longDel);
+     break;
+     case 4:
+        clearAllTabs();
+        lcd.write("sd");
+        lcd.write(chParamTabs[3]);
+        lcd.write(";");
+        delay(longDel);
+        lcd.write("ss-;");
+        delay(longDel);
+     break;
+     case 5:
+        clearAllTabs();
+        lcd.write("sd");
+        lcd.write(chParamTabs[4]);
+        lcd.write(";");
+        delay(longDel);
+        lcd.write("ss-;");
         delay(longDel);
      break;
     }
@@ -270,10 +306,10 @@ char* boolToString(boolean bval){
 
   if(bval == true){
     
-    return "[x]";
+    return "|x|";
   }else{
   
-    return "[ ]";
+    return "| |";
   }
 }
 
