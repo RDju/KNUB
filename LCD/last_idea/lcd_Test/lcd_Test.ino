@@ -328,6 +328,17 @@ if(encoderValue != lastValue){
               //updateParam(tabIndx, curves[txtParamIndx%3]);
            }
        break;
+       case 1:
+           ///not acitve yet
+           currentParamVal = activePreset.knubbies[currentParam].params[2];
+           
+           scaledEncoderValueParam = encoderValue%25;
+           if(scaledEncoderValueParam == 0){
+              txtParamIndx += encoderDir;
+              //updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
+              updateParam(2, boolToString(txtParamIndx%2));
+           }
+       break;
      }
      break;
    case 3:
