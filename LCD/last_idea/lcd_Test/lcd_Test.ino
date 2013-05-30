@@ -142,9 +142,9 @@ void loop(){
                  updateParam(1,activePreset.knubbies[currentParam].name);
                  updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
                  updateParam(3,activePreset.knubbies[currentParam].modSource);
-                 updateParam(4,toString(activePreset.knubbies[currentParam].params[0]));
-                 updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
-                 updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));    
+                 updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
+                 updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
+                 updateParam(6,customDigits[activePreset.knubbies[currentParam].params[2]]);    
                  
     time2ChangePage = false;
      break;
@@ -256,9 +256,9 @@ if(encoderValue != lastValue){
                  updateParam(1,activePreset.knubbies[currentParam].name);
                  updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
                  updateParam(3,activePreset.knubbies[currentParam].modSource);
-                 updateParam(4,toString(activePreset.knubbies[currentParam].params[0]));
-                 updateParam(5,toString(activePreset.knubbies[currentParam].params[1]));
-                 updateParam(6,toString(activePreset.knubbies[currentParam].params[2]));  
+                 updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
+                 updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
+                 updateParam(6,customDigits[activePreset.knubbies[currentParam].params[2]]);  
                  
                  
              }
@@ -280,22 +280,19 @@ if(encoderValue != lastValue){
            
            if(currentParamVal>0 && currentParamVal<100){
                currentParamVal += encoderDir;
-               
-               
-               //itoa(currentParamVal, valBuf, 10);
-               
-               
-               updateParam2(1, customDigits[currentParamVal]);
+      
+               updateParam(4, customDigits[currentParamVal]);
                currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
-          }else if(currentParamVal== 0 && encoderDir ==1){
+          
+        }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
-                   //itoa(currentParamVal, valBuf, 10);
-                   updateParam2(1, customDigits[currentParamVal]);
+                  
+                   updateParam(4, customDigits[currentParamVal]);
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
-                   //itoa(currentParamVal, valBuf, 10);
-                   updateParam2(1, customDigits[currentParamVal]);
+      
+                   updateParam(4, customDigits[currentParamVal]);
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }
        break;
@@ -305,18 +302,19 @@ if(encoderValue != lastValue){
            
            if(currentParamVal>0 && currentParamVal<100){
               currentParamVal += encoderDir;
-              itoa(currentParamVal, valBuf, 10);
-              updateParam2(2, valBuf);
+              
+              updateParam(3, customDigits[currentParamVal]);
               currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
           }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
-                   itoa(currentParamVal, valBuf, 10);
-                   updateParam2(2, valBuf);
+                   updateParam(3, customDigits[currentParamVal]);
                    currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
+                   
           }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
-                   itoa(currentParamVal, valBuf, 10);
-                   updateParam2(2, valBuf);
+                   
+                   updateParam(3, customDigits[currentParamVal]);
+                   
                    currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
          }
        break;

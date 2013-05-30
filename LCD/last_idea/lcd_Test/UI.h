@@ -57,7 +57,7 @@ char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};
 char* paramTabs[] = {"0,0", "0,2", "0,13", "1,13", "1,2", "1,6", "1,10"};
-char* chParamTabs[] = {"0,12", "1,0", "1,5", "1,9", "1,12"};
+char* chParamTabs[] = {"0,12", "1,1", "1,5", "1,9", "1,12"};
 char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
 
@@ -139,32 +139,6 @@ void updateParam2(uint8_t prmIndx, char newVal[]){
 
 }
 
-/*
-void updatePedalName(char pName[]){
-
-  lcd.write("sd0,7;");
-  delay(longDel);
-  
-  delay(longDel);
-  lcd.write("ss");
-  lcd.write(pName);
-  lcd.write(" ");
-  lcd.write(" ");
-  lcd.write(";");
-  delay(longDel);
-}
-
-void updatePedalState(char state[]){
-
-  lcd.write("sd1,7;");
-  delay(longDel);
-  lcd.write("ss");
-  lcd.write(state);
-  lcd.write(" ");
-  lcd.write(";");
-  delay(longDel);
-}
-*/
 void updatePreset(char preset[], char pName[], boolean editMode){
 
 
