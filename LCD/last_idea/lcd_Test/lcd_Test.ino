@@ -65,14 +65,14 @@ char* modSources[3] = {"mid", "osc", "exp"};
 
 aKnubPreset activePreset = {"RIFF",0,
   
-  {{"DIST", {22, 115, 1}, "mid", true}, 
-  {"TONE", {50, 50, 1}, "mid", true},
-  {"VOL", {3, 127, 1}, "mid", true},
-  {"BLEND", {110, 0, 1}, "osc", false}, 
-  {"DELAY", {10, 20, 1}, "osc", true},
-  {"FEED", {0, 127, 1}, "exp", true},
-  {"FREQ", {115, 20, 1}, "exp", true},
-  {"AMNT", {10, 127, 1}, "exp", true}}
+  {{"DIST  ", {22, 100, 1}, "mid", true}, 
+  {"TONE  ", {50, 50, 1}, "mid", true},
+  {"VOL   ", {3, 100, 1}, "mid", true},
+  {"BLEND ", {100, 0, 1}, "osc", false}, 
+  {"DELAY ", {10, 20, 1}, "osc", true},
+  {"FEED  ", {0, 127, 1}, "exp", true},
+  {"FREQ  ", {100, 20, 1}, "exp", true},
+  {"AMNT  ", {10, 100, 1}, "exp", true}}
 };
 
 void setup(){
@@ -303,17 +303,17 @@ if(encoderValue != lastValue){
            if(currentParamVal>0 && currentParamVal<100){
               currentParamVal += encoderDir;
               
-              updateParam(3, customDigits[currentParamVal]);
+              updateParam(5, customDigits[currentParamVal]);
               currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
           }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
-                   updateParam(3, customDigits[currentParamVal]);
+                   updateParam(5, customDigits[currentParamVal]);
                    currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
                    
           }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
                    
-                   updateParam(3, customDigits[currentParamVal]);
+                   updateParam(5, customDigits[currentParamVal]);
                    
                    currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
          }

@@ -116,8 +116,7 @@ void updateParam(uint8_t prmIndx, char newVal[]){
   delay(longDel);
   lcd.write("ss");
   lcd.write(newVal);
-  lcd.write(" ");
-  lcd.write(" ");
+  
   lcd.write(";");
   delay(longDel);
 

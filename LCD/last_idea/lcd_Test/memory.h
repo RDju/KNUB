@@ -1,6 +1,6 @@
 
 #define saveTime 100
-#define maxNameLength 6
+#define maxNameLength 8
 
 struct aKnub{
   char name[maxNameLength];
