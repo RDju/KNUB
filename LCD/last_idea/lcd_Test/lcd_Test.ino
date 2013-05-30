@@ -270,7 +270,7 @@ if(encoderValue != lastValue){
                  txtParamIndx += encoderDir;
                  currModIndx = txtParamIndx%3;
              
-                 updateParam2(5, modSources[currModIndx]);
+                 updateParam(3, modSources[currModIndx]);
             } 
             break;
         case 2:
