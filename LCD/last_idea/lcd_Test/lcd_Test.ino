@@ -60,19 +60,19 @@ uint8_t currModIndx  = 0;
 boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
-char* modSources[3] = {"mid", "osc", "exp"};
+char* modSources[10] = {"c20", "c21", "c22", "c23", "c24", "c25", "c26", "c27","exp","osc"};
 ////this is the dummy Preset
 
-aKnubPreset activePreset = {"RIFF",0,
+aKnubPreset activePreset = {"RIFF   ",0,
   
-  {{"DIST  ", {22, 99, 1}, "mid", true}, 
-  {"TONE  ", {50, 50, 1}, "mid", true},
-  {"VOL   ", {3, 99, 1}, "mid", true},
-  {"BLEND ", {99, 0, 1}, "osc", false}, 
-  {"DELAY ", {10, 20, 1}, "osc", true},
-  {"FEED  ", {0, 99, 1}, "exp", true},
-  {"FREQ  ", {99, 20, 1}, "exp", true},
-  {"AMNT  ", {10, 99, 1}, "exp", true}}
+  {{"DIST  ", {22, 100, 1}, 0, true, 1}, 
+  {"TONE  ", {50, 50, 1}, 1, true, 1},
+  {"VOL   ", {3, 99, 1}, 2, true, 1},
+  {"BLEND ", {99, 0, 1}, 9, false, 2}, 
+  {"DELAY ", {10, 20, 1}, 8, true, 3},
+  {"FEED  ", {0, 99, 1}, 7, true, 3},
+  {"FREQ  ", {99, 20, 1}, 6, true, 4},
+  {"AMNT  ", {10, 99, 1}, 5, true, 4}}
 };
 
 void setup(){
@@ -141,11 +141,11 @@ void loop(){
                  updateParam(0, toString(currentParam + 1));
                  updateParam(1,activePreset.knubbies[currentParam].name);
                  updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
-                 updateParam(3,activePreset.knubbies[currentParam].modSource);
+                 updateParam(3,modSources[activePreset.knubbies[currentParam].modSource]);
                  updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
                  updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
                  updateParam(6,customCurveDigits[activePreset.knubbies[currentParam].params[2]]);    
-                 
+                 updateParam(7,toString(activePreset.knubbies[currentParam].numLoop));
     time2ChangePage = false;
      break;
      case 5:
@@ -255,11 +255,11 @@ if(encoderValue != lastValue){
                  updateParam(0, toString(currentParam + 1));
                  updateParam(1,activePreset.knubbies[currentParam].name);
                  updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
-                 updateParam(3,activePreset.knubbies[currentParam].modSource);
+                 updateParam(3,modSources[activePreset.knubbies[currentParam].modSource]);
                  updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
                  updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
                  updateParam(6,customCurveDigits[activePreset.knubbies[currentParam].params[2]]);  
-                 
+                 updateParam(7, toString(activePreset.knubbies[currentParam].numLoop));
                  
              }
         break;
@@ -268,7 +268,7 @@ if(encoderValue != lastValue){
               scaledEncoderValueParam = encoderValue%25;
               if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
-                 currModIndx = txtParamIndx%3;
+                 currModIndx = txtParamIndx%10;
              
                  updateParam(3, modSources[currModIndx]);
             } 
@@ -289,7 +289,7 @@ if(encoderValue != lastValue){
                   
                    updateParam(4, customDigits[currentParamVal]);
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
-          }else if(currentParamVal== 100 && encoderDir ==-1){
+          }else if(currentParamVal== 10 && encoderDir ==-1){
                    currentParamVal += encoderDir;
       
                    updateParam(4, customDigits[currentParamVal]);

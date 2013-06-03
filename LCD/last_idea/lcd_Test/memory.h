@@ -5,8 +5,10 @@
 struct aKnub{
   char name[maxNameLength];
   uint8_t params[3];
-  char modSource[4];
+  //char modSource[4];
+  uint8_t modSource;
   boolean state;
+  uint8_t numLoop;
   //uint8_t numLoop;
   //char switchType[7];
   
