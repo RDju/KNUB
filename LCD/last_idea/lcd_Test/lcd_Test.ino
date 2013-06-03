@@ -65,14 +65,14 @@ char* modSources[3] = {"mid", "osc", "exp"};
 
 aKnubPreset activePreset = {"RIFF",0,
   
-  {{"DIST  ", {22, 100, 1}, "mid", true}, 
+  {{"DIST  ", {22, 99, 1}, "mid", true}, 
   {"TONE  ", {50, 50, 1}, "mid", true},
-  {"VOL   ", {3, 100, 1}, "mid", true},
-  {"BLEND ", {100, 0, 1}, "osc", false}, 
+  {"VOL   ", {3, 99, 1}, "mid", true},
+  {"BLEND ", {99, 0, 1}, "osc", false}, 
   {"DELAY ", {10, 20, 1}, "osc", true},
-  {"FEED  ", {0, 127, 1}, "exp", true},
-  {"FREQ  ", {100, 20, 1}, "exp", true},
-  {"AMNT  ", {10, 100, 1}, "exp", true}}
+  {"FEED  ", {0, 99, 1}, "exp", true},
+  {"FREQ  ", {99, 20, 1}, "exp", true},
+  {"AMNT  ", {10, 99, 1}, "exp", true}}
 };
 
 void setup(){
@@ -144,7 +144,7 @@ void loop(){
                  updateParam(3,activePreset.knubbies[currentParam].modSource);
                  updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
                  updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
-                 updateParam(6,customDigits[activePreset.knubbies[currentParam].params[2]]);    
+                 updateParam(6,customCurveDigits[activePreset.knubbies[currentParam].params[2]]);    
                  
     time2ChangePage = false;
      break;
@@ -258,7 +258,7 @@ if(encoderValue != lastValue){
                  updateParam(3,activePreset.knubbies[currentParam].modSource);
                  updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
                  updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
-                 updateParam(6,customDigits[activePreset.knubbies[currentParam].params[2]]);  
+                 updateParam(6,customCurveDigits[activePreset.knubbies[currentParam].params[2]]);  
                  
                  
              }

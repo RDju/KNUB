@@ -61,7 +61,7 @@ char* chParamTabs[] = {"0,12", "1,1", "1,5", "1,9", "1,12"};
 char* effectTabs[] = {"0,7", "1,7"};
 char* customCursorTabs[] = {"1,0", "1,5", "1,10"};
 
-char* customDigits[100] = {
+char* customDigits[101] = {
 "000","001","002","003","004","005","006","007","008","009","011","012","013","014","015","016","017","018",
 "019","020","021","022","023","024","025","026","027","028","029","030","031","032","033","034","035","036",
 "037","038","039","040","041","042","043","044","045","046","047","048","049","050","051","052","053","054",
@@ -70,6 +70,8 @@ char* customDigits[100] = {
 "091","092","093","094","095","096","097","098","099","100"
 };
 
+
+char* customCurveDigits[10] = {"00","01","02","03","04","05","06","07","08","09" };
 /////////////// UTILS ////////////////
 void initDisplay(){
   
@@ -116,8 +118,7 @@ void updateParam(uint8_t prmIndx, char newVal[]){
   delay(longDel);
   lcd.write("ss");
   lcd.write(newVal);
-  
-  lcd.write(";");
+   lcd.write(";");
   delay(longDel);
 
 }
@@ -131,8 +132,6 @@ void updateParam2(uint8_t prmIndx, char newVal[]){
   delay(longDel);  
   lcd.write("ss");
   lcd.write(newVal);
-  //lcd.write(" ");
-  //lcd.write(" ");
   lcd.write(";");
   delay(longDel);
 
