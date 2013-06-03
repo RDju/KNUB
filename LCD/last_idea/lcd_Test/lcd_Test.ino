@@ -60,19 +60,19 @@ uint8_t currModIndx  = 0;
 boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
-char* modSources[10] = {"c20", "c21", "c22", "c23", "c24", "c25", "c26", "c27","exp","osc"};
+char* modSources[10] = {"___", "EXP", "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08"};
 ////this is the dummy Preset
 
 aKnubPreset activePreset = {"RIFF   ",0,
   
-  {{"DIST  ", {22, 100, 1}, 0, true, 1}, 
-  {"TONE  ", {50, 50, 1}, 1, true, 1},
-  {"VOL   ", {3, 99, 1}, 2, true, 1},
-  {"BLEND ", {99, 0, 1}, 9, false, 2}, 
-  {"DELAY ", {10, 20, 1}, 8, true, 3},
-  {"FEED  ", {0, 99, 1}, 7, true, 3},
-  {"FREQ  ", {99, 20, 1}, 6, true, 4},
-  {"AMNT  ", {10, 99, 1}, 5, true, 4}}
+  {{"OUT1  ", {22, 100, 1}, 0, true, 1}, 
+  {"OUT2  ", {50, 50, 1}, 0, true, 1},
+  {"OUT3   ", {3, 99, 1}, 0, true, 1},
+  {"OUT4 ", {99, 0, 1}, 1, false, 2}, 
+  {"OUT5 ", {10, 20, 1}, 1, true, 3},
+  {"OUT6  ", {0, 99, 1}, 2, true, 3},
+  {"OUT7  ", {99, 20, 1}, 3, true, 4},
+  {"OUT8  ", {10, 99, 1}, 4, true, 4}}
 };
 
 void setup(){
@@ -263,8 +263,9 @@ if(encoderValue != lastValue){
                  
              }
         break;
-        
-        case 3:
+        case 7:
+         break;
+        case 4:
               scaledEncoderValueParam = encoderValue%25;
               if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
@@ -318,7 +319,7 @@ if(encoderValue != lastValue){
                    currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
          }
        break;
-       case 4:
+       case 3:
            ///not acitve yet
            currentParamVal = activePreset.knubbies[currentParam].params[2];
            
