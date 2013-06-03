@@ -263,8 +263,27 @@ if(encoderValue != lastValue){
                  
              }
         break;
-        case 7:
-         break;
+        case 6:
+              currentParamVal = activePreset.knubbies[currentParam].numLoop;
+           
+           if(currentParamVal>0 && currentParamVal<4){
+               currentParamVal += encoderDir;
+      
+               updateParam(7, toString(currentParamVal));
+               currentParamVal = activePreset.knubbies[currentParam].numLoop = currentParamVal;
+          
+        }else if(currentParamVal== 0 && encoderDir ==1){
+                   currentParamVal += encoderDir;
+                  
+                   updateParam(7, toString(currentParamVal));
+                   currentParamVal = activePreset.knubbies[currentParam].numLoop = currentParamVal;
+          }else if(currentParamVal== 4 && encoderDir ==-1){
+                   currentParamVal += encoderDir;
+      
+                  updateParam(7, toString(currentParamVal));
+                   currentParamVal = activePreset.knubbies[currentParam].numLoop = currentParamVal;
+          }
+        break;
         case 4:
               scaledEncoderValueParam = encoderValue%25;
               if(scaledEncoderValueParam == 0){

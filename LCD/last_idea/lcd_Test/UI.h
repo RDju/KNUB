@@ -200,14 +200,7 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
       case 0:
       
         clearAllTabs();
-        //lcd.write("sd");
-        //lcd.write(paramTabs[cusTab + 1]);
-        //lcd.write(";");
-        //delay(longDel);
-        //lcd.write("ss";");
-        //delay(longDel);
-        
-        
+
       break;
       case 1:
         clearAllTabs();
