@@ -264,7 +264,7 @@ if(encoderValue != lastValue){
              }
         break;
         
-        case 5:
+        case 3:
               scaledEncoderValueParam = encoderValue%25;
               if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
@@ -273,7 +273,7 @@ if(encoderValue != lastValue){
                  updateParam(3, modSources[currModIndx]);
             } 
             break;
-        case 2:
+        case 1:
            ///MUST FIND A BETTER WAY OF DEALING WITH THIS
            
            currentParamVal = activePreset.knubbies[currentParam].params[0];
@@ -296,7 +296,7 @@ if(encoderValue != lastValue){
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }
        break;
-       case 3:
+       case 2:
            
            currentParamVal = activePreset.knubbies[currentParam].params[1];
            
@@ -328,7 +328,7 @@ if(encoderValue != lastValue){
               //updateParam(tabIndx, curves[txtParamIndx%3]);
            }
        break;
-       case 1:
+       case 5:
            ///not acitve yet
            currentParamVal = activePreset.knubbies[currentParam].params[2];
            
