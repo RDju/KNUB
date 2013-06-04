@@ -64,9 +64,10 @@ char* fxState[2] = {"OFF", "ON"};
 char* modSources[10] = {"___", "EXP", "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08"};
 char* switchTypes[13] = {"__", "I1", "I2", "I3", "I4", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8"};
 ////this is the dummy Preset
-
-
-
+/* size of a preset is : 
+7 + 1 +
+(7 + 3 + 1 + 1 + 1)*8
+*/
 
 aKnubPreset activePreset = {"DEFAULT",0,
   
@@ -391,7 +392,7 @@ if(encoderValue != lastValue){
                  currentPresetID += encoderDir;
                  itoa(currentPresetID, valBuf, 10);
               
-                 readKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
+                 readKnubPresetName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
                  
                  updatePreset(valBuf, activePreset.name, isEdited);
         }else if(encoderDir == -1 && currentPresetID > 0){
@@ -399,7 +400,7 @@ if(encoderValue != lastValue){
           currentPresetID += encoderDir;
           itoa(currentPresetID, valBuf, 10);
           
-          readKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);  
+          readKnubPresetName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);  
           
           updatePreset(valBuf, activePreset.name, isEdited);
           }
