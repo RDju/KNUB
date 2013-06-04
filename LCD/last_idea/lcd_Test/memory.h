@@ -24,6 +24,7 @@ struct aKnubPreset{
   
   char name[maxNameLength];
   byte ID;
+  char dummyData[5];
   aKnub knubbies[8];
 };
 typedef struct aKnubPreset aKnubPreset;
@@ -158,11 +159,11 @@ void readKnubFullPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *
 
 
   readKnubPresetName(deviceaddress, eeaddress, kpreset);
-  readKnubPresetId(deviceaddress, eeaddress + maxNameLength, kpreset);
+  readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
   
   for(int i = 0; i<8; i++){
   
-    readKnubbieName(devideaddress, eeadress)
+    readKnubbieName(deviceaddress, eeaddress)
   
   
   
