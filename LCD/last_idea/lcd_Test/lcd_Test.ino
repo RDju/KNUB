@@ -57,22 +57,24 @@ uint8_t currentParamVal;
 uint8_t currentCurve = 0;
 
 uint8_t currModIndx  = 0;
+uint8_t currSwIndx = 0;
 boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
 char* modSources[10] = {"___", "EXP", "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08"};
+char* switchTypes[13] = {"__", "I1", "I2", "I3", "I4", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8"};
 ////this is the dummy Preset
 
-aKnubPreset activePreset = {"RIFF   ",0,
+aKnubPreset activePreset = {"DEFAULT",0,
   
-  {{"OUT1  ", {22, 100, 1}, 0, true, 1}, 
-  {"OUT2  ", {50, 50, 1}, 0, true, 1},
-  {"OUT3   ", {3, 99, 1}, 0, true, 1},
-  {"OUT4 ", {99, 0, 1}, 1, false, 2}, 
-  {"OUT5 ", {10, 20, 1}, 1, true, 3},
-  {"OUT6  ", {0, 99, 1}, 2, true, 3},
-  {"OUT7  ", {99, 20, 1}, 3, true, 4},
-  {"OUT8  ", {10, 99, 1}, 4, true, 4}}
+  {{"OUT1  ", {22, 100, 1}, 0, 1, 1}, 
+  {"OUT2  ", {50, 50, 1}, 0, 1, 1},
+  {"OUT3   ", {3, 99, 1}, 0, 1, 1},
+  {"OUT4 ", {99, 0, 1}, 1, 0, 2}, 
+  {"OUT5 ", {10, 20, 1}, 1, 1, 3},
+  {"OUT6  ", {0, 99, 1}, 2, 0, 3},
+  {"OUT7  ", {99, 20, 1}, 3, 1, 4},
+  {"OUT8  ", {10, 99, 1}, 4, 1, 4}}
 };
 
 void setup(){
@@ -140,12 +142,12 @@ void loop(){
                  
                  updateParam(0, toString(currentParam + 1));
                  updateParam(1,activePreset.knubbies[currentParam].name);
-                 updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
+                 updateParam(2,stateToString(activePreset.knubbies[currentParam].state));
                  updateParam(3,modSources[activePreset.knubbies[currentParam].modSource]);
                  updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
                  updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
                  updateParam(6,customCurveDigits[activePreset.knubbies[currentParam].params[2]]);    
-                 updateParam(7,toString(activePreset.knubbies[currentParam].numLoop));
+                 updateParam(7,switchTypes[activePreset.knubbies[currentParam].numLoop]);
     time2ChangePage = false;
      break;
      case 5:
@@ -254,35 +256,23 @@ if(encoderValue != lastValue){
             
                  updateParam(0, toString(currentParam + 1));
                  updateParam(1,activePreset.knubbies[currentParam].name);
-                 updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
+                 updateParam(2,stateToString(activePreset.knubbies[currentParam].state));
                  updateParam(3,modSources[activePreset.knubbies[currentParam].modSource]);
                  updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
                  updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
                  updateParam(6,customCurveDigits[activePreset.knubbies[currentParam].params[2]]);  
-                 updateParam(7, toString(activePreset.knubbies[currentParam].numLoop));
+                 updateParam(7, switchTypes[activePreset.knubbies[currentParam].numLoop]);
                  
              }
         break;
         case 6:
-              currentParamVal = activePreset.knubbies[currentParam].numLoop;
-           
-           if(currentParamVal>0 && currentParamVal<4){
-               currentParamVal += encoderDir;
-      
-               updateParam(7, toString(currentParamVal));
-               currentParamVal = activePreset.knubbies[currentParam].numLoop = currentParamVal;
-          
-        }else if(currentParamVal== 0 && encoderDir ==1){
-                   currentParamVal += encoderDir;
-                  
-                   updateParam(7, toString(currentParamVal));
-                   currentParamVal = activePreset.knubbies[currentParam].numLoop = currentParamVal;
-          }else if(currentParamVal== 4 && encoderDir ==-1){
-                   currentParamVal += encoderDir;
-      
-                  updateParam(7, toString(currentParamVal));
-                   currentParamVal = activePreset.knubbies[currentParam].numLoop = currentParamVal;
-          }
+               scaledEncoderValueParam = encoderValue%25;
+              if(scaledEncoderValueParam == 0){
+                 txtParamIndx += encoderDir;
+                 currSwIndx = txtParamIndx%13;
+             
+                 updateParam(7, switchTypes[currSwIndx]);
+            } 
         break;
         case 4:
               scaledEncoderValueParam = encoderValue%25;
@@ -356,7 +346,7 @@ if(encoderValue != lastValue){
            if(scaledEncoderValueParam == 0){
               txtParamIndx += encoderDir;
               //updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
-              updateParam(2, boolToString(txtParamIndx%2));
+              updateParam(2, stateToString(txtParamIndx%2));
            }
        break;
      }

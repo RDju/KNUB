@@ -116,18 +116,12 @@ void updateParam(uint8_t prmIndx, char newVal[]){
   lcd.write(paramTabs[prmIndx]);
   lcd.write(";");
   delay(longDel);
-  if(prmIndx == 7){
-  lcd.write("ss");
-  lcd.write("I");
-  lcd.write(newVal);
-   lcd.write(";");
-  delay(longDel);
-  }else{
+  
   lcd.write("ss");
   lcd.write(newVal);
    lcd.write(";");
   delay(longDel);
-  }
+
 }
 
 void updateParam2(uint8_t prmIndx, char newVal[]){
@@ -293,9 +287,9 @@ char* toString(uint8_t val){
   return tmpStr;
 }
 
-char* boolToString(boolean bval){
+char* stateToString(uint8_t state){
 
-  if(bval == true){
+  if(state == 1){
     
     return "|x|";
   }else{
