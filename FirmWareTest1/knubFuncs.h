@@ -45,9 +45,9 @@ void turnKnub(byte knubNum, byte knubType, byte knubVal){
   //}
   
   
-  byte readVal = redLUT[knubVal];
+  ///int mapped = redLUT[knubVal];
   
-   //lowVal  = map((int)readVal, 0, 255, vacMin , vacMax);
+   lowVal  = map(knubVal, 0, 255, 0 , 255);
    //highVal = map(knubVal, 0, 255, vacMin , vacMax);
   /*
   switch(knubNum){
