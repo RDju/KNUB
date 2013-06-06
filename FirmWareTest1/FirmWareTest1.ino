@@ -94,7 +94,7 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
-  //writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
+  writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
   
   currentPresetID = 0;
 

@@ -28,7 +28,7 @@ void multiWriteDac(byte addr, byte wrid, byte wrid2, int val, int val2){
   Wire.write(highByte(val2));
   Wire.write(lowByte(val2)); 
   Wire.endTransmission();
-};
+}
 
 //actual turn knub func
 
@@ -78,7 +78,7 @@ void turnKnub(byte knubNum, byte knubType, byte knubVal){
    for(int i = 0; i<8; i++){
       turnKnub(i, 1, knubsVals[i]);
     }
- }
+ };
 
 ///not used  to be deleted
 /*

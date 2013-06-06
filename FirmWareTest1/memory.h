@@ -23,7 +23,7 @@ typedef struct aKnub aKnub;
 struct aKnubPreset{
   
   char name[maxNameLength];
-  byte ID[5];
+  byte ID[6];
   
   aKnub knubbies[8];
 };
