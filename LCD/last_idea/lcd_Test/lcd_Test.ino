@@ -69,7 +69,7 @@ char* switchTypes[13] = {"__", "I1", "I2", "I3", "I4", "E1", "E2", "E3", "E4", "
 (7 + 3 + 1 + 1 + 1)*8
 */
 
-aKnubPreset activePreset = {"DEFAULT",0,"_____"
+aKnubPreset activePreset = {"DEFAULT",{0, 0, 0, 0, 0},
   
   {{"OUT1   ", {22, 100, 1}, 0, 1, 1}, 
   {"OUT2   ", {50, 50, 1}, 0, 1, 1},
@@ -95,7 +95,7 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
-  writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
+  //writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
   
   currentPresetID = 0;
 

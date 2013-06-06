@@ -2,7 +2,7 @@
 #define saveTime 100
 
 #define maxNameLength 8
-#define IDLength 1
+#define IDLength 5
 #define paramLength 3
 #define modSourceLength 1
 #define stateLength 1
@@ -23,8 +23,8 @@ typedef struct aKnub aKnub;
 struct aKnubPreset{
   
   char name[maxNameLength];
-  byte ID;
-  char dummyData[5];
+  byte ID[5];
+  
   aKnub knubbies[8];
 };
 typedef struct aKnubPreset aKnubPreset;
@@ -85,8 +85,10 @@ void readKnubPresetID( int deviceaddress, unsigned int eeaddress, aKnubPreset *k
     Wire.endTransmission();
     
     Wire.requestFrom(deviceaddress,IDLength);
-   
-      if (Wire.available()) kpreset->ID = Wire.read();
+    int c = 0;
+    for(int c = 0; c<IDLength; c++){
+      if (Wire.available()) kpreset->ID[c] = Wire.read();
+    }
 }
 
 void readKnubbieName( int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset, uint8_t knubbieIndx) {
@@ -158,19 +160,25 @@ void readKnubbienumLoop(int deviceaddress, unsigned int eeaddress, aKnubPreset *
 void readKnubFullPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset){
 
 
-  readKnubPresetName(deviceaddress, eeaddress, kpreset);
+  
   readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
   
-  for(int i = 0; i<8; i++){
+  for(int i = 0; i < 9; i++){
   
-    readKnubbieName(deviceaddress, eeaddress)
-  
-  
-  
-  }
-
-
-
-
-
+    if(i == 0){
+    
+      readKnubPresetName(deviceaddress, eeaddress + (13*i), kpreset);
+    
+    }else{
+    
+      readKnubbieName(deviceaddress, eeaddress+(13*i), kpreset, i - 1 );
+    
+    }
+   }
 }
+
+
+
+
+
+
