@@ -13,8 +13,7 @@ byte knob1_ch2 =  B01000010;//chanB
 byte knob2_ch1 = B01000100;//chanC
 byte knob2_ch2 = B01000110;//chanD
 
-uint16_t lowVal, highVal;
-
+int  lowVal, highVal;
 
 ///function for multiWrite : 
 
@@ -35,20 +34,29 @@ void multiWriteDac(byte addr, byte wrid, byte wrid2, int val, int val2){
 void turnKnub(byte knubNum, byte knubType, byte knubVal){
   
   
+  //knubVal = (int)knubVal;
+  /*
+  //knubVal = map(knubVal, 0, 100, 0, 255);
   // depending on the type of knob we want to replace : linear or log , change the LUT
+  */
+  //if(knubType == 1){
+    //
+    //highVal = map(redLUT[255 - knubVal], 0, 255, vacMin, vacMax);
+  //}
   
-  if(knubType == 1){;
-    lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
-    highVal = map(redLUT[255 - knubVal], 0, 255, vacMin, vacMax);
-  }
   
+  byte readVal = redLUT[knubVal];
+  
+   //lowVal  = map((int)readVal, 0, 255, vacMin , vacMax);
+   //highVal = map(knubVal, 0, 255, vacMin , vacMax);
+  /*
   switch(knubNum){
   
     case 1:
       multiWriteDac(dacIDZ[0], knob1_ch1, knob1_ch2, lowVal, highVal);
     break;
     case 2:
-      multiWriteDac(dacIDZ[0], knob2_ch1, knob2_ch2, lowVal, highVal);
+     multiWriteDac(dacIDZ[0], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
     case 3:
       multiWriteDac(dacIDZ[1], knob1_ch1, knob1_ch2, lowVal, highVal);
@@ -56,6 +64,7 @@ void turnKnub(byte knubNum, byte knubType, byte knubVal){
     case 4:
       multiWriteDac(dacIDZ[1], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
+    
     case 5:
       multiWriteDac(dacIDZ[2], knob1_ch1, knob1_ch2, lowVal, highVal);
     break;
@@ -69,27 +78,8 @@ void turnKnub(byte knubNum, byte knubType, byte knubVal){
       multiWriteDac(dacIDZ[3], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
   }
+   */
 } 
   
   
- 
-  //this load all 8 knubs values at once from memory
-  void setKnubPgm(byte * knubsVals){
-   for(int i = 0; i<8; i++){
-      turnKnub(i, 1, knubsVals[i]);
-    }
- };
-
-///not used  to be deleted
-/*
-  void knubStart(){
-    //here recall dacs last 
-   pgmNum = readSingleKnub(eepromAddr1, 0);  
-   readKnubPreset(eepromAddr1, pgmNum, (byte *)knubsValues);
-   setKnubPgm((byte *)knubsValues);
-  
-  
-  }
-
-*/
 

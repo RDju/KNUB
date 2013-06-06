@@ -111,6 +111,16 @@ void setup(){
          (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
          itoa(currentPresetID, valBuf, 10);
          updatePreset(valBuf, activePreset.name, isEdited);
+         
+         
+  //Serial.println(activePreset.knubbies[currentParam].params[0]);
+     
+  ///Set all knub to memory value
+  for(byte i = 0; i < 8; i++){
+    
+    turnKnub(i, 1, activePreset.knubbies[i].params[0]);
+ }
+  
 }
 
 void loop(){
@@ -299,7 +309,7 @@ if(encoderValue != lastValue){
                
                
                ///turn knub
-               turnKnub(currentParam, 0, map(currentParamVal, 0, 100, 0, 255));
+               //turnKnub(currentParam, 0, currentParamVal);
                
                
                currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
@@ -310,7 +320,7 @@ if(encoderValue != lastValue){
                    updateParam(4, customDigits[currentParamVal]);
                    
                    ///turn knub
-                   turnKnub(currentParam, 0, map(currentParamVal, 0, 100, 0, 255));
+                   //turnKnub(currentParam, 0, currentParamVal);
                
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }else if(currentParamVal== 10 && encoderDir ==-1){
@@ -319,7 +329,7 @@ if(encoderValue != lastValue){
                    updateParam(4, customDigits[currentParamVal]);
                    
                    ///turn knub
-                   turnKnub(currentParam, 0, map(currentParamVal, 0, 100, 0, 255));
+                   //turnKnub(currentParam, 0, currentParamVal);
                    
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }
