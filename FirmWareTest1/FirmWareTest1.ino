@@ -4,6 +4,8 @@
 #include <Wire.h>
 #include "UI.h"
 #include "memory.h"
+#include "knubFuncs.h"
+
 /*
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
 
@@ -82,6 +84,7 @@ void setup(){
   lcd.begin(9600);
   Serial.begin(9600);
   Wire.begin();
+  
   initDisplay();
    
   pinMode(encoderPin1, INPUT); 
@@ -251,6 +254,7 @@ if(encoderValue != lastValue){
          case 0:
             scaledEncoderValueParam = encoderValue%25;
             if(scaledEncoderValueParam == 0){
+                 
                  txtParamIndx += encoderDir;
                  currentParam = txtParamIndx%8;
             
@@ -292,17 +296,31 @@ if(encoderValue != lastValue){
                currentParamVal += encoderDir;
       
                updateParam(4, customDigits[currentParamVal]);
+               
+               
+               ///turn knub
+               turnKnub(currentParam, 0, map(currentParamVal, 0, 100, 0, 255));
+               
+               
                currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           
         }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
                   
                    updateParam(4, customDigits[currentParamVal]);
+                   
+                   ///turn knub
+                   turnKnub(currentParam, 0, map(currentParamVal, 0, 100, 0, 255));
+               
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }else if(currentParamVal== 10 && encoderDir ==-1){
                    currentParamVal += encoderDir;
       
                    updateParam(4, customDigits[currentParamVal]);
+                   
+                   ///turn knub
+                   turnKnub(currentParam, 0, map(currentParamVal, 0, 100, 0, 255));
+                   
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }
        break;
