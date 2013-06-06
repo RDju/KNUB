@@ -142,7 +142,7 @@ void readKnubbieModState(int deviceaddress, unsigned int eeaddress, aKnubPreset 
   
       if (Wire.available()) kpreset->knubbies[knubbieIndx].state = Wire.read();
 }
-void readKnubbienumLoop(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset, uint8_t knubbieIndx){
+void readKnubbieNumLoop(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset, uint8_t knubbieIndx){
 
 
   Wire.beginTransmission(deviceaddress);
@@ -158,10 +158,8 @@ void readKnubbienumLoop(int deviceaddress, unsigned int eeaddress, aKnubPreset *
 
 
 void readKnubFullPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset){
-
-
   
-  readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
+  //fist we read all the names:  preset + outs
   
   for(int i = 0; i < 9; i++){
   
@@ -175,6 +173,46 @@ void readKnubFullPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *
     
     }
    }
+   
+   ////then the preset ID
+   readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
+
+
+  /// then the knubbies params :
+  
+  for(int i = 1; i<9; i++){
+  
+  
+    readKnubbieParams(deviceaddress, eeaddress + ((13*i)+maxNameLength), kpreset, i-1);
+  
+  
+  }
+
+  ///mod source
+  
+  for(int i = 1; i<9; i++){
+  
+  
+    readKnubbieModSource(deviceaddress, eeaddress + ((13*i)+maxNameLength+3), kpreset, i-1);
+  
+  
+  }
+  //numLoop
+  for(int i = 1; i<9; i++){
+  
+  
+    readKnubbieNumLoop(deviceaddress, eeaddress + ((13*i)+maxNameLength+4), kpreset, i-1);
+  
+  
+  }
+  //state
+  for(int i = 1; i<9; i++){
+  
+  
+    readKnubbieModState(deviceaddress, eeaddress + ((13*i)+maxNameLength+5), kpreset, i-1);
+  
+  
+  }
 }
 
 
