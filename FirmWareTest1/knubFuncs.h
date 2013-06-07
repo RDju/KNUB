@@ -12,14 +12,10 @@ byte knob1_ch2 =  B01000010;//chanB
 byte knob2_ch1 = B01000100;//chanC
 byte knob2_ch2 = B01000110;//chanD
 
-byte redLUT[] = preLUT;
-
-
 byte getValueFromLUT(byte indx){
 
 
   return redLUT[indx];
-
 
 }
 
