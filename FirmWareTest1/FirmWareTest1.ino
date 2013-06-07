@@ -2,9 +2,11 @@
 #include <SoftwareSerial.h>
 #include <stdlib.h>
 #include <Wire.h>
-#include "UI.h"
+
+//#include "luts.h"
 #include "memory.h"
-#include "knubFuncs.h"
+//#include "knubFuncs.h"
+#include "UI.h"
 
 /*
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
@@ -79,12 +81,16 @@ aKnubPreset activePreset = {"DEFAULT",{0, 0, 0, 0, 0},
   {"OUT8   ", {10, 100, 1}, 4, 1, 4}}
 };
 
+byte toPrint;
+
+
 void setup(){
+
   
   lcd.begin(9600);
   Serial.begin(9600);
   Wire.begin();
-  
+ 
   initDisplay();
    
   pinMode(encoderPin1, INPUT); 
@@ -94,7 +100,7 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
-  writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
+  ///writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
   
   currentPresetID = 0;
 
@@ -107,24 +113,24 @@ void setup(){
     
     clearScreen();
     pageLevel = 2;
-         tabIndx = 0;
-         (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
-         itoa(currentPresetID, valBuf, 10);
-         updatePreset(valBuf, activePreset.name, isEdited);
-         
-         
-  //Serial.println(activePreset.knubbies[currentParam].params[0]);
-     
-  ///Set all knub to memory value
-  for(byte i = 0; i < 8; i++){
+    tabIndx = 0;
     
-    turnKnub(i, 1, activePreset.knubbies[i].params[0]);
- }
-  
+    (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
+    itoa(currentPresetID, valBuf, 10);
+    updatePreset(valBuf, activePreset.name, isEdited);
+   
+         
+   //toPrint = getValueFromLUT(0);
+   //Serial.println(toPrint);
+   
+   
+   //Serial.println(sizeof(redLUT)/sizeof(redLUT[0]));
 }
 
 void loop(){
-
+  
+ 
+  
   ////dealing with pages 
   if(time2ChangePage){
    switch(pageLevel){
@@ -307,9 +313,7 @@ if(encoderValue != lastValue){
       
                updateParam(4, customDigits[currentParamVal]);
                
-               
-               ///turn knub
-               //turnKnub(currentParam, 0, currentParamVal);
+           
                
                
                currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
@@ -318,19 +322,14 @@ if(encoderValue != lastValue){
                    currentParamVal += encoderDir;
                   
                    updateParam(4, customDigits[currentParamVal]);
-                   
-                   ///turn knub
-                   //turnKnub(currentParam, 0, currentParamVal);
+                 
                
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }else if(currentParamVal== 10 && encoderDir ==-1){
                    currentParamVal += encoderDir;
       
                    updateParam(4, customDigits[currentParamVal]);
-                   
-                   ///turn knub
-                   //turnKnub(currentParam, 0, currentParamVal);
-                   
+                 
                    currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }
        break;

@@ -16,19 +16,17 @@ void setup(){
 
 void loop(){
 
-  turnKnub(knubVal);
+  //turnKnub(knubVal);
 
 
 }
 
 
 
+byte getValueFromLUT(byte[] * lut, byte * inVal){
 
-
-void turnKnub(byte val){
-
-  mappedKnub = map(val, 0, 255, vacMin, vacMax);
-  Serial.println(mappedKnub);
 
 
 }
+
+
