@@ -126,12 +126,17 @@ void setup(){
     itoa(currentPresetID, valBuf, 10);
     updatePreset(valBuf, activePreset.name, isEdited);
    
-         
-   toPrint = getValueFromLUT(0);
-   Serial.println(toPrint);
+   
+   ///now turn knubs
+   
+   for(uint8_t i = 0; i < 8; i++ ){
+   
+     turnKnub(i + 1, 1, activePreset.knubbies[i].params[0]);
    
    
-   //Serial.println(sizeof(redLUT)/sizeof(redLUT[0]));
+   }
+   
+
 }
 
 void loop(){
