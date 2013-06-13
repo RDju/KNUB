@@ -51,29 +51,29 @@ void turnKnub(byte knubNum, byte knubType, byte knubVal){
  
   switch(knubNum){
   
-    case 1:
+    case 0:
       multiWriteDac(dacIDZ[0], knob1_ch1, knob1_ch2, lowVal, highVal);
     break;
-    case 2:
+    case 1:
      multiWriteDac(dacIDZ[0], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
-    case 3:
+    case 2:
       multiWriteDac(dacIDZ[1], knob1_ch1, knob1_ch2, lowVal, highVal);
     break;
-    case 4:
+    case 3:
       multiWriteDac(dacIDZ[1], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
     
-    case 5:
+    case 4:
       multiWriteDac(dacIDZ[2], knob1_ch1, knob1_ch2, lowVal, highVal);
     break;
-    case 6:
+    case 5:
       multiWriteDac(dacIDZ[2], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
-    case 7:
+    case 6:
       multiWriteDac(dacIDZ[3], knob1_ch1, knob1_ch2, lowVal, highVal);
     break;
-    case 8:
+    case 7:
       multiWriteDac(dacIDZ[3], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
   }

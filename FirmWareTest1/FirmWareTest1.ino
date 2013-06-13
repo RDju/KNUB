@@ -131,7 +131,7 @@ void setup(){
    
    for(uint8_t i = 0; i < 8; i++ ){
    
-     turnKnub(i + 1, 1, activePreset.knubbies[i].params[0]);
+     turnKnub(i, 1, activePreset.knubbies[i].params[0]);
    
    
    }
@@ -141,9 +141,7 @@ void setup(){
 
 void loop(){
   
- 
-  
-  ////dealing with pages 
+   ////dealing with pages 
   if(time2ChangePage){
    switch(pageLevel){
      case 0:
@@ -322,27 +320,29 @@ if(encoderValue != lastValue){
            
            if(currentParamVal>0 && currentParamVal<100){
                currentParamVal += encoderDir;
-      
+                
+                
+               turnKnub(currentParam, 1, currentParamVal); 
                updateParam(4, customDigits[currentParamVal]);
                
            
                
                
-               currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
+               currentParamVal = activePreset.knubbies[currentParam].params[0];
           
         }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
-                  
+                    turnKnub(currentParam, 1, currentParamVal);
                    updateParam(4, customDigits[currentParamVal]);
                  
                
-                   currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
+                   currentParamVal = activePreset.knubbies[currentParam].params[0];
           }else if(currentParamVal== 10 && encoderDir ==-1){
                    currentParamVal += encoderDir;
-      
+                    turnKnub(currentParam, 1, currentParamVal);
                    updateParam(4, customDigits[currentParamVal]);
                  
-                   currentParamVal = activePreset.knubbies[currentParam].params[0] = currentParamVal;
+                   currentParamVal = activePreset.knubbies[currentParam].params[0];
           }
        break;
        case 2:
