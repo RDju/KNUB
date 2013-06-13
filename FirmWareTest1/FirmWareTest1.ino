@@ -32,12 +32,12 @@ change the way params are updated via the encoder use function to wich you'll pa
 
 #define eepromAddr1  B01010000 
 
-volatile int lastValue = 0;
-volatile int lastEncoderValue = 0;
-volatile int encoderValue = 0;
-volatile int encoderValueParam = 0;
-volatile int encoderValueParamVal = 0;
-volatile int scaledEncoderValueParam = 0;
+volatile uint8_t lastValue = 0;
+volatile uint8_t lastEncoderValue = 0;
+volatile uint8_t encoderValue = 0;
+volatile uint8_t encoderValueParam = 0;
+volatile uint8_t encoderValueParamVal = 0;
+volatile uint8_t scaledEncoderValueParam = 0;
 
 boolean time2ChangePage;
 
@@ -65,7 +65,8 @@ boolean isEdited;
 uint8_t currentFx = 0;
 uint8_t currentParam = 0;
 uint8_t currentParamVal;
-uint8_t currentCurve = 0;
+uint8_t digiMapParamVal;
+//uint8_t currentCurve = 0;
 
 uint8_t currModIndx  = 0;
 uint8_t currSwIndx = 0;
@@ -131,7 +132,7 @@ void setup(){
    
    for(uint8_t i = 0; i < 8; i++ ){
    
-     turnKnub(i, 1, activePreset.knubbies[i].params[0]);
+     turnKnub(i,activePreset.knubbies[i].params[0]);
    
    
    }
@@ -318,28 +319,29 @@ if(encoderValue != lastValue){
            
            currentParamVal = activePreset.knubbies[currentParam].params[0];
            
-           if(currentParamVal>0 && currentParamVal<100){
+           if(currentParamVal>0 && currentParamVal<256){
                currentParamVal += encoderDir;
-                
-               turnKnub(currentParam, 1, currentParamVal); 
-               updateParam(4, customDigits[currentParamVal]);
+               
+               turnKnub(currentParam, currentParamVal); 
+               
+               updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
                
                activePreset.knubbies[currentParam].params[0] = currentParamVal;
           
         }else if(currentParamVal== 0 && encoderDir ==1){
                    
                    currentParamVal += encoderDir;
-                   turnKnub(currentParam, 1, currentParamVal);
-                   updateParam(4, customDigits[currentParamVal]);
+                   turnKnub(currentParam, currentParamVal);
+                   updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
                  
                
                    activePreset.knubbies[currentParam].params[0] = currentParamVal;
                    
-          }else if(currentParamVal== 10 && encoderDir ==-1){
+          }else if(currentParamVal== 255 && encoderDir ==-1){
                    
                    currentParamVal += encoderDir;
-                   turnKnub(currentParam, 1, currentParamVal);
-                   updateParam(4, customDigits[currentParamVal]);
+                   turnKnub(currentParam, currentParamVal);
+                   updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
                  
                    activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }

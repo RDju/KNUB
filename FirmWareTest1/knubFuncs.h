@@ -38,14 +38,14 @@ void multiWriteDac(byte addr, byte wrid, byte wrid2, int val, int val2){
 
 //actual turn knub func
 
-void turnKnub(byte knubNum, byte knubType, byte knubVal){
+void turnKnub(byte knubNum,byte knubVal){
   
  
   
-  if(knubType == 1){;
+ 
     lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
     highVal = map(redLUT[255 - knubVal], 0, 255, vacMin, vacMax);
-  }
+
   
   
  
