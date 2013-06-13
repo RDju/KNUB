@@ -324,10 +324,11 @@ if(encoderValue != lastValue){
                
                turnKnub(currentParam, currentParamVal); 
                
+               
                updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
                
                activePreset.knubbies[currentParam].params[0] = currentParamVal;
-          
+                
         }else if(currentParamVal== 0 && encoderDir ==1){
                    
                    currentParamVal += encoderDir;
