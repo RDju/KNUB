@@ -321,28 +321,27 @@ if(encoderValue != lastValue){
            if(currentParamVal>0 && currentParamVal<100){
                currentParamVal += encoderDir;
                 
-                
                turnKnub(currentParam, 1, currentParamVal); 
                updateParam(4, customDigits[currentParamVal]);
                
-           
-               
-               
-               currentParamVal = activePreset.knubbies[currentParam].params[0];
+               activePreset.knubbies[currentParam].params[0] = currentParamVal;
           
         }else if(currentParamVal== 0 && encoderDir ==1){
+                   
                    currentParamVal += encoderDir;
-                    turnKnub(currentParam, 1, currentParamVal);
+                   turnKnub(currentParam, 1, currentParamVal);
                    updateParam(4, customDigits[currentParamVal]);
                  
                
-                   currentParamVal = activePreset.knubbies[currentParam].params[0];
+                   activePreset.knubbies[currentParam].params[0] = currentParamVal;
+                   
           }else if(currentParamVal== 10 && encoderDir ==-1){
+                   
                    currentParamVal += encoderDir;
-                    turnKnub(currentParam, 1, currentParamVal);
+                   turnKnub(currentParam, 1, currentParamVal);
                    updateParam(4, customDigits[currentParamVal]);
                  
-                   currentParamVal = activePreset.knubbies[currentParam].params[0];
+                   activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }
        break;
        case 2:
