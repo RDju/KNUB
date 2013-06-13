@@ -10,7 +10,7 @@ prog_uchar PROGMEM redLUT[] = {
 #include <stdlib.h>
 #include <Wire.h>
 
-//#include "luts.h"
+
 #include "memory.h"
 #include "knubFuncs.h"
 #include "UI.h"
