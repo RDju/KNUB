@@ -72,10 +72,10 @@ char* switchTypes[13] = {"__", "I1", "I2", "I3", "I4", "E1", "E2", "E3", "E4", "
 
 aKnubPreset activePreset = {"DEFAULT",{0, 0, 0, 0, 0},
   
-  {{"OUT1   ", {22, 100, 1}, 0, 1, 1}, 
-  {"OUT2   ", {50, 50, 1}, 0, 1, 1},
-  {"OUT3   ", {3, 100, 1}, 0, 1, 1},
-  {"OUT4   ", {100, 0, 1}, 1, 0, 2}, 
+  {{"DIST   ", {127, 127, 1}, 0, 1, 1}, 
+  {"TONE   ", {127, 50, 1}, 0, 1, 1},
+  {"OUT3   ", {127,  100, 1}, 0, 1, 1},
+  {"VOL    ", {127, 0, 1}, 1, 0, 2}, 
   {"OUT5   ", {10, 20, 1}, 1, 1, 3},
   {"OUT6   ", {0, 100, 1}, 2, 0, 3},
   {"OUT7   ", {100, 20, 1}, 3, 1, 4},
@@ -167,8 +167,8 @@ void loop(){
                  updateParam(1,activePreset.knubbies[currentParam].name);
                  updateParam(2,stateToString(activePreset.knubbies[currentParam].state));
                  updateParam(3,modSources[activePreset.knubbies[currentParam].modSource]);
-                 updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
-                 updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
+                 updateParam(4,customDigits[map(activePreset.knubbies[currentParam].params[0], 0, 255, 0, 100)]);
+                 updateParam(5,customDigits[map(activePreset.knubbies[currentParam].params[1], 0, 255, 0, 100)]);
                  updateParam(6,customCurveDigits[activePreset.knubbies[currentParam].params[2]]);    
                  updateParam(7,switchTypes[activePreset.knubbies[currentParam].numLoop]);
     time2ChangePage = false;
@@ -282,8 +282,8 @@ if(encoderValue != lastValue){
                  updateParam(1,activePreset.knubbies[currentParam].name);
                  updateParam(2,stateToString(activePreset.knubbies[currentParam].state));
                  updateParam(3,modSources[activePreset.knubbies[currentParam].modSource]);
-                 updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
-                 updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
+                 updateParam(4,customDigits[map(activePreset.knubbies[currentParam].params[0], 0, 255, 0, 100)]);
+                 updateParam(5,customDigits[map(activePreset.knubbies[currentParam].params[1], 0, 255, 0, 100)]);
                  updateParam(6,customCurveDigits[activePreset.knubbies[currentParam].params[2]]);  
                  updateParam(7, switchTypes[activePreset.knubbies[currentParam].numLoop]);
                  
@@ -312,13 +312,13 @@ if(encoderValue != lastValue){
            
            currentParamVal = activePreset.knubbies[currentParam].params[0];
            
-           if(currentParamVal>0 && currentParamVal<256){
+           if(currentParamVal>0 && currentParamVal<255){
                currentParamVal += encoderDir;
                
                turnKnub(currentParam, currentParamVal); 
                
                
-               updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
+               updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 100)]);
                
                activePreset.knubbies[currentParam].params[0] = currentParamVal;
                 
@@ -326,7 +326,7 @@ if(encoderValue != lastValue){
                    
                    currentParamVal += encoderDir;
                    turnKnub(currentParam, currentParamVal);
-                   updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
+                   updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 100)]);
                  
                
                    activePreset.knubbies[currentParam].params[0] = currentParamVal;
@@ -335,7 +335,7 @@ if(encoderValue != lastValue){
                    
                    currentParamVal += encoderDir;
                    turnKnub(currentParam, currentParamVal);
-                   updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
+                   updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 100)]);
                  
                    activePreset.knubbies[currentParam].params[0] = currentParamVal;
           }
