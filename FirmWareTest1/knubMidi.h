@@ -1,19 +1,10 @@
-#define baseKnubCC 107
+#include <MIDI.h>
+
+
 
 void handleControlChange(byte channel, byte number, byte value){
   
   value = map(value, 0, 127, 0, 255);
-  
-   if(number >= baseKnubCC && number < baseKnubCC + 8){
-      turnKnub(number - 106, 1, value);
-  }
+  //deals with curves from value 1 to 2 here 
 }
 
-void handleProgramChange(byte channel, byte number){
-
-       readKnubPreset(eepromAddr1, pgmNum*memOffset, (byte *)knubsValues);
-       setKnubPgm((byte *)knubsValues);
-       ///saves last used pgm
-       writeSingleKnub(eepromAddr1, 0, pgmNum);
-
-}

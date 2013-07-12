@@ -1,3 +1,8 @@
+#include <MIDI.h>
+
+
+
+
 #include <ClickButton.h>
 #include <SoftwareSerial.h>
 #include <stdlib.h>
@@ -7,7 +12,7 @@
 #include "memory.h"
 #include "knubFuncs.h"
 #include "UI.h"
-
+#include "knubMidi.h"
 /*
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
 
@@ -85,15 +90,24 @@ aKnubPreset activePreset = {"DEFAULT",{0, 0, 0, 0, 0},
 byte toPrint;
 
 
+
+void handleProgramChange(byte channel, byte number){
+
+      readKnubFullPreset(eepromAddr1, number, &activePreset);
+}
+
 void setup(){
 
-  
+  //INIT some STUFF
   lcd.begin(9600);
-  Serial.begin(9600);
+  //Serial.begin(9600);
   Wire.begin();
- 
+  
+  MIDI.begin();
+  MIDI.setHandleControlChange(handleControlChange);
+  
   initDisplay();
-   
+  
   pinMode(encoderPin1, INPUT); 
   pinMode(encoderPin2, INPUT);
   digitalWrite(encoderPin1, HIGH);
@@ -134,6 +148,12 @@ void setup(){
 }
 
 void loop(){
+  
+  if(pageLevel == 2){
+  
+    MIDI.read();
+  
+  }
   
    ////dealing with pages 
   if(time2ChangePage){
@@ -245,9 +265,9 @@ void loop(){
         
       }else if(bckValid.click == 2 && pageLevel == 2){
        
-          Serial.println("saving");
+          //Serial.println("saving");
           pageLevel = 5;
-          Serial.println(pageLevel);
+          //Serial.println(pageLevel);
           isEdited = false;
           time2ChangePage = true;
      
