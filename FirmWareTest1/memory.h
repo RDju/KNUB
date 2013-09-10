@@ -2,11 +2,12 @@
 #define saveTime 100
 
 #define maxNameLength 8
-#define IDLength 5
+#define IDLength 6
 #define paramLength 3
 #define modSourceLength 1
 #define stateLength 1
 #define numLoopLength 1
+#define numKnubbies 8
 
 #define presetSize 112
 
@@ -25,7 +26,7 @@ struct aKnubPreset{
   char name[maxNameLength];
   byte ID[6];
   
-  aKnub knubbies[8];
+  aKnub knubbies[numKnubbies];
 };
 typedef struct aKnubPreset aKnubPreset;
 
@@ -156,66 +157,40 @@ void readKnubbieNumLoop(int deviceaddress, unsigned int eeaddress, aKnubPreset *
 }
 
 
-
+/*
 void readKnubFullPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset){
   
-  //fist we read all the names:  preset + outs
-  
-  for(int i = 0; i < 9; i++){
-  
-    if(i == 0){
+    ///first we read the preset's name and ID
     
-      readKnubPresetName(deviceaddress, eeaddress + (13*i), kpreset);
+    // so name
+    readKnubPresetName(deviceaddress, eeaddress, kpreset); 
     
-    }else{
+    //then ID
+    readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
     
-      readKnubbieName(deviceaddress, eeaddress+(13*i), kpreset, i - 1 );
-    
-    }
-   }
+    //so now eeaddress is maxNameLength + IDLength
+     uint16_t addrPtr = maxNameLength + IDLength;
    
-   ////then the preset ID
-   readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
-
-
-  /// then the knubbies params :
-  
-  for(int i = 1; i<9; i++){
-  
-  
-    readKnubbieParams(deviceaddress, eeaddress + ((13*i)+maxNameLength), kpreset, i-1);
-  
-  
-  }
-
-  ///mod source
-  
-  for(int i = 1; i<9; i++){
-  
-  
-    readKnubbieModSource(deviceaddress, eeaddress + ((13*i)+maxNameLength+3), kpreset, i-1);
-  
-  
-  }
-  //numLoop
-  for(int i = 1; i<9; i++){
-  
-  
-    readKnubbieNumLoop(deviceaddress, eeaddress + ((13*i)+maxNameLength+4), kpreset, i-1);
-  
-  
-  }
-  //state
-  for(int i = 1; i<9; i++){
-  
-  
-    readKnubbieModState(deviceaddress, eeaddress + ((13*i)+maxNameLength+5), kpreset, i-1);
-  
-  
-  }
+   
+   for(int i = 0; i<numKnubbies; i++){
+     
+     ///move addrPtr to start of knubbie
+     addrPtr = addrPtr*(i+1);
+     
+     
+     readKnubbieName(deviceaddress,addrPtr , kpreset, i);
+     
+     readKnubbieParams(deviceaddress, addrPtr+maxNameLength, kpreset, i);
+       
+     readKnubbieModSource(deviceaddress, addrPtr+maxNameLength+paramLength, kpreset, i);
+     
+     readKnubbieModState(deviceaddress, addrPtr+maxNameLength+paramLength+modSourceLength, kpreset, i);
+     
+     readKnubbieNumLoop(deviceaddress, addrPtr+maxNameLength+paramLength+modSourceLength+stateLength, kpreset, i);
+   }
 }
 
-
+*/
 
 
 

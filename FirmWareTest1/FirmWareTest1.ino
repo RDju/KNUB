@@ -1,8 +1,4 @@
 #include <MIDI.h>
-
-
-
-
 #include <ClickButton.h>
 #include <SoftwareSerial.h>
 #include <stdlib.h>
@@ -10,9 +6,9 @@
 
 
 #include "memory.h"
-#include "knubFuncs.h"
+//#include "knubFuncs.h"
 #include "UI.h"
-#include "knubMidi.h"
+//#include "knubMidi.h"
 /*
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
 
@@ -74,38 +70,26 @@ char* fxState[2] = {"OFF", "ON"};
 char* modSources[10] = {"___", "EXP", "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08"};
 char* switchTypes[13] = {"__", "I1", "I2", "I3", "I4", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8"};
 
-
 aKnubPreset activePreset = {"DEFAULT",{0, 0, 0, 0, 0},
   
-  {{"DIST   ", {127, 127, 1}, 0, 1, 1}, 
-  {"TONE   ", {127, 50, 1}, 0, 1, 1},
-  {"OUT3   ", {127,  100, 1}, 0, 1, 1},
-  {"VOL    ", {127, 0, 1}, 1, 0, 2}, 
-  {"OUT5   ", {10, 20, 1}, 1, 1, 3},
-  {"OUT6   ", {0, 100, 1}, 2, 0, 3},
-  {"OUT7   ", {100, 20, 1}, 3, 1, 4},
-  {"OUT8   ", {10, 100, 1}, 4, 1, 4}}
+  {{"DIST  ", {127, 127, 1}, 0, 1, 1}, 
+  {"TONE  ", {127, 50, 1}, 0, 1, 1},
+  {"OUT3  ", {127,  100, 1}, 0, 1, 1},
+  {"VOL   ", {127, 0, 1}, 1, 0, 2}, 
+  {"OUT5  ", {10, 20, 1}, 1, 1, 3},
+  {"OUT6  ", {0, 100, 1}, 2, 0, 3},
+  {"OUT7  ", {100, 20, 1}, 3, 1, 4},
+  {"OUT8  ", {10, 100, 1}, 4, 1, 4}}
 };
 
-byte toPrint;
-
-
-
-void handleProgramChange(byte channel, byte number){
-
-      readKnubFullPreset(eepromAddr1, number, &activePreset);
-}
 
 void setup(){
 
   //INIT some STUFF
   lcd.begin(9600);
-  //Serial.begin(9600);
+
   Wire.begin();
-  
-  MIDI.begin();
-  MIDI.setHandleControlChange(handleControlChange);
-  
+
   initDisplay();
   
   pinMode(encoderPin1, INPUT); 
@@ -115,13 +99,14 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
-  ///writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
+  
   
   currentPresetID = 0;
 
     //startUp sequence
     (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
     delay(500);
+    /*
     (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
     delay(500);
     initMemDisp();
@@ -139,21 +124,16 @@ void setup(){
    
    for(uint8_t i = 0; i < 8; i++ ){
    
-     turnKnub(i,activePreset.knubbies[i].params[0]);
+     //turnKnub(i,activePreset.knubbies[i].params[0]);
    
    
    }
-   
+   */
 
 }
 
 void loop(){
-  
-  if(pageLevel == 2){
-  
-    MIDI.read();
-  
-  }
+  /*
   
    ////dealing with pages 
   if(time2ChangePage){
@@ -335,7 +315,7 @@ if(encoderValue != lastValue){
            if(currentParamVal>0 && currentParamVal<255){
                currentParamVal += encoderDir;
                
-               turnKnub(currentParam, currentParamVal); 
+               //turnKnub(currentParam, currentParamVal); 
                
                
                updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 100)]);
@@ -345,7 +325,7 @@ if(encoderValue != lastValue){
         }else if(currentParamVal== 0 && encoderDir ==1){
                    
                    currentParamVal += encoderDir;
-                   turnKnub(currentParam, currentParamVal);
+                   //turnKnub(currentParam, currentParamVal);
                    updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 100)]);
                  
                
@@ -354,7 +334,7 @@ if(encoderValue != lastValue){
           }else if(currentParamVal== 255 && encoderDir ==-1){
                    
                    currentParamVal += encoderDir;
-                   turnKnub(currentParam, currentParamVal);
+                   //turnKnub(currentParam, currentParamVal);
                    updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 100)]);
                  
                    activePreset.knubbies[currentParam].params[0] = currentParamVal;
@@ -431,12 +411,12 @@ if(encoderValue != lastValue){
         case 1:
             
         break;
-      */  
+      *//*  
     }
     break;
     case 2:
-    
-        scaledEncoderValueParam = encoderValue%25;
+       ////LOADING OF PRESETS&
+       scaledEncoderValueParam = encoderValue%25;
         if(scaledEncoderValueParam == 0){
             if(encoderDir == 1){     
                  currentPresetID += encoderDir;
@@ -459,7 +439,7 @@ if(encoderValue != lastValue){
    }
  }
    lastValue = encoderValue;
-
+  */
 }
 
 void updateEncoder(){
