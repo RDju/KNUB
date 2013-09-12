@@ -125,7 +125,7 @@ void setup(){
    
    for(uint8_t i = 0; i < 8; i++ ){
    
-     turnKnub(i,activePreset.knubbies[i].params[0]);
+     //turnKnub(i,activePreset.knubbies[i].params[0]);
    
    
    }
@@ -315,7 +315,7 @@ if(encoderValue != lastValue){
            if(currentParamVal>0 && currentParamVal<256){
                currentParamVal += encoderDir;
                
-               turnKnub(currentParam, currentParamVal); 
+               //turnKnub(currentParam, currentParamVal); 
                
                
                updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
@@ -325,7 +325,7 @@ if(encoderValue != lastValue){
         }else if(currentParamVal== 0 && encoderDir ==1){
                    
                    currentParamVal += encoderDir;
-                   turnKnub(currentParam, currentParamVal);
+                   //turnKnub(currentParam, currentParamVal);
                    updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
                  
                
@@ -334,7 +334,7 @@ if(encoderValue != lastValue){
           }else if(currentParamVal== 255 && encoderDir ==-1){
                    
                    currentParamVal += encoderDir;
-                   turnKnub(currentParam, currentParamVal);
+                   //turnKnub(currentParam, currentParamVal);
                    updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
                  
                    activePreset.knubbies[currentParam].params[0] = currentParamVal;
