@@ -29,11 +29,11 @@ void multiWriteDac(byte addr, byte wrid, byte wrid2, int val, int val2){
 };
 
 //actual turn knub func
-/*
+
 void turnKnub(byte knubNum,byte knubVal){
    
-    lowVal = map(pgm_read_byte(greenLUT + knubVal), 0, 255, vacMin, vacMax);
-    highVal = map(pgm_read_byte(greenLUT + (255 - knubVal)), 0, 255, vacMin, vacMax);
+    lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
+    highVal = map(pgm_read_byte(redLUT + (255 - knubVal)), 0, 255, vacMin, vacMax);
 
   switch(knubNum){
   
@@ -65,6 +65,6 @@ void turnKnub(byte knubNum,byte knubVal){
   }
    
 }; 
-*/ 
+ 
 
 
