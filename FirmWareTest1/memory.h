@@ -254,7 +254,7 @@ void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpr
     
     // so name
     writeKnubPresetName(deviceaddress, eeaddress, kpreset); 
-    
+    delay(5);
     //then ID
     writeKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
     

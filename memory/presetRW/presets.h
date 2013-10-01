@@ -1,4 +1,4 @@
-aKnubPreset preset1 = {"DEFAULT",{11, 11, 11, 11, 11, 11},
+aKnubPreset preset1 = {"DEFAULT",{0, 0, 0, 0, 0, 1},
   
   {{"OUT1   ", {22, 100, 1}, 0, 1, 1}, 
   {"OUT2   ", {50, 50, 1}, 0, 1, 1},
@@ -10,7 +10,7 @@ aKnubPreset preset1 = {"DEFAULT",{11, 11, 11, 11, 11, 11},
   {"OUT8   ", {10, 100, 1}, 4, 1, 4}}
 };
 
-aKnubPreset preset2 = {"VERSE 1",{2, 2, 2, 2, 2, 2},
+aKnubPreset preset2 = {"VERSE 1",{0, 0, 0, 0, 0, 2},
   
   {{"DIST   ", {12, 10, 1}, 0, 0, 1}, 
   {"DEL    ", {5, 50, 1}, 0, 0, 1},
@@ -22,7 +22,7 @@ aKnubPreset preset2 = {"VERSE 1",{2, 2, 2, 2, 2, 2},
   {"OUT8   ", {10, 100, 1}, 4, 1, 4}}
 };
 
-aKnubPreset preset3 = {"CHORUS1",{3, 3, 3, 3, 3, 3},
+aKnubPreset preset3 = {"CHORUS1",{0, 0, 0, 0, 0, 3},
   
   {{"DIST   ", {100, 100, 1}, 0, 1, 1}, 
   {"DEL    ", {100, 50, 1}, 0, 1, 1},
