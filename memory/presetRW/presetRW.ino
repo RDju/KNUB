@@ -18,15 +18,16 @@ byte presetIndx  = 0;
 	Serial.print("writing at address : ");
 	Serial.println(presetIndx*presetSize);
 	
-	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset1);
-	
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset2);
+	//writeKnubbieName(eepromAddr1, presetIndx*presetSize, &preset1, 0);
 	delay(1000);
 
 	Serial.println("reading");
 
 	readKnubPreset(eepromAddr1, presetIndx*presetSize, &currentPreset);
+	//readKnubbieName(eepromAddr1, presetIndx*presetSize, &currentPreset, 0);
  	delay(1000);
- 	
+ 	/*
    	Serial.println("loaded NAME: ");
    		for(int i = 0; i<maxNameLength; i++){
 
@@ -38,7 +39,11 @@ byte presetIndx  = 0;
    	Serial.println("loaded ID: ");
    	for(int  i= 0; i<IDLength; i++){
    		Serial.println(currentPreset.ID[i]);
+
    }
+	*/
+   	Serial.println("first KNUB: ");
+   	Serial.println(currentPreset.knubbies[0].name);
  }
 
 
