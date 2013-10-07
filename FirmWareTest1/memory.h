@@ -61,8 +61,8 @@ typedef struct aKnubPreset aKnubPreset;
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)eeaddresspage >> 8);
      Wire.write((int)(eeaddresspage & 0xFF)); // LSB
-    byte c;
-    for ( c = 0; c < maxNameLength; c++){
+   
+    for ( byte c = 0; c < maxNameLength; c++){
       Wire.write(kpreset->knubbies[knubbieIndx].name[c]);
     }
     Wire.endTransmission();
@@ -156,9 +156,10 @@ void readKnubbieName( int deviceaddress, unsigned int eeaddress, aKnubPreset *kp
     Wire.endTransmission();
     
     Wire.requestFrom(deviceaddress,maxNameLength);
-    int c = 0;
-    for ( c = 0; c < maxNameLength; c++ )
+    
+    for ( byte c = 0; c < maxNameLength; c++ ){
       if (Wire.available()) kpreset->knubbies[knubbieIndx].name[c] = Wire.read();
+  }
 }
 
 void readKnubbieParams(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset, uint8_t knubbieIndx){
@@ -171,8 +172,9 @@ void readKnubbieParams(int deviceaddress, unsigned int eeaddress, aKnubPreset *k
     
     Wire.requestFrom(deviceaddress,paramLength);
     int c = 0;
-    for ( c = 0; c < paramLength; c++ )
+    for ( c = 0; c < paramLength; c++ ){
       if (Wire.available()) kpreset->knubbies[knubbieIndx].params[c] = Wire.read();
+    }
 }
 
 void readKnubbieModSource(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset, uint8_t knubbieIndx){
@@ -225,9 +227,12 @@ void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpre
     readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
     
     //so now eeaddress is maxNameLength + IDLength
-     uint16_t addrPtr = maxNameLength + IDLength;
+     unsigned int addrPtr = eeaddress + maxNameLength + IDLength;
    
-   /*
+
+     //readKnubbieName(deviceaddress, addrPtr, kpreset, 0);
+
+   
    for(int i = 0; i<numKnubbies; i++){
      
      ///move addrPtr to start of knubbie
@@ -243,9 +248,10 @@ void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpre
      readKnubbieModState(deviceaddress, addrPtr+maxNameLength+paramLength+modSourceLength, kpreset, i);
      
      readKnubbieNumLoop(deviceaddress, addrPtr+maxNameLength+paramLength+modSourceLength+stateLength, kpreset, i);
-       
+         
    }
-   */
+   
+   
 }
 
 void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset){
@@ -259,26 +265,30 @@ void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpr
     writeKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
     
     //so now eeaddress is maxNameLength + IDLength
-     uint16_t addrPtr = maxNameLength + IDLength;
-   /*
+     unsigned int addrPtr = eeaddress + maxNameLength + IDLength;
+     //delay(5); 
+     //writeKnubbieName(deviceaddress, addrPtr, kpreset, 0);
+
    
    for(int i = 0; i<numKnubbies; i++){
      
      ///move addrPtr to start of knubbie
      addrPtr = addrPtr*(i+1);
      
-     
+     delay(5);
      writeKnubbieName(deviceaddress,addrPtr , kpreset, i);
      
+     delay(5);
      writeKnubbieParams(deviceaddress, addrPtr+maxNameLength, kpreset, i);
-       
+     delay(5);  
      writeKnubbieModSource(deviceaddress, addrPtr+maxNameLength+paramLength, kpreset, i);
-     
+     delay(5);
      writeKnubbieModState(deviceaddress, addrPtr+maxNameLength+paramLength+modSourceLength, kpreset, i);
-     
+     delay(5);
      writeKnubbieNumLoop(deviceaddress, addrPtr+maxNameLength+paramLength+modSourceLength+stateLength, kpreset, i);
+    
    }
-   */
+   
 }
 //single read/write functions
 
