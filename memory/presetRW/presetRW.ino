@@ -7,7 +7,7 @@
 
 #define eepromAddr1 0x50 
 
-byte presetIndx  = 0;
+byte presetIndx  = 5;
 
 
  void setup() 
@@ -15,29 +15,61 @@ byte presetIndx  = 0;
 	Serial.begin(9600);
 	Wire.begin();
 	
+	
+for(int  i =0; i<3;i++){
+
+
 	Serial.print("writing at address : ");
 	Serial.println(presetIndx*presetSize);
-	
-	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset2);
+	if(i == 0){
+		writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset1);
+	}else if(i == 1){
 
-	delay(1000);
+		writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset2);
 
-	Serial.println("reading");
+	}else{
 
+		writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset3);
+
+	}
+	delay(500);
 	readKnubPreset(eepromAddr1, presetIndx*presetSize, &currentPreset);
+	delay(1000);
+	printCurrentPreset();
+	delay(2000);
+	presetIndx ++;
+}	
 
- 	delay(1000);
- 		Serial.println("----------------------");
+	
+
+ }	
+
+
+ void loop() 
+{
+	
+}
+
+
+void printCurrentPreset(){
+
+
+	Serial.println(currentPreset.name);
+ 	
+ 	Serial.println("----------------------");
+   	
    	Serial.println("KNUBBIES: ");
 
    	for(int i = 0; i<numKnubbies; i++){
    			Serial.println(currentPreset.knubbies[i].name);
 
    		}   	
+ 	
  	Serial.println("----------------------");
+   	
    	Serial.println("KNUBBIE 1 PARAMS : ");
 
-   for(int i = 0; i<paramLength; i++){
+   	for(int i = 0; i<paramLength; i++){
 
    		Serial.println(currentPreset.knubbies[0].params[i]);
 	}
@@ -53,40 +85,32 @@ byte presetIndx  = 0;
 	Serial.println("----------------------");
    	Serial.println("KNUBBIE 2 PARAMS : ");
 
-   for(int i = 0; i<paramLength; i++){
+   	for(int i = 0; i<paramLength; i++){
 
    		Serial.println(currentPreset.knubbies[1].params[i]);
 	}
  
 
-	Serial.println("KNUBBIE 1 MODSOURCE: ");
+	Serial.println("KNUBBIE 2 MODSOURCE: ");
 	Serial.println(currentPreset.knubbies[1].modSource);
-	Serial.println("KNUBBIE 1 STATE: ");
+	Serial.println("KNUBBIE 2 STATE: ");
 	Serial.println(currentPreset.knubbies[1].state);
-	Serial.println("KNUBBIE 1 NUMLOOP: ");
+	Serial.println("KNUBBIE 2 NUMLOOP: ");
 	Serial.println(currentPreset.knubbies[1].numLoop);
 
 	Serial.println("----------------------");
    	Serial.println("KNUBBIE 3 PARAMS : ");
 
-   for(int i = 0; i<paramLength; i++){
+   	for(int i = 0; i<paramLength; i++){
 
    		Serial.println(currentPreset.knubbies[2].params[i]);
 	}
  
 
-	Serial.println("KNUBBIE 1 MODSOURCE: ");
+	Serial.println("KNUBBIE 3 MODSOURCE: ");
 	Serial.println(currentPreset.knubbies[2].modSource);
-	Serial.println("KNUBBIE 1 STATE: ");
+	Serial.println("KNUBBIE 3 STATE: ");
 	Serial.println(currentPreset.knubbies[2].state);
-	Serial.println("KNUBBIE 1 NUMLOOP: ");
+	Serial.println("KNUBBIE 3 NUMLOOP: ");
 	Serial.println(currentPreset.knubbies[2].numLoop);
-
-
- }	
-
-
- void loop() 
-{
-	
 }
