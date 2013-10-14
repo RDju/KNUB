@@ -14,6 +14,8 @@
 #define stateIndx maxNameLength+paramLength+modOnLength
 #define loopIndx +maxNameLength+paramLength+modOnLength+stateLength
 
+#define eepromAddr1 0x50
+
 struct aKnub{
   char name[maxNameLength];
   byte params[3];

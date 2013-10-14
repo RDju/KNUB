@@ -5,7 +5,10 @@
 
 
 #include "memory.h"
+#include "presets.h"
 #include "knubFuncs.h"
+#include "knubUtils.h"
+#include "knubMidi.h"
 #include "UI.h"
 
 /*
@@ -23,7 +26,7 @@ change the way params are updated via the encoder use function to wich you'll pa
 #define validBut 9
 #define backBut 8
 
-#define eepromAddr1  B01010000 
+
 
 volatile uint8_t lastValue = 0;
 volatile uint8_t lastEncoderValue = 0;
@@ -43,7 +46,6 @@ char valBuf[4];
 
 ClickButton bValid(validBut, LOW, CLICKBTN_PULLUP);
 ClickButton bckValid(backBut, LOW, CLICKBTN_PULLUP);
-
 
 int pageLevel = 0;
 int tabIndx = 0;
@@ -66,24 +68,12 @@ uint8_t currSwIndx = 0;
 boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
-char* modSources[10] = {"___", "EXP", "M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08"};
-char* switchTypes[13] = {"__", "I1", "I2", "I3", "I4", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8"};
+char* modOns[2] = {"___", "EXP"};
+char* switchTypes[5] = {"__", "I1", "I2", "I3", "I4"};
 
-
-aKnubPreset activePreset = {"DEFAULT",{0, 0, 0, 0, 0},
-  
-  {{"OUT1   ", {0, 0, 0}, 0, 0, 0}, 
-  {"OUT2   ", {0, 0, 0}, 0, 0, 0},
-  {"OUT3   ", {0, 0, 0}, 0, 0, 0},
-  {"OUT4   ", {0, 0, 0}, 0, 0, 0}, 
-  {"OUT5   ", {0, 0, 0}, 0, 0, 0},
-  {"OUT6   ", {0, 0, 0}, 0, 0, 0},
-  {"OUT7   ", {0, 0, 0}, 0, 0, 0},
-  {"OUT8   ", {0, 0, 0}, 0, 0, 0}}
-};
+byte baseAddr = 5;
 
 byte toPrint;
-
 
 void setup(){
 
@@ -91,7 +81,9 @@ void setup(){
   lcd.begin(9600);
   Serial.begin(9600);
   Wire.begin();
- 
+  midiSerial.begin(31250);
+
+
   initDisplay();
    
   pinMode(encoderPin1, INPUT); 
@@ -101,35 +93,37 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
-  ///writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
+  ///writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &currentPreset);
   
   currentPresetID = 0;
-
-    //startUp sequence
-    (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
-    delay(500);
-    (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
-    delay(500);
-    initMemDisp();
+  readKnubPreset(eepromAddr1, baseAddr*presetSize, &currentPreset);
+  delay(50);
+  Serial.println("curr name = ");
+  Serial.println(currentPreset.name);
+  //startUp sequence
+  (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
+  delay(500);
+  (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
+  delay(500);
+  initMemDisp();
     
     clearScreen();
     pageLevel = 2;
     tabIndx = 0;
     
     (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
-    itoa(currentPresetID, valBuf, 10);
-    updatePreset(valBuf, activePreset.name, isEdited);
+    //itoa(currentPresetID, valBuf, 10);
+    updatePreset(currentPreset.name, isEdited);
    
    
    ///now turn knubs
-   
+   /*
    for(uint8_t i = 0; i < 8; i++ ){
    
-     //turnKnub(i,activePreset.knubbies[i].params[0]);
-   
+     //turnKnub(i,currentPreset.knubbies[i].params[0]);
    
    }
-   
+   */
 
 }
 
@@ -152,8 +146,8 @@ void loop(){
      clearScreen();
          tabIndx = 0;
          (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
-         itoa(currentPresetID, valBuf, 10);
-         updatePreset(valBuf, activePreset.name, isEdited);
+         //itoa(currentPresetID, valBuf, 10);
+         updatePreset(currentPreset.name, isEdited);
          time2ChangePage = false;
      break;
      case 3:
@@ -164,13 +158,13 @@ void loop(){
      clearScreen();
                  
                  updateParam(0, toString(currentParam + 1));
-                 updateParam(1,activePreset.knubbies[currentParam].name);
-                 updateParam(2,stateToString(activePreset.knubbies[currentParam].state));
-                 updateParam(3,modSources[activePreset.knubbies[currentParam].modSource]);
-                 updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
-                 updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
-                 updateParam(6,customCurveDigits[activePreset.knubbies[currentParam].params[2]]);    
-                 updateParam(7,switchTypes[activePreset.knubbies[currentParam].numLoop]);
+                 updateParam(1,currentPreset.knubbies[currentParam].name);
+                 updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
+                 updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
+                 updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                 updateParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
+                 updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
+                 updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
     time2ChangePage = false;
      break;
      case 5:
@@ -279,13 +273,13 @@ if(encoderValue != lastValue){
                  currentParam = txtParamIndx%8;
             
                  updateParam(0, toString(currentParam + 1));
-                 updateParam(1,activePreset.knubbies[currentParam].name);
-                 updateParam(2,stateToString(activePreset.knubbies[currentParam].state));
-                 updateParam(3,modSources[activePreset.knubbies[currentParam].modSource]);
-                 updateParam(4,customDigits[activePreset.knubbies[currentParam].params[0]]);
-                 updateParam(5,customDigits[activePreset.knubbies[currentParam].params[1]]);
-                 updateParam(6,customCurveDigits[activePreset.knubbies[currentParam].params[2]]);  
-                 updateParam(7, switchTypes[activePreset.knubbies[currentParam].numLoop]);
+                 updateParam(1,currentPreset.knubbies[currentParam].name);
+                 updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
+                 updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
+                 updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                 updateParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
+                 updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);  
+                 updateParam(7, switchTypes[currentPreset.knubbies[currentParam].numLoop]);
                  
              }
         break;
@@ -304,13 +298,13 @@ if(encoderValue != lastValue){
                  txtParamIndx += encoderDir;
                  currModIndx = txtParamIndx%10;
              
-                 updateParam(3, modSources[currModIndx]);
+                 updateParam(3, modOns[currModIndx]);
             } 
             break;
         case 1:
            ///MUST FIND A BETTER WAY OF DEALING WITH THIS
            
-           currentParamVal = activePreset.knubbies[currentParam].params[0];
+           currentParamVal = currentPreset.knubbies[currentParam].params[0];
            
            if(currentParamVal>0 && currentParamVal<256){
                currentParamVal += encoderDir;
@@ -320,7 +314,7 @@ if(encoderValue != lastValue){
                
                updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
                
-               activePreset.knubbies[currentParam].params[0] = currentParamVal;
+               currentPreset.knubbies[currentParam].params[0] = currentParamVal;
                 
         }else if(currentParamVal== 0 && encoderDir ==1){
                    
@@ -329,7 +323,7 @@ if(encoderValue != lastValue){
                    updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
                  
                
-                   activePreset.knubbies[currentParam].params[0] = currentParamVal;
+                   currentPreset.knubbies[currentParam].params[0] = currentParamVal;
                    
           }else if(currentParamVal== 255 && encoderDir ==-1){
                    
@@ -337,34 +331,34 @@ if(encoderValue != lastValue){
                    //turnKnub(currentParam, currentParamVal);
                    updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
                  
-                   activePreset.knubbies[currentParam].params[0] = currentParamVal;
+                   currentPreset.knubbies[currentParam].params[0] = currentParamVal;
           }
        break;
        case 2:
            
-           currentParamVal = activePreset.knubbies[currentParam].params[1];
+           currentParamVal = currentPreset.knubbies[currentParam].params[1];
            
            if(currentParamVal>0 && currentParamVal<100){
               currentParamVal += encoderDir;
               
               updateParam(5, customDigits[currentParamVal]);
-              currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
+              currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
           }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
                    updateParam(5, customDigits[currentParamVal]);
-                   currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
+                   currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
                    
           }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
                    
                    updateParam(5, customDigits[currentParamVal]);
                    
-                   currentParamVal = activePreset.knubbies[currentParam].params[1] = currentParamVal;
+                   currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
          }
        break;
        case 3:
            ///not acitve yet
-           currentParamVal = activePreset.knubbies[currentParam].params[2];
+           currentParamVal = currentPreset.knubbies[currentParam].params[2];
            
            scaledEncoderValueParam = encoderValue%25;
            if(scaledEncoderValueParam == 0){
@@ -374,12 +368,12 @@ if(encoderValue != lastValue){
        break;
        case 5:
            ///not acitve yet
-           currentParamVal = activePreset.knubbies[currentParam].params[2];
+           currentParamVal = currentPreset.knubbies[currentParam].params[2];
            
            scaledEncoderValueParam = encoderValue%25;
            if(scaledEncoderValueParam == 0){
               txtParamIndx += encoderDir;
-              //updateParam(2,boolToString(activePreset.knubbies[currentParam].state));
+              //updateParam(2,boolToString(currentPreset.knubbies[currentParam].state));
               updateParam(2, stateToString(txtParamIndx%2));
            }
        break;
@@ -395,8 +389,8 @@ if(encoderValue != lastValue){
                  txtParamIndx += encoderDir;
                  currentFx = txtParamIndx%3;
                  
-                 updatePedalName(activePreset.knubbies[currentFx].name);
-                 updatePedalState(fxState[activePreset.knubbies[currentFx].isOn]);
+                 updatePedalName(currentPreset.knubbies[currentFx].name);
+                 updatePedalState(fxState[currentPreset.knubbies[currentFx].isOn]);
                  
                  if(currentFx != 0){
                    
@@ -422,17 +416,17 @@ if(encoderValue != lastValue){
                  currentPresetID += encoderDir;
                  itoa(currentPresetID, valBuf, 10);
               
-                 readKnubPresetName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);
+                 readKnubPresetName(eepromAddr1, currentPresetID*maxNameLength, &currentPreset);
                  
-                 updatePreset(valBuf, activePreset.name, isEdited);
+                 updatePreset(currentPreset.name, isEdited);
         }else if(encoderDir == -1 && currentPresetID > 0){
         
           currentPresetID += encoderDir;
           itoa(currentPresetID, valBuf, 10);
           
-          readKnubPresetName(eepromAddr1, currentPresetID*maxNameLength, &activePreset);  
+          readKnubPresetName(eepromAddr1, currentPresetID*maxNameLength, &currentPreset);  
           
-          updatePreset(valBuf, activePreset.name, isEdited);
+          updatePreset(currentPreset.name, isEdited);
           }
         }
     break;

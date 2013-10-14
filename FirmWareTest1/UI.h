@@ -138,9 +138,9 @@ void updateParam2(uint8_t prmIndx, char newVal[]){
 
 }
 
-void updatePreset(char preset[], char pName[], boolean editMode){
+void updatePreset(/*char preset[],*/ char pName[], boolean editMode){
 
-
+/*
   lcd.write("sd0,7;");
   delay(longDel);
   lcd.write("ss");
@@ -151,11 +151,11 @@ void updatePreset(char preset[], char pName[], boolean editMode){
   delay(longDel);
   lcd.write("sd1,0;");
   delay(longDel);
-  
+  */
   if(editMode){
     lcd.write("ss");
     lcd.write(pName);
-    lcd.write("{O_O}");
+    lcd.write("%");
     lcd.write(";");
     delay(longDel);
   }else{
@@ -341,7 +341,7 @@ void savePage(char dummy[], char dummy1[], char dummy2[], char dummy3[], char du
 }
 
 
-void presetPage(char presetNum[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
+void presetPage(char presetName[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
  lcd.write("sc;");
  delay(longDel);
@@ -350,7 +350,7 @@ void presetPage(char presetNum[], char dummy1[], char dummy2[], char dummy3[], c
  lcd.write("ssPRESET:;");
  delay(longDel);
  lcd.write("ss");
- lcd.write(presetNum);
+ lcd.write(presetName);
  lcd.write(";");
  delay(longDel);
 }

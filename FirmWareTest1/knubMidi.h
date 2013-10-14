@@ -27,20 +27,20 @@ void midiInRead(){
 
 			inRead = 0;
 			
-			/* then here test if message is a PGM or CC */
-			/*
+			/* then here test if message is a PGM or CC 
+			for now I use noteOn messages*/
+
 			if(inMessage[2]!= 0){
 
 			//Serial.println(inMessage[0]);
 				//Serial.println(inMessage[1]);
-				time = millis();
+				
 				readKnubPreset(eepromAddr1, (inMessage[1] - 56)*presetSize, &currentPreset);
-				time = millis() - time;
-				Serial.println(time);
+				delay(50);
 				printCurrentPreset();
 
 			}
-			*/
+			
 		}
 	}
 }
