@@ -6,10 +6,11 @@
 
 #include "memory.h"
 #include "presets.h"
-#include "knubFuncs.h"
-#include "knubUtils.h"
-#include "knubMidi.h"
+//#include "knubFuncs.h"
+//#include "knubUtils.h"
 #include "UI.h"
+#include "knubMidi.h"
+
 
 /*
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
@@ -20,8 +21,8 @@ change the way params are updated via the encoder use function to wich you'll pa
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 */
 
-#define encoderPin1 2
-#define encoderPin2 3
+#define encoderPin1 12
+#define encoderPin2 13
 
 #define validBut 9
 #define backBut 8
@@ -35,7 +36,7 @@ volatile uint8_t encoderValueParam = 0;
 volatile uint8_t encoderValueParamVal = 0;
 volatile uint8_t scaledEncoderValueParam = 0;
 
-boolean time2ChangePage;
+//boolean time2ChangePage;
 
 uint8_t txtParamIndx;
 
@@ -86,20 +87,19 @@ void setup(){
 
   initDisplay();
    
-  pinMode(encoderPin1, INPUT); 
-  pinMode(encoderPin2, INPUT);
-  digitalWrite(encoderPin1, HIGH);
-  digitalWrite(encoderPin2, HIGH);
-  attachInterrupt(0, updateEncoder, CHANGE); 
-  attachInterrupt(1, updateEncoder, CHANGE);
+  //pinMode(encoderPin1, INPUT); 
+  //pinMode(encoderPin2, INPUT);
+  //digitalWrite(encoderPin1, HIGH);
+  //digitalWrite(encoderPin2, HIGH);
+  //attachInterrupt(0, updateEncoder, CHANGE); 
+  //attachInterrupt(1, updateEncoder, CHANGE);
   
   ///writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &currentPreset);
   
   currentPresetID = 0;
   readKnubPreset(eepromAddr1, baseAddr*presetSize, &currentPreset);
   delay(50);
-  Serial.println("curr name = ");
-  Serial.println(currentPreset.name);
+ 
   //startUp sequence
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
   delay(500);
@@ -128,6 +128,7 @@ void setup(){
 }
 
 void loop(){
+  midiInRead();
   
    ////dealing with pages 
   if(time2ChangePage){
@@ -146,8 +147,9 @@ void loop(){
      clearScreen();
          tabIndx = 0;
          (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
-         //itoa(currentPresetID, valBuf, 10);
+
          updatePreset(currentPreset.name, isEdited);
+         Serial.println("preset Page called");
          time2ChangePage = false;
      break;
      case 3:
@@ -260,7 +262,7 @@ void loop(){
   //////////////////////////////////////////////
   
   /////// encoding Wheel/////////////////////
-
+/*
 if(encoderValue != lastValue){
    switch(pageLevel){
      case 4 :
@@ -405,7 +407,7 @@ if(encoderValue != lastValue){
         case 1:
             
         break;
-      */  
+        
     }
     break;
     case 2:
@@ -433,7 +435,7 @@ if(encoderValue != lastValue){
    }
  }
    lastValue = encoderValue;
-
+  */
 }
 
 void updateEncoder(){

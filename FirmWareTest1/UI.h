@@ -48,8 +48,11 @@ sm1; [ shift right ]
 
 #include "Arduino.h"
 
+
 SoftwareSerial lcd(rxPin, txPin);
 
+
+bool time2ChangePage = false;
 int fxIndx = 0;
 int memTabIndx = 0;
 uint8_t numTabs[] = {0, 0, 0, 2, 7};
@@ -140,18 +143,6 @@ void updateParam2(uint8_t prmIndx, char newVal[]){
 
 void updatePreset(/*char preset[],*/ char pName[], boolean editMode){
 
-/*
-  lcd.write("sd0,7;");
-  delay(longDel);
-  lcd.write("ss");
-  lcd.write(preset);
-  lcd.write(" ");
-  lcd.write(" ");
-  lcd.write(";");
-  delay(longDel);
-  lcd.write("sd1,0;");
-  delay(longDel);
-  */
   if(editMode){
     lcd.write("ss");
     lcd.write(pName);
