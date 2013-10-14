@@ -13,7 +13,7 @@ void midiInRead(){
 
 	/*reads incomming PGM change and CC's (for modulation of individual parameters)*/
 
-	if(midiSerial.available()>0 && time2ChangePage == false){
+	if(midiSerial.available()>0){
 
 
 		if(inRead < 3){
@@ -24,31 +24,22 @@ void midiInRead(){
 		}
 
 		if(inRead >=3){
+			
 			inRead = 0;
+			
 			Serial.print(inMessage[0]);
 			Serial.print(", ");
 			Serial.print(inMessage[1]);
 			Serial.print(", ");
 			Serial.println(inMessage[2]);
 			
-			
-			
-
 			/* then here test if message is a PGM or CC 
 			for now I use noteOn messages*/
-				
-			if(inMessage[2]!= 0){
-
-
-				
-				readKnubPreset(eepromAddr1, (inMessage[1] - 56)*presetSize, &currentPreset);
-				delay(50);
-		
-				time2ChangePage = true;
-
-			}
 			
-		
+			uint16_t readAdr = (inMessage[1]-56)*presetSize;
+
+			readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+			updatePreset(currentPreset.name, false);
 
 		}
 	}

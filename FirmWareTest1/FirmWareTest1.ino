@@ -73,6 +73,7 @@ char* modOns[2] = {"___", "EXP"};
 char* switchTypes[5] = {"__", "I1", "I2", "I3", "I4"};
 
 byte baseAddr = 5;
+byte prevLoaded = 61;
 
 byte toPrint;
 
@@ -93,11 +94,7 @@ void setup(){
   //digitalWrite(encoderPin2, HIGH);
   //attachInterrupt(0, updateEncoder, CHANGE); 
   //attachInterrupt(1, updateEncoder, CHANGE);
-  
-  ///writeKnubName(eepromAddr1, currentPresetID*maxNameLength, &currentPreset);
-  
-  currentPresetID = 0;
-  readKnubPreset(eepromAddr1, baseAddr*presetSize, &currentPreset);
+  readKnubPreset(eepromAddr1, (prevLoaded-56) * presetSize, &currentPreset);
   delay(50);
  
   //startUp sequence
@@ -112,18 +109,9 @@ void setup(){
     tabIndx = 0;
     
     (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
-    //itoa(currentPresetID, valBuf, 10);
+
     updatePreset(currentPreset.name, isEdited);
-   
-   
-   ///now turn knubs
-   /*
-   for(uint8_t i = 0; i < 8; i++ ){
-   
-     //turnKnub(i,currentPreset.knubbies[i].params[0]);
-   
-   }
-   */
+
 
 }
 
@@ -149,7 +137,7 @@ void loop(){
          (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
 
          updatePreset(currentPreset.name, isEdited);
-         Serial.println("preset Page called");
+        
          time2ChangePage = false;
      break;
      case 3:
@@ -181,7 +169,7 @@ void loop(){
    }
   }
   //////////////////////
-  
+  /*
   //// tab button
   bValid.Update();
   
