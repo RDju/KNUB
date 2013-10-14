@@ -3,17 +3,17 @@
 #include "Wire.h"
 #include "memory.h"
 #include "presets.h"
+#include "knubMidi.h"
 
-#define eepromAddr1 0x50 
+ 
 
 
-SoftwareSerial midiSerial(2, 3);
+
 
 unsigned long time;
 
 byte presetIndx  = 5;
-byte inMessage[3];
-byte inRead  = 0;
+
 
 void setup(){
 	
@@ -80,33 +80,7 @@ for(int  i =0; i<3;i++){
 
  void loop(){
 
-	if(midiSerial.available()>0){
-
-
-		if(inRead < 3){
-
-			inMessage[inRead] = midiSerial.read();
-			inRead ++;
-
-		}
-
-		if(inRead >=3){
-
-			inRead = 0;
-			
-			if(inMessage[2]!= 0){
-
-			//Serial.println(inMessage[0]);
-				//Serial.println(inMessage[1]);
-				time = millis();
-				readKnubPreset(eepromAddr1, (inMessage[1] - 56)*presetSize, &currentPreset);
-				time = millis() - time;
-				Serial.println(time);
-				printCurrentPreset();
-
-			}
-		}
-	}
+	
 
 }
 
@@ -135,8 +109,8 @@ void printCurrentPreset(){
 	}
  
 
-	Serial.println("KNUBBIE 1 MODSOURCE: ");
-	Serial.println(currentPreset.knubbies[0].modSource);
+	Serial.println("KNUBBIE 1 modOn: ");
+	Serial.println(currentPreset.knubbies[0].modOn);
 	Serial.println("KNUBBIE 1 STATE: ");
 	Serial.println(currentPreset.knubbies[0].state);
 	Serial.println("KNUBBIE 1 NUMLOOP: ");
@@ -151,8 +125,8 @@ void printCurrentPreset(){
 	}
  
 
-	Serial.println("KNUBBIE 2 MODSOURCE: ");
-	Serial.println(currentPreset.knubbies[1].modSource);
+	Serial.println("KNUBBIE 2 modOn: ");
+	Serial.println(currentPreset.knubbies[1].modOn);
 	Serial.println("KNUBBIE 2 STATE: ");
 	Serial.println(currentPreset.knubbies[1].state);
 	Serial.println("KNUBBIE 2 NUMLOOP: ");
@@ -167,8 +141,8 @@ void printCurrentPreset(){
 	}
  
 
-	Serial.println("KNUBBIE 3 MODSOURCE: ");
-	Serial.println(currentPreset.knubbies[2].modSource);
+	Serial.println("KNUBBIE 3 modOn: ");
+	Serial.println(currentPreset.knubbies[2].modOn);
 	Serial.println("KNUBBIE 3 STATE: ");
 	Serial.println(currentPreset.knubbies[2].state);
 	Serial.println("KNUBBIE 3 NUMLOOP: ");
