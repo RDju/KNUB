@@ -39,7 +39,8 @@ void midiInRead(){
 			uint16_t readAdr = (inMessage[1]-56)*presetSize;
 
 			readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-			updatePreset(currentPreset.name, false);
+			time2ChangePage = true;
+
 
 		}
 	}
