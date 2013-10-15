@@ -21,6 +21,11 @@ change the way params are updated via the encoder use function to wich you'll pa
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 */
 
+
+//#define DEBUG_MIDI //uncomment this to activate midi debugging
+ #define DEBUG_UI //uncomment this to activate UI debugging
+
+
 #define encoderPin1 12
 #define encoderPin2 13
 
@@ -114,9 +119,13 @@ void setup(){
 }
 
 void loop(){
-  if(pageLevel == 2){
+#ifdef DEBUG_UI
+  Serial.println(pageLevel);
+#endif
+
+if(pageLevel == 2){
     midiInRead();
-  }
+}
   
    ////dealing with pages 
    if(time2ChangePage){
@@ -140,10 +149,8 @@ void loop(){
 
        time2ChangePage = false;
        break;
+      
        case 3:
-
-       break;
-       case 4:
        tabIndx = 0;
        clearScreen();
 
@@ -157,9 +164,9 @@ void loop(){
        updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
        time2ChangePage = false;
        break;
-       case 5:
+       case 4:
        clearScreen();
-       (*drawFuncs[pageLevel])("", "",  "",  "", "", "", "", "", "");
+       (*drawFuncs[pageLevel+1])("", "",  "",  "", "", "", "", "", "");
        time2ChangePage = false;
        delay(saveTime*5);
        pageLevel = 2;
@@ -231,12 +238,12 @@ void loop(){
       }else if(bckValid.click == 2 && pageLevel == 2){
 
         Serial.println("saving");
-        pageLevel = 5;
+        pageLevel = 4;
         Serial.println(pageLevel);
         isEdited = false;
         time2ChangePage = true;
 
-        }else if(bckValid.click == 1 && pageLevel == 4){
+        }else if(bckValid.click == 1 && pageLevel == 3){
          tabIndx--;
          tabIndx = tabIndx%numTabs[pageLevel];
          tab(chParamTabs[tabIndx]);
