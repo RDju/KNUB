@@ -1,12 +1,9 @@
 #include "SoftwareSerial.h"
 
-#define baseKnubCC 107
-
-
 SoftwareSerial midiSerial(2, 3);
 byte inMessage[3];
 byte inRead  = 0;
-
+uint16_t prevRead = 5*presetSize;
 
 void midiInRead(){
 
@@ -27,20 +24,24 @@ void midiInRead(){
 			
 			inRead = 0;
 			
-			Serial.print(inMessage[0]);
-			Serial.print(", ");
-			Serial.print(inMessage[1]);
-			Serial.print(", ");
-			Serial.println(inMessage[2]);
+			#ifdef DEBUG_MIDI
+				Serial.print(inMessage[0]);
+				Serial.print(", ");
+				Serial.print(inMessage[1]);
+				Serial.print(", ");
+				Serial.println(inMessage[2]);
+			#endif
 			
 			/* then here test if message is a PGM or CC 
 			for now I use noteOn messages*/
 			
 			uint16_t readAdr = (inMessage[1]-56)*presetSize;
-
-			readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-			time2ChangePage = true;
-
+			
+			if(readAdr != prevRead){
+				readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+				time2ChangePage = true;
+				prevRead = readAdr;
+			}
 
 		}
 	}

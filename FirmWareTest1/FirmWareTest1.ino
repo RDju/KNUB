@@ -6,8 +6,8 @@
 
 #include "memory.h"
 #include "presets.h"
-//#include "knubFuncs.h"
-//#include "knubUtils.h"
+#include "knubFuncs.h"
+#include "knubUtils.h"
 #include "UI.h"
 #include "knubMidi.h"
 
@@ -169,7 +169,7 @@ void loop(){
    }
   }
   //////////////////////
-  /*
+  
   //// tab button
   bValid.Update();
   
@@ -216,6 +216,7 @@ void loop(){
         break;
         }
     }
+  
   //////back button
   bckValid.Update();
      

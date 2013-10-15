@@ -1,4 +1,4 @@
-aKnubPreset preset1 = {"DEFAULT",{0, 0, 0, 0, 0, 1},
+aKnubPreset preset1 = {"MCLOVIN",{0, 0, 0, 0, 0, 1},
   
   {{"OUT1   ", {22, 100, 1}, 0, 1, 1}, 
   {"OUT2   ", {50, 50, 1}, 0, 1, 1},

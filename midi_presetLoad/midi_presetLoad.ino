@@ -19,7 +19,7 @@ void setup(){
 	midiSerial.begin(31250);
 
 	Wire.begin();
-	/*
+	
 	Serial.print("writing at address : ");
 	
 	Serial.println(presetIndx*presetSize);
@@ -44,7 +44,7 @@ void setup(){
 	delay(1000);
 	presetIndx = 5;
 	Serial.println("ready");
-	*/
+	
 
 
 
@@ -53,7 +53,7 @@ void setup(){
 
  void loop(){
 
- 	midiInRead();
+ 	//midiInRead();
 
 
 }
