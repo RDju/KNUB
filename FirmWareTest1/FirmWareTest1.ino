@@ -22,8 +22,8 @@ change the way params are updated via the encoder use function to wich you'll pa
 */
 
 
-//#define DEBUG_MIDI //uncomment this to activate midi debugging
- #define DEBUG_UI //uncomment this to activate UI debugging
+
+ //#define DEBUG_UI //uncomment this to activate UI debugging
 
 
 #define encoderPin1 12
@@ -51,7 +51,7 @@ char valBuf[4];
 ClickButton bValid(validBut, LOW, CLICKBTN_PULLUP);
 ClickButton bckValid(backBut, LOW, CLICKBTN_PULLUP);
 
-int pageLevel = 0;
+byte pageLevel = 0;
 int tabIndx = 0;
 uint8_t currFx = 0;
 
@@ -119,15 +119,10 @@ void setup(){
 }
 
 void loop(){
-#ifdef DEBUG_UI
-  Serial.println(pageLevel);
-#endif
+   
+  midiInRead(pageLevel);
 
-if(pageLevel == 2){
-    midiInRead();
-}
-  
-   ////dealing with pages 
+  ////dealing with pages 
    if(time2ChangePage){
      switch(pageLevel){
        case 0:
@@ -236,10 +231,8 @@ if(pageLevel == 2){
 
 
       }else if(bckValid.click == 2 && pageLevel == 2){
-
-        Serial.println("saving");
+        
         pageLevel = 4;
-        Serial.println(pageLevel);
         isEdited = false;
         time2ChangePage = true;
 
@@ -249,8 +242,6 @@ if(pageLevel == 2){
          tab(chParamTabs[tabIndx]);
 
          customCursor(tabIndx, pageLevel);
-
-
        }
      }
 

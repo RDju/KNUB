@@ -1,11 +1,14 @@
 #include "SoftwareSerial.h"
 
+//#define DEBUG_MIDI //uncomment this to activate midi debugging
+
+
 SoftwareSerial midiSerial(2, 3);
 byte inMessage[3];
 byte inRead  = 0;
 uint16_t prevRead = 5*presetSize;
 
-void midiInRead(){
+void midiInRead(byte pageLev){
 
 
 	/*reads incomming PGM change and CC's (for modulation of individual parameters)*/
@@ -37,12 +40,13 @@ void midiInRead(){
 			
 			uint16_t readAdr = (inMessage[1]-56)*presetSize;
 			
-			if(readAdr != prevRead){
-				readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-				time2ChangePage = true;
-				prevRead = readAdr;
+			if(pageLev == 2){
+				if(readAdr != prevRead){
+					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+					time2ChangePage = true;
+					prevRead = readAdr;
+				}
 			}
-
 		}
 	}
 }
