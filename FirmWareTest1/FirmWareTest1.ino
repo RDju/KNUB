@@ -6,8 +6,8 @@
 
 #include "memory.h"
 #include "presets.h"
-#include "knubFuncs.h"
-#include "knubUtils.h"
+//#include "knubFuncs.h"
+//#include "knubUtils.h"
 #include "UI.h"
 #include "knubMidi.h"
 
@@ -26,8 +26,6 @@ change the way params are updated via the encoder use function to wich you'll pa
 
 #define validBut 9
 #define backBut 8
-
-
 
 volatile uint8_t lastValue = 0;
 volatile uint8_t lastEncoderValue = 0;
@@ -70,7 +68,7 @@ boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
 char* modOns[2] = {"___", "EXP"};
-char* switchTypes[5] = {"__", "I1", "I2", "I3", "I4"};
+char* switchTypes[5] = {"__", "L1", "L2", "L3", "L4"};
 
 byte baseAddr = 5;
 byte prevLoaded = 61;
@@ -79,7 +77,7 @@ byte toPrint;
 
 void setup(){
 
-  
+
   lcd.begin(9600);
   Serial.begin(9600);
   Wire.begin();
@@ -87,7 +85,7 @@ void setup(){
 
 
   initDisplay();
-   
+
   //pinMode(encoderPin1, INPUT); 
   //pinMode(encoderPin2, INPUT);
   //digitalWrite(encoderPin1, HIGH);
@@ -96,68 +94,70 @@ void setup(){
   //attachInterrupt(1, updateEncoder, CHANGE);
   readKnubPreset(eepromAddr1, (prevLoaded-56) * presetSize, &currentPreset);
   delay(50);
- 
+
   //startUp sequence
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
   delay(500);
   (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
   delay(500);
   initMemDisp();
-    
-    clearScreen();
-    pageLevel = 2;
-    tabIndx = 0;
-    
-    (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
 
-    updatePreset(currentPreset.name, isEdited);
+  clearScreen();
+  pageLevel = 2;
+  tabIndx = 0;
+
+  (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
+
+  updatePreset(currentPreset.name, isEdited);
 
 
 }
 
 void loop(){
-  midiInRead();
+  if(pageLevel == 2){
+    midiInRead();
+  }
   
    ////dealing with pages 
-  if(time2ChangePage){
-   switch(pageLevel){
-     case 0:
-     clearScreen();
+   if(time2ChangePage){
+     switch(pageLevel){
+       case 0:
+       clearScreen();
        (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
-        time2ChangePage = false;
-     break;
-     case 1:  
-     clearScreen();
-        (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
-        time2ChangePage = false;
-     break;
-     case 2:
-     clearScreen();
-         tabIndx = 0;
-         (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
+       time2ChangePage = false;
+       break;
+       case 1:  
+       clearScreen();
+       (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
+       time2ChangePage = false;
+       break;
+       case 2:
+       clearScreen();
+       tabIndx = 0;
+       (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
 
-         updatePreset(currentPreset.name, isEdited);
-        
-         time2ChangePage = false;
-     break;
-     case 3:
-  
-     break;
-     case 4:
-     tabIndx = 0;
-     clearScreen();
-                 
-                 updateParam(0, toString(currentParam + 1));
-                 updateParam(1,currentPreset.knubbies[currentParam].name);
-                 updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
-                 updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
-                 updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
-                 updateParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
-                 updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
-                 updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
-    time2ChangePage = false;
-     break;
-     case 5:
+       updatePreset(currentPreset.name, isEdited);
+
+       time2ChangePage = false;
+       break;
+       case 3:
+
+       break;
+       case 4:
+       tabIndx = 0;
+       clearScreen();
+
+       updateParam(0, toString(currentParam + 1));
+       updateParam(1,currentPreset.knubbies[currentParam].name);
+       updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
+       updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
+       updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+       updateParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
+       updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
+       updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
+       time2ChangePage = false;
+       break;
+       case 5:
        clearScreen();
        (*drawFuncs[pageLevel])("", "",  "",  "", "", "", "", "", "");
        time2ChangePage = false;
@@ -165,9 +165,9 @@ void loop(){
        pageLevel = 2;
        time2ChangePage = true;
        
-     break;
+       break;
+     }
    }
-  }
   //////////////////////
   
   //// tab button
@@ -175,79 +175,79 @@ void loop(){
   
   if(bValid.click !=0){
     switch (pageLevel){
-        case 0:
-          if(bValid.click == 1){     
-          pageLevel ++;
-          time2ChangePage = true;
-          }
-        break;
-        case 1:
-         if(bValid.click == 1){
-          pageLevel ++;
-          time2ChangePage = true;
-         }
-        break;
-        case 2:
-          if(bValid.click == 2){
-            pageLevel ++;
-            if(isEdited == false){
-              isEdited = true;
-            }
-            time2ChangePage = true;
-          }
-        break;
-        case 3:
-        
-        if(bValid.click == 2){
-          pageLevel ++;
-          time2ChangePage = true;
-          
-        }   
-       break;
-        case 4:
-          if(bValid.click == 1){
-          
-             tabIndx++;
-             tabIndx = tabIndx%numTabs[pageLevel];
-             tab(chParamTabs[tabIndx]);
-        
-             customCursor(tabIndx, pageLevel);
-          }
-        break;
+      case 0:
+      if(bValid.click == 1){     
+        pageLevel ++;
+        time2ChangePage = true;
+      }
+      break;
+      case 1:
+      if(bValid.click == 1){
+        pageLevel ++;
+        time2ChangePage = true;
+      }
+      break;
+      case 2:
+      if(bValid.click == 2){
+        pageLevel ++;
+        if(isEdited == false){
+          isEdited = true;
         }
-    }
-  
+        time2ChangePage = true;
+      }
+      break;
+      case 3:
+
+      if(bValid.click == 2){
+        pageLevel ++;
+        time2ChangePage = true;
+
+      }   
+      break;
+      case 4:
+      if(bValid.click == 1){
+
+       tabIndx++;
+       tabIndx = tabIndx%numTabs[pageLevel];
+       tab(chParamTabs[tabIndx]);
+
+       customCursor(tabIndx, pageLevel);
+     }
+     break;
+   }
+ }
+
   //////back button
   bckValid.Update();
-     
-   if(bckValid.click != 0){
-    if(bckValid.click==2 && pageLevel > 2){
-      
-  
-        pageLevel = 2;
-        time2ChangePage = true;
-   
-        
-      }else if(bckValid.click == 2 && pageLevel == 2){
-       
-          Serial.println("saving");
-          pageLevel = 5;
-          Serial.println(pageLevel);
-          isEdited = false;
-          time2ChangePage = true;
-     
-     }else if(bckValid.click == 1 && pageLevel == 4){
-             tabIndx--;
-             tabIndx = tabIndx%numTabs[pageLevel];
-             tab(chParamTabs[tabIndx]);
-        
-             customCursor(tabIndx, pageLevel);
-       
-     
-     }
-   }
 
-  
+  if(bckValid.click != 0){
+    if(bckValid.click==2 && pageLevel > 2){
+
+
+      pageLevel = 2;
+      time2ChangePage = true;
+
+
+      }else if(bckValid.click == 2 && pageLevel == 2){
+
+        Serial.println("saving");
+        pageLevel = 5;
+        Serial.println(pageLevel);
+        isEdited = false;
+        time2ChangePage = true;
+
+        }else if(bckValid.click == 1 && pageLevel == 4){
+         tabIndx--;
+         tabIndx = tabIndx%numTabs[pageLevel];
+         tab(chParamTabs[tabIndx]);
+
+         customCursor(tabIndx, pageLevel);
+
+
+       }
+     }
+
+
   //////////////////////////////////////////////
   
   /////// encoding Wheel/////////////////////
@@ -424,10 +424,10 @@ if(encoderValue != lastValue){
    }
  }
    lastValue = encoderValue;
-  */
-}
+   */
+ }
 
-void updateEncoder(){
+ void updateEncoder(){
   uint8_t MSB = digitalRead(encoderPin1); //MSB = most significant bit
   uint8_t LSB = digitalRead(encoderPin2); //LSB = least significant bit
 
@@ -435,15 +435,15 @@ void updateEncoder(){
   uint8_t sum  = (lastEncoderValue << 2) | encoded; //adding it to the previous encoded value
   
   if(sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011){
-    
-      encoderDir = 1;
-      encoderValue ++;
+
+    encoderDir = 1;
+    encoderValue ++;
     
   }
   if(sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000){
-      encoderDir = -1;
-      encoderValue -- ;
-   
+    encoderDir = -1;
+    encoderValue -- ;
+
   }
 
   lastEncoderValue = encoded; //store this value for next time
