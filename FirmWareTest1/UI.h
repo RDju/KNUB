@@ -244,7 +244,7 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
      
     }
     break;
-    case 3:
+    case 4:
       switch(cusTab){
   
       case 0:
