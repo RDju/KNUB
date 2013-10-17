@@ -3,7 +3,7 @@
 //#define DEBUG_MIDI //uncomment this to activate midi debugging
 
 
-SoftwareSerial midiSerial(2, 3);
+SoftwareSerial midiSerial(7, 10);
 byte inMessage[3];
 byte inRead  = 0;
 uint16_t prevRead = 5*presetSize;

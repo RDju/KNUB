@@ -179,7 +179,7 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
   
   switch(pageLev){
   
-    case 4:
+    case 3:
     switch(cusTab){
   
       case 0:

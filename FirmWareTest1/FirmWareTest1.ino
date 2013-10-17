@@ -26,8 +26,8 @@ change the way params are updated via the encoder use function to wich you'll pa
  //#define DEBUG_UI //uncomment this to activate UI debugging
 
 
-#define encoderPin1 12
-#define encoderPin2 13
+#define encoderPin1 2
+#define encoderPin2 3
 
 #define validBut 9
 #define backBut 8
@@ -91,12 +91,13 @@ void setup(){
 
   initDisplay();
 
-  //pinMode(encoderPin1, INPUT); 
-  //pinMode(encoderPin2, INPUT);
-  //digitalWrite(encoderPin1, HIGH);
-  //digitalWrite(encoderPin2, HIGH);
-  //attachInterrupt(0, updateEncoder, CHANGE); 
-  //attachInterrupt(1, updateEncoder, CHANGE);
+  pinMode(encoderPin1, INPUT); 
+  pinMode(encoderPin2, INPUT);
+  digitalWrite(encoderPin1, HIGH);
+  digitalWrite(encoderPin2, HIGH);
+  attachInterrupt(0, updateEncoder, CHANGE); 
+  attachInterrupt(1, updateEncoder, CHANGE);
+  
   readKnubPreset(eepromAddr1, (prevLoaded-56) * presetSize, &currentPreset);
   delay(50);
 
@@ -198,7 +199,7 @@ void loop(){
         time2ChangePage = true;
       }
       break;
-      case 3:
+      case 4:
 
       if(bValid.click == 2){
         pageLevel ++;
@@ -206,7 +207,7 @@ void loop(){
 
       }   
       break;
-      case 4:
+      case 3:
       if(bValid.click == 1){
 
        tabIndx++;
@@ -249,10 +250,10 @@ void loop(){
   //////////////////////////////////////////////
   
   /////// encoding Wheel/////////////////////
-/*
+
 if(encoderValue != lastValue){
    switch(pageLevel){
-     case 4 :
+     case 3 :
        switch(tabIndx){
          case 0:
             scaledEncoderValueParam = encoderValue%25;
@@ -345,8 +346,10 @@ if(encoderValue != lastValue){
                    currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
          }
        break;
+       /*
        case 3:
            ///not acitve yet
+           
            currentParamVal = currentPreset.knubbies[currentParam].params[2];
            
            scaledEncoderValueParam = encoderValue%25;
@@ -366,13 +369,15 @@ if(encoderValue != lastValue){
               updateParam(2, stateToString(txtParamIndx%2));
            }
        break;
+      */
      }
      break;
-   case 3:
+   case 4:
       
       switch(tabIndx){
-       /*
+       
         case 0:
+            /*
             scaledEncoderValueParam = encoderValue%25;
             if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
@@ -389,7 +394,7 @@ if(encoderValue != lastValue){
                  
                  }
                }
-        
+          */
         break;
         case 1:
             
@@ -422,7 +427,7 @@ if(encoderValue != lastValue){
    }
  }
    lastValue = encoderValue;
-   */
+   
  }
 
  void updateEncoder(){
