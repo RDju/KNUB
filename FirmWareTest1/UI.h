@@ -55,7 +55,7 @@ SoftwareSerial lcd(rxPin, txPin);
 bool time2ChangePage = false;
 int fxIndx = 0;
 int memTabIndx = 0;
-uint8_t numTabs[] = {0, 0, 0, 2, 7};
+uint8_t numTabs[] = {0, 0, 2, 7, 0};
 char tmpStr[4];
 
 char* fxTabs[] = {"0,7", "1,7"};

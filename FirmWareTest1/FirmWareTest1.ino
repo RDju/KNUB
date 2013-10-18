@@ -121,6 +121,10 @@ void setup(){
 
 void loop(){
    
+  Serial.print(pageLevel);
+  Serial.print(", ");
+  Serial.println(tabIndx);
+
   midiInRead(pageLevel);
 
   ////dealing with pages 
