@@ -150,7 +150,7 @@ void loop(){
        case 3:
        tabIndx = 0;
        currentParam = 0;
-       
+
        clearScreen();
 
        updateParam(0, toString(currentParam + 1));
@@ -291,7 +291,7 @@ if(encoderValue != lastValue){
               scaledEncoderValueParam = encoderValue%25;
               if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
-                 currModIndx = txtParamIndx%10;
+                 currModIndx = txtParamIndx%2;
              
                  updateParam(3, modOns[currModIndx]);
             } 
