@@ -149,6 +149,8 @@ void loop(){
       
        case 3:
        tabIndx = 0;
+       currentParam = 0;
+       
        clearScreen();
 
        updateParam(0, toString(currentParam + 1));
