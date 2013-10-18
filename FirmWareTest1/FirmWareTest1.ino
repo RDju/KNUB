@@ -121,9 +121,6 @@ void setup(){
 
 void loop(){
    
-  Serial.print(pageLevel);
-  Serial.print(", ");
-  Serial.println(tabIndx);
 
   midiInRead(pageLevel);
 
@@ -168,6 +165,7 @@ void loop(){
        clearScreen();
        (*drawFuncs[pageLevel+1])("", "",  "",  "", "", "", "", "", "");
        time2ChangePage = false;
+       writeKnubPreset(eepromAddr1, readAdr, &currentPreset);
        delay(saveTime*5);
        pageLevel = 2;
        time2ChangePage = true;
@@ -197,9 +195,7 @@ void loop(){
       case 2:
       if(bValid.click == 2){
         pageLevel ++;
-        if(isEdited == false){
-          isEdited = true;
-        }
+        
         time2ChangePage = true;
       }
       break;
@@ -241,6 +237,7 @@ void loop(){
         isEdited = false;
         time2ChangePage = true;
 
+
         }else if(bckValid.click == 1 && pageLevel == 3){
          tabIndx--;
          tabIndx = tabIndx%numTabs[pageLevel];
@@ -278,6 +275,7 @@ if(encoderValue != lastValue){
              }
         break;
         case 6:
+              checkEdition();
                scaledEncoderValueParam = encoderValue%25;
               if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
@@ -287,6 +285,7 @@ if(encoderValue != lastValue){
             } 
         break;
         case 4:
+              checkEdition();
               scaledEncoderValueParam = encoderValue%25;
               if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
@@ -296,6 +295,10 @@ if(encoderValue != lastValue){
             } 
             break;
         case 1:
+           
+            ///EDITED
+
+            checkEdition();
            ///MUST FIND A BETTER WAY OF DEALING WITH THIS
            
            currentParamVal = currentPreset.knubbies[currentParam].params[0];
@@ -304,32 +307,34 @@ if(encoderValue != lastValue){
                currentParamVal += encoderDir;
                
                //turnKnub(currentParam, currentParamVal); 
-               
-               
-               updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
-               
                currentPreset.knubbies[currentParam].params[0] = currentParamVal;
-                
+               updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+               
+               
+
+
         }else if(currentParamVal== 0 && encoderDir ==1){
                    
                    currentParamVal += encoderDir;
                    //turnKnub(currentParam, currentParamVal);
-                   updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
+                   
                  
                
                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
+                   updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
                    
           }else if(currentParamVal== 255 && encoderDir ==-1){
                    
                    currentParamVal += encoderDir;
                    //turnKnub(currentParam, currentParamVal);
-                   updateParam(4, customDigits[map(currentParamVal, 0, 255, 0, 101)]);
+               
                  
                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
+                   updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
           }
        break;
        case 2:
-           
+           checkEdition();
            currentParamVal = currentPreset.knubbies[currentParam].params[1];
            
            if(currentParamVal>0 && currentParamVal<100){
@@ -362,7 +367,9 @@ if(encoderValue != lastValue){
               //updateParam(tabIndx, curves[txtParamIndx%3]);
            }
        break;
+       */
        case 5:
+            checkEdition();
            ///not acitve yet
            currentParamVal = currentPreset.knubbies[currentParam].params[2];
            
@@ -373,7 +380,7 @@ if(encoderValue != lastValue){
               updateParam(2, stateToString(txtParamIndx%2));
            }
        break;
-      */
+      
      }
      break;
    case 4:
@@ -454,4 +461,15 @@ if(encoderValue != lastValue){
   }
 
   lastEncoderValue = encoded; //store this value for next time
+}
+
+
+void checkEdition(){
+
+  if(isEdited == false){
+
+
+      isEdited = true;
+
+  }
 }

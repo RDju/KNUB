@@ -7,6 +7,7 @@ SoftwareSerial midiSerial(7, 10);
 byte inMessage[3];
 byte inRead  = 0;
 uint16_t prevRead = 5*presetSize;
+uint16_t readAdr;
 
 void midiInRead(byte pageLev){
 
@@ -38,7 +39,7 @@ void midiInRead(byte pageLev){
 			/* then here test if message is a PGM or CC 
 			for now I use noteOn messages*/
 			
-			uint16_t readAdr = (inMessage[1]-56)*presetSize;
+			 readAdr = (inMessage[1]-56)*presetSize;
 			
 			if(pageLev == 2){
 				if(readAdr != prevRead){
