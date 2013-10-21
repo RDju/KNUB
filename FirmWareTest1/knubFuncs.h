@@ -47,10 +47,10 @@ void turnKnub(byte knubNum,byte knubVal){
      multiWriteDac(dacIDZ[0], write_cmds[2], write_cmds[3], lowVal, highVal);
     break;
     case 2:
-      multiWriteDac(dacIDZ[0], write_cmds[0], write_cmds[1], lowVal, highVal);
+      multiWriteDac(dacIDZ[1], write_cmds[0], write_cmds[1], lowVal, highVal);
     break;
     case 3:
-      multiWriteDac(dacIDZ[0], write_cmds[2], write_cmds[3], lowVal, highVal);
+      multiWriteDac(dacIDZ[1], write_cmds[2], write_cmds[3], lowVal, highVal);
     break;
     
     case 4:
