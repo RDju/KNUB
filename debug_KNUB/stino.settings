@@ -1,6 +1,6 @@
 {
     "arduino_folder": "/home/ekko/Appz/arduino-1.0.1", 
-    "board": 3, 
+    "board": 1, 
     "full_compilation": false, 
     "platform": 1, 
     "programmer": {

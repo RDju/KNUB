@@ -40,6 +40,15 @@ void multiWriteDac(byte addr, byte wrid, byte wrid2, int val, int val2){
   Wire.endTransmission();
 };
 
+void writeSingle(byte addr, byte wrid, int val){
+
+  Wire.beginTransmission(addr);
+  Wire.write(wrid);
+  Wire.write(highByte(val));
+  Wire.write(lowByte(val));
+  Wire.endTransmission();
+}
+
 //actual turn knub func
 
 void turnKnub(byte knubNum,byte knubVal){

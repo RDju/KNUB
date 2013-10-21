@@ -7,7 +7,7 @@
 
 //DAC communication AD5696
 byte dacIDZ[] = {B0001100, B0001101, B0001110, B0001111};// 4x4 dacs = 16 dacs so 8 knubs.
-byte write_cmds[] = {B00110001, B00110010, B00110100, B00111000}; 
+byte write_cmds[] = {B00110001, B00110010, B00110100, B00111000}; //note used here for singlewrite only.
 
 int  lowVal, highVal;
 
@@ -27,6 +27,20 @@ void multiWriteDac(byte addr, byte wrid, byte wrid2, int val, int val2){
   Wire.write(lowByte(val2)); 
   Wire.endTransmission();
 };
+
+
+
+void singleWriteDac(byte addr, byte wrcmd, uint16_t val){
+
+  Wire.beginTransmission(addr);
+  Wire.write(wrcmd);
+  Wire.write(highByte(val));
+  Wire.write(lowByte(val));
+  Wire.endTransmission();
+}
+
+
+
 
 //actual turn knub func
 
@@ -71,3 +85,52 @@ void turnKnub(byte knubNum,byte knubVal){
  
 
 
+void testDacs(){
+
+  ///FIRST DAC ADDR = 0
+  //one side A
+  singleWriteDac(dacIDZ[0], write_cmds[0], 4095);
+  delay(500);
+  singleWriteDac(dacIDZ[0], write_cmds[0], 0);
+  delay(500);
+  //one side B
+  singleWriteDac(dacIDZ[0], write_cmds[1], 4095);
+  delay(500);
+  singleWriteDac(dacIDZ[0], write_cmds[1], 0);
+  delay(500);
+
+  //two side A
+  singleWriteDac(dacIDZ[0], write_cmds[2], 4095);
+  delay(500);
+  singleWriteDac(dacIDZ[0], write_cmds[2], 0);
+  delay(500);
+  //two side B
+  singleWriteDac(dacIDZ[0], write_cmds[3], 4095);
+  delay(500);
+  singleWriteDac(dacIDZ[0], write_cmds[3], 0);
+  delay(500);
+
+
+///FIRST DAC ADDR = 1
+  //three side A
+  singleWriteDac(dacIDZ[1], write_cmds[0], 4095);
+  delay(500);
+  singleWriteDac(dacIDZ[1], write_cmds[0], 0);
+  delay(500);
+  //three side B
+  singleWriteDac(dacIDZ[1], write_cmds[1], 4095);
+  delay(500);
+  singleWriteDac(dacIDZ[1], write_cmds[1], 0);
+  delay(500);
+
+  //four side A
+  singleWriteDac(dacIDZ[1], write_cmds[2], 4095);
+  delay(500);
+  singleWriteDac(dacIDZ[1], write_cmds[2], 0);
+  delay(500);
+  //four side B
+  singleWriteDac(dacIDZ[1], write_cmds[3], 4095);
+  delay(500);
+  singleWriteDac(dacIDZ[1], write_cmds[3], 0);
+  delay(500);
+}

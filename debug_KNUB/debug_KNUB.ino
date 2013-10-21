@@ -14,20 +14,23 @@ void setup(){
 
 void loop(){
 
-  for(int i = 0; i<256; i++){
-  
-    turnKnub(0, i);
-    delay(50);
-  
-  }
-  for(int i = 255; i > -1; i--){
-  
-    turnKnub(0, i);
-    delay(50);
-  }
+writeSingle(dacIDZ[1], write_cmds[0], 4095);
+delay(500);
+writeSingle(dacIDZ[1], write_cmds[0], 0);
+delay(500);
+writeSingle(dacIDZ[1], write_cmds[1], 4095);
+delay(500);
+writeSingle(dacIDZ[1], write_cmds[1], 0);
+delay(500);
 
-
-
+writeSingle(dacIDZ[1], write_cmds[2], 4095);
+delay(500);
+writeSingle(dacIDZ[1], write_cmds[2], 0);
+delay(500);
+writeSingle(dacIDZ[1], write_cmds[3], 4095);
+delay(500);
+writeSingle(dacIDZ[1], write_cmds[3], 0);
+delay(500);
 }
 
 
