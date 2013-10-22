@@ -43,7 +43,11 @@ void midiInRead(byte pageLev){
 			
 			if(pageLev == 2){
 				if(readAdr != prevRead){
+
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+					delay(50);	
+					
+					updateKnubs(&currentPreset);
 					time2ChangePage = true;
 					prevRead = readAdr;
 				}

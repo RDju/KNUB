@@ -88,7 +88,7 @@ void setup(){
   Wire.begin();
   midiSerial.begin(31250);
 
-  /*
+  
   initDisplay();
 
   pinMode(encoderPin1, INPUT); 
@@ -100,7 +100,7 @@ void setup(){
   
   readKnubPreset(eepromAddr1, (prevLoaded-56) * presetSize, &currentPreset);
   delay(50);
-
+  //updateKnubs(&currentPreset);
   //startUp sequence
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
   delay(500);
@@ -116,7 +116,7 @@ void setup(){
 
   updatePreset(currentPreset.name, isEdited);
 
-  */
+  
 }
 
 void loop(){

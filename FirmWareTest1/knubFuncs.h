@@ -1,16 +1,36 @@
 #include "Arduino.h"
 #include "luts.h"
 
-
+/*
 #define vacMin 1490
 #define vacMax 2050
+*/
+
+#define vacMin  0
+#define vacMax 4095
 
 //DAC communication AD5696
 byte write_cmds[] = {B01011000, B01011010, B01011100, B01011110}; //for single writes not used here.
 
 byte dacIDZ[] = {B1100000, B1100001, B1100010, B1100011};// 4x4 dacs = 16 dacs so 8 knubs.
 
-int  lowVal, highVal;
+
+byte dacChans[] = {B01000000, B01000010, B01000100, B01000110};  
+
+
+uint16_t  lowVal, highVal;
+
+
+///custom mapping function
+uint16_t knubMapFromLut(byte in, byte in_min, byte in_max, uint16_t out_min, uint16_t out_max){
+
+
+  return (in - in_min) * (out_max - out_min) / (in_max - in_min)+out_min;
+
+}
+
+
+
 
 //function for multiWrite : 
   
@@ -40,34 +60,41 @@ void singleWriteDac(byte addr, byte wrcmd, uint16_t val){
   Wire.endTransmission();
 }
 
-
-
-
 //actual turn knub func
 
 void turnKnub(byte knubNum,byte knubVal){
    
-    //lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
-    //highVal = map(pgm_read_byte(redLUT + (255 - knubVal)), 0, 255, vacMin, vacMax);
+    lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
+    highVal = map(pgm_read_byte(redLUT + (255 - knubVal)), 0, 255, vacMin, vacMax);
 
-    lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
-    highVal = map(redLUT[255 - knubVal], 0, 255, vacMin, vacMax);
+    //lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
+    //highVal = map(redLUT[255 - knubVal], 0, 255, vacMin, vacMax);
+    //lowVal = knubMapFromLut(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
+    //highVal = knubMapFromLut(pgm_read_byte(redLUT + (255- knubVal)), 255, 0, vacMin, vacMax);
+    
+    //lowVal = pgm_read_byte(redLUT+knubVal);
+    //highVal = pgm_read_byte(redLUT + (255 - knubVal));
 
+    /*
+    Serial.print("low: ");
+    Serial.print(lowVal);
+    Serial.print(",  hi: ");
+    Serial.println(highVal);
+    */
   switch(knubNum){
   
     case 0:
-      multiWriteDac(dacIDZ[0], write_cmds[0], write_cmds[1], lowVal, highVal);
+      multiWriteDac(dacIDZ[0], dacChans[0], dacChans[1], lowVal, highVal);
     break;
     case 1:
-     multiWriteDac(dacIDZ[0], write_cmds[2], write_cmds[3], lowVal, highVal);
+     multiWriteDac(dacIDZ[0], dacChans[2], dacChans[3], lowVal, highVal);
     break;
     case 2:
-      multiWriteDac(dacIDZ[1], write_cmds[0], write_cmds[1], lowVal, highVal);
+      multiWriteDac(dacIDZ[1], dacChans[0], dacChans[1], lowVal, highVal);
     break;
     case 3:
-      multiWriteDac(dacIDZ[1], write_cmds[2], write_cmds[3], lowVal, highVal);
+      multiWriteDac(dacIDZ[1], dacChans[2], dacChans[3], lowVal, highVal);
     break;
-    
     case 4:
      multiWriteDac(dacIDZ[2], write_cmds[0], write_cmds[1], lowVal, highVal);
     break;
@@ -80,18 +107,22 @@ void turnKnub(byte knubNum,byte knubVal){
     case 7:
       multiWriteDac(dacIDZ[3], write_cmds[2], write_cmds[3], lowVal, highVal);
     break;
-  }
-   
-}; 
+    }
+ 
+}
  
 
 void updateKnubs(aKnubPreset * kPreset){
+ 
+    Serial.println("KNUB UPDATE CALLED");
+    for(uint8_t i = 0; i<numKnubbies; i++){
 
-    for(int i = 0; i<8; i++){
+        turnKnub(i, kPreset->knubbies[i].params[0]);
 
 
-      turnKnub(i, kPreset->knubbies[i].params[0]);
     }
+  
+    
 }
 
 
@@ -146,3 +177,11 @@ void testDacs(){
   delay(500);
 */
 }
+
+
+/*
+long map(long x, long in_min, long in_max, long out_min, long out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+*/
