@@ -1,15 +1,15 @@
 #include "Arduino.h"
 #include "luts.h"
 
-/*
-#define vacMin 1490
-#define vacMax 2050
-*/
+
+//#define vacMin 1490
+//#define vacMax 2050
+
 
 #define vacMin  0
 #define vacMax 4095
 
-//DAC communication AD5696
+//DAC communication MCP4728
 byte write_cmds[] = {B01011000, B01011010, B01011100, B01011110}; //for single writes not used here.
 
 byte dacIDZ[] = {B1100000, B1100001, B1100010, B1100011};// 4x4 dacs = 16 dacs so 8 knubs.
@@ -21,13 +21,23 @@ byte dacChans[] = {B01000000, B01000010, B01000100, B01000110};
 uint16_t  lowVal, highVal;
 
 
+
+/*
+long map(long x, long in_min, long in_max, long out_min, long out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+*/
+
+/*
 ///custom mapping function
-uint16_t knubMapFromLut(byte in, byte in_min, byte in_max, uint16_t out_min, uint16_t out_max){
+unsigned int knubMapFromLut(unsigned int in,  unsigned int in_min, unsigned int in_max, unsigned int out_min, unsigned int out_max){
 
 
-  return (in - in_min) * (out_max - out_min) / (in_max - in_min)+out_min;
+  return (in - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 
 }
+*/
 
 
 
@@ -69,8 +79,9 @@ void turnKnub(byte knubNum,byte knubVal){
 
     //lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
     //highVal = map(redLUT[255 - knubVal], 0, 255, vacMin, vacMax);
+    
     //lowVal = knubMapFromLut(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
-    //highVal = knubMapFromLut(pgm_read_byte(redLUT + (255- knubVal)), 255, 0, vacMin, vacMax);
+    //highVal = knubMapFromLut(pgm_read_byte(redLUT + (255- knubVal)), 0, 255,  vacMin, vacMax);
     
     //lowVal = pgm_read_byte(redLUT+knubVal);
     //highVal = pgm_read_byte(redLUT + (255 - knubVal));
@@ -126,7 +137,7 @@ void updateKnubs(aKnubPreset * kPreset){
 }
 
 
-
+/*
 void testDacs(){
 
   ///FIRST DAC ADDR = 0
@@ -175,13 +186,6 @@ void testDacs(){
   delay(500);
   singleWriteDac(dacIDZ[1], write_cmds[3], 0);
   delay(500);
-*/
-}
 
-
-/*
-long map(long x, long in_min, long in_max, long out_min, long out_max)
-{
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 */

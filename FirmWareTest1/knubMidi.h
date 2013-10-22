@@ -46,7 +46,7 @@ void midiInRead(byte pageLev){
 
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 					delay(50);	
-					
+					Serial.println("CALLING KNUB UPDATE");
 					updateKnubs(&currentPreset);
 					time2ChangePage = true;
 					prevRead = readAdr;
