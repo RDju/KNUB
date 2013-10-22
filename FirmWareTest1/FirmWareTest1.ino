@@ -52,7 +52,7 @@ ClickButton bValid(validBut, LOW, CLICKBTN_PULLUP);
 ClickButton bckValid(backBut, LOW, CLICKBTN_PULLUP);
 
 byte pageLevel = 0;
-int tabIndx = 0;
+uint8_t tabIndx = 0;
 uint8_t currFx = 0;
 
 int8_t encoderDir;

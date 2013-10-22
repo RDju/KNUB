@@ -84,6 +84,16 @@ void turnKnub(byte knubNum,byte knubVal){
 }; 
  
 
+void updateKnubs(aKnubPreset * kPreset){
+
+    for(int i = 0; i<8; i++){
+
+
+      turnKnub(i, kPreset->knubbies[i].params[0]);
+    }
+}
+
+
 
 void testDacs(){
 
