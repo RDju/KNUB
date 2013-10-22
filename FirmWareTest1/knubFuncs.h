@@ -6,8 +6,9 @@
 #define vacMax 2050
 
 //DAC communication AD5696
-byte dacIDZ[] = {B0001100, B0001101, B0001110, B0001111};// 4x4 dacs = 16 dacs so 8 knubs.
-byte write_cmds[] = {B00110001, B00110010, B00110100, B00111000}; //note used here for singlewrite only.
+byte write_cmds[] = {B01011000, B01011010, B01011100, B01011110}; //for single writes not used here.
+
+byte dacIDZ[] = {B1100000, B1100001, B1100010, B1100011};// 4x4 dacs = 16 dacs so 8 knubs.
 
 int  lowVal, highVal;
 
@@ -120,7 +121,7 @@ void testDacs(){
   singleWriteDac(dacIDZ[0], write_cmds[3], 0);
   delay(500);
 
-
+/*
 ///FIRST DAC ADDR = 1
   //three side A
   singleWriteDac(dacIDZ[1], write_cmds[0], 4095);
@@ -143,4 +144,5 @@ void testDacs(){
   delay(500);
   singleWriteDac(dacIDZ[1], write_cmds[3], 0);
   delay(500);
+*/
 }

@@ -88,7 +88,7 @@ void setup(){
   Wire.begin();
   midiSerial.begin(31250);
 
-
+  /*
   initDisplay();
 
   pinMode(encoderPin1, INPUT); 
@@ -116,12 +116,13 @@ void setup(){
 
   updatePreset(currentPreset.name, isEdited);
 
-
+  */
 }
 
 void loop(){
-   
+   //testDacs();
 
+   
   midiInRead(pageLevel);
 
   ////dealing with pages 
@@ -440,7 +441,7 @@ if(encoderValue != lastValue){
    }
  }
    lastValue = encoderValue;
-   
+  
  }
 
  void updateEncoder(){
