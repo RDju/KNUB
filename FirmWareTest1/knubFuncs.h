@@ -38,10 +38,6 @@ unsigned int knubMapFromLut(unsigned int in,  unsigned int in_min, unsigned int 
 
 }
 */
-
-
-
-
 //function for multiWrite : 
   
 void multiWriteDac(byte addr, byte wrid, byte wrid2, int val, int val2){
@@ -73,10 +69,10 @@ void singleWriteDac(byte addr, byte wrcmd, uint16_t val){
 //actual turn knub func
 
 void turnKnub(byte knubNum,byte knubVal){
-   
+    /*
     lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
     highVal = map(pgm_read_byte(redLUT + (255 - knubVal)), 0, 255, vacMin, vacMax);
-
+    */
     //lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
     //highVal = map(redLUT[255 - knubVal], 0, 255, vacMin, vacMax);
     
@@ -86,12 +82,15 @@ void turnKnub(byte knubNum,byte knubVal){
     //lowVal = pgm_read_byte(redLUT+knubVal);
     //highVal = pgm_read_byte(redLUT + (255 - knubVal));
 
+    lowVal = pgm_read_byte(redLUT + knubVal);
+    highVal = pgm_read_byte(redLUT + (255 - knubVal));
     
+
     Serial.print("low: ");
     Serial.print(lowVal);
     Serial.print(",  hi: ");
     Serial.println(highVal);
-    
+   /* 
   switch(knubNum){
   
     case 0:
@@ -119,7 +118,7 @@ void turnKnub(byte knubNum,byte knubVal){
       multiWriteDac(dacIDZ[3], write_cmds[2], write_cmds[3], lowVal, highVal);
     break;
     }
- 
+    */
 }
  
 
