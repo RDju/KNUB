@@ -44,15 +44,12 @@ unsigned int knubMapFromLut(unsigned int in,  unsigned int in_min, unsigned int 
 */
 //function for multiWrite : 
   
-void multiWriteDac(byte addr, byte wrid, byte wrid2, int val, int val2){
+void multiWriteDac(byte addr, byte wrid, byte wrid2, uint16_t val, uint16_t val2){
   
   Wire.beginTransmission(addr);
   Wire.write(wrid);
   Wire.write(highByte(val));
-  Wire.write(lowByte(val));
-  Wire.endTransmission();
-  
-  Wire.beginTransmission(addr); 
+  Wire.write(lowByte(val)); 
   Wire.write(wrid2);
   Wire.write(highByte(val2));
   Wire.write(lowByte(val2)); 
@@ -74,8 +71,10 @@ void singleWriteDac(byte addr, byte wrcmd, uint16_t val){
 
 void turnKnub(byte knubNum,byte knubVal){
     
+    byte hiRead = 255 - knubVal;
+
     lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
-    highVal = map(pgm_read_byte(redLUT + knubVal), 255, 0, vacMin, vacMax);
+    highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
     
     //lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
     //highVal = map(redLUT[255 - knubVal], 0, 255, vacMin, vacMax);
@@ -86,13 +85,16 @@ void turnKnub(byte knubNum,byte knubVal){
     //lowVal = pgm_read_byte(redLUT+knubVal);
     //highVal = pgm_read_byte(redLUT + (255 - knubVal));
 
-    /*
+    Serial.print("KNUBVAL: ");
+    Serial.println(knubVal);
     Serial.print("low: ");
+    Serial.print()
+
     Serial.print(lowVal);
     Serial.print(",  hi: ");
     Serial.println(highVal);
-    */
-
+    
+  /*
   switch(knubNum){
   
     case 0:
@@ -121,9 +123,9 @@ void turnKnub(byte knubNum,byte knubVal){
     case 7:
       multiWriteDac(dacIDZ[3], write_cmds[2], write_cmds[3], lowVal, highVal);
     break;
-    */
-    }
     
+    }
+    */
 }
  
 
@@ -131,7 +133,7 @@ void updateKnubs(aKnubPreset * kPreset){
  
     Serial.println("KNUB UPDATE CALLED");
     
-    for(uint8_t i = 0; i<2; i++){
+    for(uint8_t i = 0; i<1; i++){
 
         turnKnub(i, kPreset->knubbies[i].params[0]);
 
