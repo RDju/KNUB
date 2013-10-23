@@ -305,57 +305,79 @@ if(encoderValue != lastValue){
            
            currentParamVal = currentPreset.knubbies[currentParam].params[0];
            
-           if(currentParamVal>0 && currentParamVal<256){
-               currentParamVal += encoderDir;
+           if(currentParamVal>0 && currentParamVal<255){
+              
+              currentParamVal += encoderDir;
+              currentPreset.knubbies[currentParam].params[0] = currentParamVal;
+              updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
                
-               //turnKnub(currentParam, currentParamVal); 
-               currentPreset.knubbies[currentParam].params[0] = currentParamVal;
-               updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
-               
-               
-
-
-        }else if(currentParamVal== 0 && encoderDir ==1){
+            }else if(currentParamVal== 0 && encoderDir ==1){
                    
+                    currentParamVal += encoderDir;
+                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
+                    updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                   
+            }else if(currentParamVal== 255 && encoderDir ==-1){
+            
                    currentParamVal += encoderDir;
-                   //turnKnub(currentParam, currentParamVal);
-                   
-                 
-               
                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
                    updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
-                   
-          }else if(currentParamVal== 255 && encoderDir ==-1){
-                   
-                   currentParamVal += encoderDir;
-                   //turnKnub(currentParam, currentParamVal);
+            }else if(currentParamVal == 255 && encoderDir == 1){
                
-                 
-                   currentPreset.knubbies[currentParam].params[0] = currentParamVal;
-                   updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
-          }
+              
+                    currentParamVal  = 255;
+                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
+                    updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+            }else if(currentParamVal == 0 && encoderDir == -1){
+
+                    currentParamVal = 0;
+                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
+                    updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+            }
        break;
        case 2:
            checkEdition();
-           currentParamVal = currentPreset.knubbies[currentParam].params[1];
            
-           if(currentParamVal>0 && currentParamVal<100){
+            currentParamVal = currentPreset.knubbies[currentParam].params[1];
+           
+            if(currentParamVal>0 && currentParamVal<256){
+              
               currentParamVal += encoderDir;
               
-              updateNumParam(5, customDigits[currentParamVal]);
               currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
-          }else if(currentParamVal== 0 && encoderDir ==1){
-                   currentParamVal += encoderDir;
-                   updateNumParam(5, customDigits[currentParamVal]);
-                   currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
+
+              updateNumParam(5, customDigits[currentParamVal]);
+              
+            }else if(currentParamVal== 0 && encoderDir ==1){
                    
-          }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
-                   
-                   updateNumParam(5, customDigits[currentParamVal]);
                    
                    currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
-         }
+
+                   updateNumParam(5, customDigits[currentParamVal]);
+                   
+                   
+                   
+            }else if(currentParamVal== 255 && encoderDir ==-1){
+                   
+                   currentParamVal += encoderDir;
+
+                   currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
+                   
+                   updateNumParam(5, customDigits[currentParamVal]);
+            
+            }else if(currentParamVal == 255 && encoderDir == 1){
+               
+              
+                    currentParamVal  = 255;
+                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
+                    updateNumParam(5,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+            }else if(currentParamVal == 0 && encoderDir == -1){
+
+                    currentParamVal = 0;
+                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
+                    updateNumParam(5,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+            }
        break;
        /*
        case 3:
