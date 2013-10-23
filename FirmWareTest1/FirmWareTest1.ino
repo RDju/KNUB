@@ -157,8 +157,8 @@ void loop(){
        updateParam(1,currentPreset.knubbies[currentParam].name);
        updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
        updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
-       updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
-       updateParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
+       updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+       updateNumParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
        updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
        updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
        time2ChangePage = false;
@@ -269,8 +269,8 @@ if(encoderValue != lastValue){
                  updateParam(1,currentPreset.knubbies[currentParam].name);
                  updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
                  updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
-                 updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
-                 updateParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
+                 updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                 updateNumParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
                  updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);  
                  updateParam(7, switchTypes[currentPreset.knubbies[currentParam].numLoop]);
                  
@@ -310,7 +310,7 @@ if(encoderValue != lastValue){
                
                //turnKnub(currentParam, currentParamVal); 
                currentPreset.knubbies[currentParam].params[0] = currentParamVal;
-               updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+               updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
                
                
 
@@ -323,7 +323,7 @@ if(encoderValue != lastValue){
                  
                
                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
-                   updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                   updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
                    
           }else if(currentParamVal== 255 && encoderDir ==-1){
                    
@@ -332,7 +332,7 @@ if(encoderValue != lastValue){
                
                  
                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
-                   updateParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                   updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
           }
        break;
        case 2:
@@ -342,17 +342,17 @@ if(encoderValue != lastValue){
            if(currentParamVal>0 && currentParamVal<100){
               currentParamVal += encoderDir;
               
-              updateParam(5, customDigits[currentParamVal]);
+              updateNumParam(5, customDigits[currentParamVal]);
               currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
           }else if(currentParamVal== 0 && encoderDir ==1){
                    currentParamVal += encoderDir;
-                   updateParam(5, customDigits[currentParamVal]);
+                   updateNumParam(5, customDigits[currentParamVal]);
                    currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
                    
           }else if(currentParamVal== 100 && encoderDir ==-1){
                    currentParamVal += encoderDir;
                    
-                   updateParam(5, customDigits[currentParamVal]);
+                   updateNumParam(5, customDigits[currentParamVal]);
                    
                    currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
          }
