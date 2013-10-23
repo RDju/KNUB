@@ -16,7 +16,11 @@ byte write_cmds[] = {B01011000, B01011010, B01011100, B01011110}; //for single w
 
 byte dacIDZ[] = {B1100000, B1100001, B1100010, B1100011};// 4x4 dacs = 16 dacs so 8 knubs.
 
-byte dacChans[] = {B01000000, B01000010, B01000100, B01000110};  
+byte knob1_ch1  = B01000000;
+byte knob1_ch2 = B01000010;
+
+byte knob2_ch1 = B01000100;
+byte knob2_ch2 = B01000110;
 
 uint16_t  lowVal, highVal;
 
@@ -69,10 +73,10 @@ void singleWriteDac(byte addr, byte wrcmd, uint16_t val){
 //actual turn knub func
 
 void turnKnub(byte knubNum,byte knubVal){
-    /*
+    
     lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
-    highVal = map(pgm_read_byte(redLUT + (255 - knubVal)), 0, 255, vacMin, vacMax);
-    */
+    highVal = map(pgm_read_byte(redLUT + knubVal), 255, 0, vacMin, vacMax);
+    
     //lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
     //highVal = map(redLUT[255 - knubVal], 0, 255, vacMin, vacMax);
     
@@ -82,29 +86,29 @@ void turnKnub(byte knubNum,byte knubVal){
     //lowVal = pgm_read_byte(redLUT+knubVal);
     //highVal = pgm_read_byte(redLUT + (255 - knubVal));
 
-    lowVal = pgm_read_byte(redLUT + knubVal);
-    highVal = pgm_read_byte(redLUT + (255 - knubVal));
-    
-
+    /*
     Serial.print("low: ");
     Serial.print(lowVal);
     Serial.print(",  hi: ");
     Serial.println(highVal);
-   /* 
+    */
+
   switch(knubNum){
   
     case 0:
-      multiWriteDac(dacIDZ[0], dacChans[0], dacChans[1], lowVal, highVal);
+      multiWriteDac(dacIDZ[0], knob1_ch1, knob1_ch2, lowVal, highVal);
     break;
     case 1:
-     multiWriteDac(dacIDZ[0], dacChans[2], dacChans[3], lowVal, highVal);
+     multiWriteDac(dacIDZ[0], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
+    /*
     case 2:
-      multiWriteDac(dacIDZ[1], dacChans[0], dacChans[1], lowVal, highVal);
+      multiWriteDac(dacIDZ[1], knob1_ch1, knob1_ch2, lowVal, highVal);
     break;
     case 3:
-      multiWriteDac(dacIDZ[1], dacChans[2], dacChans[3], lowVal, highVal);
+      multiWriteDac(dacIDZ[1], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
+    /*
     case 4:
      multiWriteDac(dacIDZ[2], write_cmds[0], write_cmds[1], lowVal, highVal);
     break;
@@ -117,15 +121,17 @@ void turnKnub(byte knubNum,byte knubVal){
     case 7:
       multiWriteDac(dacIDZ[3], write_cmds[2], write_cmds[3], lowVal, highVal);
     break;
-    }
     */
+    }
+    
 }
  
 
 void updateKnubs(aKnubPreset * kPreset){
  
     Serial.println("KNUB UPDATE CALLED");
-    for(uint8_t i = 0; i<numKnubbies; i++){
+    
+    for(uint8_t i = 0; i<2; i++){
 
         turnKnub(i, kPreset->knubbies[i].params[0]);
 
