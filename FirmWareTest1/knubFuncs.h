@@ -10,13 +10,13 @@
 #define vacMax 4095
 
 //DAC communication MCP4728
+// might change those to PROGMEM prog_uchar arrays
+
 byte write_cmds[] = {B01011000, B01011010, B01011100, B01011110}; //for single writes not used here.
 
 byte dacIDZ[] = {B1100000, B1100001, B1100010, B1100011};// 4x4 dacs = 16 dacs so 8 knubs.
 
-
 byte dacChans[] = {B01000000, B01000010, B01000100, B01000110};  
-
 
 uint16_t  lowVal, highVal;
 
@@ -86,12 +86,12 @@ void turnKnub(byte knubNum,byte knubVal){
     //lowVal = pgm_read_byte(redLUT+knubVal);
     //highVal = pgm_read_byte(redLUT + (255 - knubVal));
 
-    /*
+    
     Serial.print("low: ");
     Serial.print(lowVal);
     Serial.print(",  hi: ");
     Serial.println(highVal);
-    */
+    
   switch(knubNum){
   
     case 0:
