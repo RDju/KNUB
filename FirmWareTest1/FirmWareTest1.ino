@@ -99,7 +99,7 @@ void setup(){
   
   readKnubPreset(eepromAddr1, (prevLoaded-56) * presetSize, &currentPreset);
   delay(50);
-  //updateKnubs(&currentPreset);
+  updateKnubs(&currentPreset);
   //startUp sequence
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
   delay(500);
