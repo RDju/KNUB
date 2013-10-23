@@ -87,14 +87,14 @@ void turnKnub(byte knubNum,byte knubVal){
 
     Serial.print("KNUBVAL: ");
     Serial.println(knubVal);
+    Serial.print("HIREAD: ");
+    Serial.println(hiRead);
     Serial.print("low: ");
-    Serial.print()
-
     Serial.print(lowVal);
     Serial.print(",  hi: ");
     Serial.println(highVal);
     
-  /*
+  
   switch(knubNum){
   
     case 0:
@@ -123,9 +123,9 @@ void turnKnub(byte knubNum,byte knubVal){
     case 7:
       multiWriteDac(dacIDZ[3], write_cmds[2], write_cmds[3], lowVal, highVal);
     break;
-    
-    }
     */
+    }
+    
 }
  
 
@@ -133,7 +133,7 @@ void updateKnubs(aKnubPreset * kPreset){
  
     Serial.println("KNUB UPDATE CALLED");
     
-    for(uint8_t i = 0; i<1; i++){
+    for(uint8_t i = 0; i<2; i++){
 
         turnKnub(i, kPreset->knubbies[i].params[0]);
 
