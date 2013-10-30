@@ -8,6 +8,7 @@ byte inMessage[3];
 byte inRead  = 0;
 uint16_t prevRead = 5*presetSize;
 uint16_t readAdr;
+bool loadFlag = false;
 
 void midiInRead(byte pageLev){
 
@@ -42,14 +43,15 @@ void midiInRead(byte pageLev){
 			 readAdr = (inMessage[1]-56)*presetSize;
 			
 			if(pageLev == 2){
-				if(readAdr != prevRead){
-
+				if(readAdr != prevRead && loadFlag == false){
+					loadFlag = true;
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 					delay(50);	
 					Serial.println("CALLING KNUB UPDATE");
 					updateKnubs(&currentPreset);
 					time2ChangePage = true;
 					prevRead = readAdr;
+					loadFlag = false;
 				}
 			}
 		}
