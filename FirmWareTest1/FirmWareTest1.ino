@@ -317,29 +317,34 @@ if(encoderValue != lastValue){
               currentParamVal += encoderDir;
               currentPreset.knubbies[currentParam].params[0] = currentParamVal;
               updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+              turnKnub(currentParam, currentPreset.knubbies[currentParam].params[0]);
                
             }else if(currentParamVal== 0 && encoderDir ==1){
                    
                     currentParamVal += encoderDir;
                     currentPreset.knubbies[currentParam].params[0] = currentParamVal;
                     updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                    turnKnub(currentParam, currentPreset.knubbies[currentParam].params[0]);
                    
             }else if(currentParamVal== 255 && encoderDir ==-1){
             
                    currentParamVal += encoderDir;
                    currentPreset.knubbies[currentParam].params[0] = currentParamVal;
                    updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                   turnKnub(currentParam, currentPreset.knubbies[currentParam].params[0]);
             }else if(currentParamVal == 255 && encoderDir == 1){
                
               
                     currentParamVal  = 255;
                     currentPreset.knubbies[currentParam].params[0] = currentParamVal;
                     updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                    turnKnub(currentParam, currentPreset.knubbies[currentParam].params[0]);
             }else if(currentParamVal == 0 && encoderDir == -1){
 
                     currentParamVal = 0;
                     currentPreset.knubbies[currentParam].params[0] = currentParamVal;
                     updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                    turnKnub(currentParam, currentPreset.knubbies[currentParam].params[0]);
             }
        break;
        case 2:
