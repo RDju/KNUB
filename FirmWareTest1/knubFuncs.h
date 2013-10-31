@@ -133,7 +133,7 @@ void turnKnub(byte knubNum,byte knubVal){
 
 void updateKnubs(aKnubPreset * kPreset){
  
-    Serial.println("KNUB UPDATE CALLED");
+        
     
     for(uint8_t i = 0; i<3; i++){
 
