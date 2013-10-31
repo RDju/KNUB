@@ -4,10 +4,11 @@
 
 //#define vacMin 1490
 //#define vacMax 2050
+#define vacMin 1200
+#define vacMax 2500
 
-
-#define vacMin  0
-#define vacMax 4095
+//#define vacMin  0
+//#define vacMax 4095
 
 //DAC communication MCP4728
 // might change those to PROGMEM prog_uchar arrays
@@ -84,7 +85,7 @@ void turnKnub(byte knubNum,byte knubVal){
     
     //lowVal = pgm_read_byte(redLUT+knubVal);
     //highVal = pgm_read_byte(redLUT + (255 - knubVal));
-
+    /*
     Serial.print("KNUBVAL: ");
     Serial.println(knubVal);
     Serial.print("HIREAD: ");
@@ -93,7 +94,7 @@ void turnKnub(byte knubNum,byte knubVal){
     Serial.print(lowVal);
     Serial.print(",  hi: ");
     Serial.println(highVal);
-    
+    */
   
   switch(knubNum){
   
@@ -103,10 +104,11 @@ void turnKnub(byte knubNum,byte knubVal){
     case 1:
      multiWriteDac(dacIDZ[0], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
-    /*
+    
     case 2:
       multiWriteDac(dacIDZ[1], knob1_ch1, knob1_ch2, lowVal, highVal);
     break;
+    /*
     case 3:
       multiWriteDac(dacIDZ[1], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
@@ -133,7 +135,7 @@ void updateKnubs(aKnubPreset * kPreset){
  
     Serial.println("KNUB UPDATE CALLED");
     
-    for(uint8_t i = 0; i<2; i++){
+    for(uint8_t i = 0; i<3; i++){
 
         turnKnub(i, kPreset->knubbies[i].params[0]);
 
