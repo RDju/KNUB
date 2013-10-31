@@ -104,10 +104,8 @@ void setup(){
   // fill up loopsOut array
   for(uint8_t i = 0; i<numKnubbies; i++){
 
-    fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPrest.knubbies[i].state);
+    fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
   }
-  
-  
   
   //startUp sequence
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
