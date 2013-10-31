@@ -99,7 +99,16 @@ void setup(){
   
   readKnubPreset(eepromAddr1, (prevLoaded-56) * presetSize, &currentPreset);
   delay(50);
+  
   updateKnubs(&currentPreset);
+  // fill up loopsOut array
+  for(uint8_t i = 0; i<numKnubbies; i++){
+
+    fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPrest.knubbies[i].state);
+  }
+  
+  
+  
   //startUp sequence
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
   delay(500);
