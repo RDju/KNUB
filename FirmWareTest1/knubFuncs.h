@@ -23,6 +23,8 @@ byte knob1_ch2 = B01000010;
 byte knob2_ch1 = B01000100;
 byte knob2_ch2 = B01000110;
 
+byte loopsOut[4];
+
 uint16_t  lowVal, highVal;
 
 
@@ -97,14 +99,16 @@ void turnKnub(byte knubNum,byte knubVal){
 
 void updateKnubs(aKnubPreset * kPreset){
  
-        
-    
-    for(uint8_t i = 0; i<3; i++){
+      for(uint8_t i = 0; i<3; i++){
 
         turnKnub(i, kPreset->knubbies[i].params[0]);
+      }
+}
 
 
-    }
-  
-    
+void fillLoopsOut(byte indx, byte val){
+
+
+  loopsOut[indx] += val;
+
 }

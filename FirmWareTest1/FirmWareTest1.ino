@@ -64,7 +64,7 @@ uint8_t currentFx = 0;
 uint8_t currentParam = 0;
 uint8_t currentParamVal;
 uint8_t digiMapParamVal;
-//uint8_t currentCurve = 0;
+
 
 uint8_t currModIndx  = 0;
 uint8_t currSwIndx = 0;

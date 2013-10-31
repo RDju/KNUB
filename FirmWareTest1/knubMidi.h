@@ -50,8 +50,6 @@ void midiInRead(byte pageLev){
 					loadFlag = true;
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 					
-					
-						
 					updateKnubs(&currentPreset);
 					loadFlag = false;
 					
