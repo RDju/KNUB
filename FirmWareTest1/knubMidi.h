@@ -1,6 +1,6 @@
 #include "SoftwareSerial.h"
 
-//#define DEBUG_MIDI //uncomment this to activate midi debugging
+#define DEBUG_MIDI //uncomment this to activate midi debugging
 
 
 SoftwareSerial midiSerial(7, 10);
@@ -43,7 +43,7 @@ void midiInRead(byte pageLev){
 			 readAdr = inMessage[1]*presetSize;
 			
 			if(pageLev == 2){
-				if(readAdr != prevRead && loadFlag == false){
+				if(inMessage[1]<8 && readAdr != prevRead && loadFlag == false){
 					
 					
 					loadFlag = true;

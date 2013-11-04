@@ -172,7 +172,7 @@ void updateNumParam(uint8_t prmIndx, uint8_t newVal){
   }
 
 
-
+   lcd.write(" ");
    lcd.write(";");
   delay(longDel);
 

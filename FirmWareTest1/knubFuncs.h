@@ -74,7 +74,7 @@ void turnKnub(byte knubNum,byte knubVal){
     case 2:
       multiWriteDac(dacIDZ[1], knob1_ch1, knob1_ch2, lowVal, highVal);
     break;
-    /*
+    
     case 3:
       multiWriteDac(dacIDZ[1], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
@@ -99,7 +99,7 @@ void turnKnub(byte knubNum,byte knubVal){
 
 void updateKnubs(aKnubPreset * kPreset){
  
-      for(uint8_t i = 0; i<3; i++){
+      for(uint8_t i = 0; i<4; i++){
 
         turnKnub(i, kPreset->knubbies[i].params[0]);
       }
@@ -131,3 +131,6 @@ void printPresetName(aKnubPreset *kPreset){
   Serial.println(kPreset->name);
 
 }
+
+
+void doExpressionPedal
