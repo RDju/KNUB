@@ -31,6 +31,9 @@ change the way params are updated via the encoder use function to wich you'll pa
 #define validBut 9
 #define backBut 8
 
+#define expressionPin 0
+
+
 volatile uint8_t lastValue = 0;
 volatile uint8_t lastEncoderValue = 0;
 volatile uint8_t encoderValue = 0;
@@ -75,9 +78,12 @@ char* modOns[2] = {"___", "EXP"};
 char* switchTypes[5] = {"__", "L1", "L2", "L3", "L4"};
 
 byte baseAddr = 5;
-byte prevLoaded = 61;
 
 byte toPrint;
+
+uint16_t prevExpVal;
+uint16_t expVal;
+
 
 void setup(){
 
@@ -96,7 +102,7 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
-  readKnubPreset(eepromAddr1, (prevLoaded-56) * presetSize, &currentPreset);
+  readKnubPreset(eepromAddr1, baseAddr * presetSize, &currentPreset);
   delay(50);
   
   updateKnubs(&currentPreset);
@@ -121,7 +127,7 @@ void setup(){
 
   updatePreset(currentPreset.name, isEdited);
 
-  
+ 
 }
 
 void loop(){
@@ -129,6 +135,15 @@ void loop(){
 
    
   midiInRead(pageLevel);
+
+  if(pageLevel == 2){
+
+    expVal = analogRead(expressionPin);
+      if(expVal != prevExpVal){ 
+      doExpressionPedal(expVal);
+      prevExpVal = expVal;
+    }
+  }
 
   ////dealing with pages 
    if(time2ChangePage){

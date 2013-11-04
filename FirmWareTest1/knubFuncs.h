@@ -133,4 +133,26 @@ void printPresetName(aKnubPreset *kPreset){
 }
 
 
-void doExpressionPedal
+void doExpressionPedal(uint16_t expVal){
+
+
+  //for(int i = 0; i<4; i++){
+
+    //if(currentPreset.knubbies[i].modOn == 1){
+
+        
+        //turnKnub(i, map(expVal, 97, 1015, currentPreset.knubbies[i].params[0], currentPreset.knubbies[i].params[1]));
+        Serial.print(constrain(expVal, 97 ,1015));
+        Serial.print(" ");
+        Serial.println(map(constrain(expVal, 97, 1015), 97, 1015, currentPreset.knubbies[0].params[0], currentPreset.knubbies[0].params[1]));
+    //}
+
+
+
+  //}
+
+
+
+
+
+}
