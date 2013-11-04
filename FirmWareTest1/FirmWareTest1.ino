@@ -87,7 +87,6 @@ void setup(){
   Wire.begin();
   midiSerial.begin(31250);
 
-  
   initDisplay();
 
   pinMode(encoderPin1, INPUT); 

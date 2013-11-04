@@ -1,10 +1,10 @@
 #include "SoftwareSerial.h"
 
-#define DEBUG_MIDI //uncomment this to activate midi debugging
+//#define DEBUG_MIDI //uncomment this to activate midi debugging
 
 
 SoftwareSerial midiSerial(7, 10);
-byte inMessage[3];
+byte inMessage[2];
 byte inRead  = 0;
 uint16_t prevRead = 5*presetSize;
 uint16_t readAdr;
@@ -19,29 +19,28 @@ void midiInRead(byte pageLev){
 	if(midiSerial.available()>0){
 
 
-		if(inRead < 3){
+		if(inRead < 2){
 
 			inMessage[inRead] = midiSerial.read();
 			inRead ++;
 
 		}
 
-		if(inRead >=3){
+		if(inRead >=2){
 			
 			inRead = 0;
 			
 			#ifdef DEBUG_MIDI
 				Serial.print(inMessage[0]);
 				Serial.print(", ");
-				Serial.print(inMessage[1]);
-				Serial.print(", ");
-				Serial.println(inMessage[2]);
+				Serial.println(inMessage[1]);
+				//Serial.print(", ");
+				//Serial.println(inMessage[2]);
 			#endif
 			
-			/* then here test if message is a PGM or CC 
-			for now I use noteOn messages*/
+			/* PGM change to change preset*/
 			
-			 readAdr = (inMessage[1]-56)*presetSize;
+			 readAdr = inMessage[1]*presetSize;
 			
 			if(pageLev == 2){
 				if(readAdr != prevRead && loadFlag == false){
@@ -49,7 +48,7 @@ void midiInRead(byte pageLev){
 					
 					loadFlag = true;
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-					printPresetName(&currentPreset);
+					
 					updateKnubs(&currentPreset);
 					loadFlag = false;
 					
@@ -59,6 +58,7 @@ void midiInRead(byte pageLev){
 
 				}
 			}
+			
 		}
 	}
 }
