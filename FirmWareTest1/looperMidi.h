@@ -1,4 +1,9 @@
 
+/*
+FOR TESTING USE SOFTSERIAL BUT FINAL VERSION USES MAIN SERIAL OUT
+*/
+
+
 #define CC2Looper 176
 
 byte loopsOut[4];
@@ -25,7 +30,7 @@ bool checkLoopsOut(byte indx ){
   if(loopsOut[indx] != 0){
 
       return true;
-  }else{
+  }else if(loopsOut[indx] == 0){
 
       return false;
   }
@@ -35,8 +40,9 @@ void updateLoops(byte indx, byte val){
 
 	
 		if(val == 0){
-			
-				loopsOut[indx] -= 1;
+				if(loopsOut[indx] >0){
+					loopsOut[indx] -= 1;
+			}
 		}else{
 			if(loopsOut[indx]<3){
 				loopsOut[indx] += 1;

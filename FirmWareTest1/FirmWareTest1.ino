@@ -87,7 +87,8 @@ void setup(){
   lcd.begin(9600);
   Serial.begin(9600);
   Wire.begin();
-  midiSerial.begin(31250);
+  //midiSerial.begin(31250);
+  looperSerial.begin(31250);
 
   initDisplay();
 
@@ -100,17 +101,33 @@ void setup(){
   
   //read last loaded ID and load that one
   lastID = readByte(eepromAddr1, lastPresetMemSpace);
+  
   readKnubPreset(eepromAddr1, lastID * presetSize, &currentPreset);
   delay(50);
   
   updateKnubs(&currentPreset);
+  
   // fill up loopsOut array
   for(uint8_t i = 0; i<numKnubbies; i++){
 
     fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
   }
+
+  // check loops state and update
+
+  for(uint8_t i = 0; i<4; i++){
+
+      if(checkLoopsOut(i) == true){
+          Serial.print("turn on loop: ");
+          Serial.println(i);
+          switchLoop(i, 1);
+      }else{
+
+          switchLoop(i, 0);
+      }
+    }
   
-  Serial.println(loopsOut[0]);
+
   //startUp sequence
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
   delay(500);
@@ -178,6 +195,7 @@ void loop(){
        updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
        updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
        time2ChangePage = false;
+
        break;
        case 4:
        clearScreen();
@@ -416,20 +434,49 @@ if(encoderValue != lastValue){
        case 5:
             checkEdition();
            
-            //do all switch check here (might not be the greatest idea);
-
-
-           scaledEncoderValueParam = encoderValue%25;
-           if(scaledEncoderValueParam == 0){
-              txtParamIndx += encoderDir;
+            //do all switch check here (might not be the greatest idea)
+            //scaledEncoderValueParam = encoderValue%25;
+           
+           if(encoderDir == 1){
+               if(currentPreset.knubbies[currentParam].state == 0){ 
+                
+                currentPreset.knubbies[currentParam].state = 1;
+                updateParam(2, stateToString(currentPreset.knubbies[currentParam].state));
+                updateLoops(currentPreset.knubbies[currentParam].numLoop, currentPreset.knubbies[currentParam].state);
               
-              updateParam(2, stateToString(txtParamIndx%2));
-              currentPreset.knubbies[currentParam].state = txtParamIndx%2;
+              }
+             }else if(encoderDir == -1){
+                if(currentPreset.knubbies[currentParam].state == 1){
+
+                 currentPreset.knubbies[currentParam].state = 0;
+                 updateParam(2, stateToString(currentPreset.knubbies[currentParam].state));
+                 updateLoops(currentPreset.knubbies[currentParam].numLoop, currentPreset.knubbies[currentParam].state);
+              }
+
+             } 
+              
               //update loop at loop indx
-              updateLoops(currentPreset.knubbies[currentParam].numLoop, txtParamIndx%2);
               
+              //check loop at numLoop
+              Serial.print("checking loop: ");
+              Serial.println(currentPreset.knubbies[currentParam].numLoop);
+              Serial.print("value: ");
+              Serial.println(loopsOut[currentPreset.knubbies[currentParam].numLoop]);
               
-           }
+              if(checkLoopsOut(currentPreset.knubbies[currentParam].numLoop) == false){
+                  Serial.println("turnOFF");
+                  //turn loop off
+                  switchLoop(currentPreset.knubbies[currentParam].numLoop, 0);
+
+              }else{
+
+                  //quick and dirty
+                  //turn loop on
+                  Serial.println("turnON");
+                  switchLoop(currentPreset.knubbies[currentParam].numLoop, 1);
+              }
+              
+            
        break;
       
      }
@@ -463,7 +510,7 @@ if(encoderValue != lastValue){
     }
     break;
     case 2:
-    
+      /*
         scaledEncoderValueParam = encoderValue%25;
         if(scaledEncoderValueParam == 0){
             if(encoderDir == 1){     
@@ -483,6 +530,7 @@ if(encoderValue != lastValue){
           updatePreset(currentPreset.name, isEdited);
           }
         }
+      */
     break;
    }
  }
