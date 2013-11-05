@@ -70,7 +70,7 @@ boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
 char* modOns[2] = {"___", "EXP"};
-char* switchTypes[5] = {"__", "L1", "L2", "L3", "L4"};
+char* switchTypes[5] = {"L1", "L2", "L3", "L4","__"};
 
 byte baseAddr = 5;
 byte lastID = 5;
@@ -415,14 +415,20 @@ if(encoderValue != lastValue){
        */
        case 5:
             checkEdition();
-           ///not acitve yet
-           currentParamVal = currentPreset.knubbies[currentParam].params[2];
            
+            //do all switch check here (might not be the greatest idea);
+
+
            scaledEncoderValueParam = encoderValue%25;
            if(scaledEncoderValueParam == 0){
               txtParamIndx += encoderDir;
-              //updateParam(2,boolToString(currentPreset.knubbies[currentParam].state));
+              
               updateParam(2, stateToString(txtParamIndx%2));
+
+              //update loop at loop indx
+              updateLoops(currentPreset.knubbies[currentParam].numLoop, txtParamIndx%2);
+              
+              
            }
        break;
       
@@ -452,9 +458,7 @@ if(encoderValue != lastValue){
                }
           */
         break;
-        case 1:
-            
-        break;
+       
         
     }
     break;

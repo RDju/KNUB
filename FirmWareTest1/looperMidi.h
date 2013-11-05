@@ -20,7 +20,6 @@ void switchLoop( byte loopNum, byte state){
 void fillLoopsOut(byte indx, byte val){
 
     loopsOut[indx] += val;
-
 }
 
 bool checkLoopsOut(byte indx ){
@@ -33,3 +32,20 @@ bool checkLoopsOut(byte indx ){
       return false;
   }
 }
+
+void updateLoops(byte indx, byte val){
+
+	
+		if(val == 0){
+			
+				loopsOut[indx] -= 1;
+			
+
+		}else{
+			if(loopsOut[indx]<3){
+				loopsOut[indx] += 1;
+			}
+		}
+	
+}
+
