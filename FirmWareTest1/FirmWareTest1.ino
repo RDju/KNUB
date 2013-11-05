@@ -424,7 +424,7 @@ if(encoderValue != lastValue){
               txtParamIndx += encoderDir;
               
               updateParam(2, stateToString(txtParamIndx%2));
-
+              currentPreset.knubbies[currentParam].state = txtParamIndx%2;
               //update loop at loop indx
               updateLoops(currentPreset.knubbies[currentParam].numLoop, txtParamIndx%2);
               

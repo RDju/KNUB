@@ -1,11 +1,9 @@
 
 #define CC2Looper 176
 
-
 byte loopsOut[4];
 
 SoftwareSerial looperSerial(11, 4);
-
 
 byte switchLoops[4] = {80, 81, 82, 83};
 byte loopStates[2] = {0, 127};
@@ -39,8 +37,6 @@ void updateLoops(byte indx, byte val){
 		if(val == 0){
 			
 				loopsOut[indx] -= 1;
-			
-
 		}else{
 			if(loopsOut[indx]<3){
 				loopsOut[indx] += 1;
