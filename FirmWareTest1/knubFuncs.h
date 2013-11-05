@@ -108,7 +108,7 @@ void updateKnubs(aKnubPreset * kPreset){
 
 void fillLoopsOut(byte indx, byte val){
 
-  loopsOut[indx] += val;
+    loopsOut[indx] += val;
 
 }
 
@@ -121,8 +121,6 @@ bool checkLoopsOut(byte indx ){
 
       return false;
   }
-
-
 }
 
 void printPresetName(aKnubPreset *kPreset){

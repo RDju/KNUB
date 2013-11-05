@@ -2,7 +2,6 @@
 
 //#define DEBUG_MIDI //uncomment this to activate midi debugging
 
-
 SoftwareSerial midiSerial(7, 10);
 byte inMessage[2];
 byte inRead  = 0;

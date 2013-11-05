@@ -9,7 +9,7 @@
 #include "knubFuncs.h"
 #include "UI.h"
 #include "knubMidi.h"
-
+#include "looperMidi.h"
 
 /*
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
@@ -19,11 +19,6 @@ change the way params are updated via the encoder use function to wich you'll pa
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 */
-
-
-
- //#define DEBUG_UI //uncomment this to activate UI debugging
-
 
 #define encoderPin1 2
 #define encoderPin2 3
@@ -145,8 +140,6 @@ void loop(){
     doExpressionPedal(analogRead(expressionPin));
       
   }
-  
-
   ////dealing with pages 
    if(time2ChangePage){
      switch(pageLevel){
