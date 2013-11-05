@@ -1,6 +1,6 @@
 #include "SoftwareSerial.h"
 
-#define DEBUG_MIDI //uncomment this to activate midi debugging
+//#define DEBUG_MIDI //uncomment this to activate midi debugging
 
 
 SoftwareSerial midiSerial(7, 10);
@@ -26,7 +26,7 @@ void midiInRead(byte pageLev){
 
 		}
 
-		if(inRead >=2){
+		if(inRead >=2 && inMessage[0] == 192){
 			
 			inRead = 0;
 			
@@ -47,9 +47,12 @@ void midiInRead(byte pageLev){
 					
 					
 					loadFlag = true;
+					//readPrest
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-					
+					//turnKnubs
 					updateKnubs(&currentPreset);
+					//save last loaded ID
+					writeByte(eepromAddr1, lastPresetMemSpace, inMessage[1]);
 					loadFlag = false;
 					
 

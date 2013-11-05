@@ -78,6 +78,7 @@ char* modOns[2] = {"___", "EXP"};
 char* switchTypes[5] = {"__", "L1", "L2", "L3", "L4"};
 
 byte baseAddr = 5;
+byte lastID = 5;
 
 byte toPrint;
 
@@ -102,7 +103,10 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
-  readKnubPreset(eepromAddr1, baseAddr * presetSize, &currentPreset);
+  lastID = readByte(eepromAddr1, lastPresetMemSpace);
+  Serial.println(lastID);
+  
+  readKnubPreset(eepromAddr1, lastID * presetSize, &currentPreset);
   delay(50);
   
   updateKnubs(&currentPreset);
