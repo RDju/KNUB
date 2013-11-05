@@ -8,8 +8,9 @@
 #include "presets.h"
 #include "knubFuncs.h"
 #include "UI.h"
-#include "knubMidi.h"
 #include "looperMidi.h"
+#include "knubMidi.h"
+
 
 /*
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
@@ -83,12 +84,11 @@ uint16_t expVal;
 
 void setup(){
 
-
   lcd.begin(9600);
-  Serial.begin(9600);
+  Serial.begin(31250);
   Wire.begin();
-  //midiSerial.begin(31250);
-  looperSerial.begin(31250);
+  midiSerial.begin(31250);
+  //looperSerial.begin(31250);
 
   initDisplay();
 
@@ -118,8 +118,8 @@ void setup(){
   for(uint8_t i = 0; i<4; i++){
 
       if(checkLoopsOut(i) == true){
-          Serial.print("turn on loop: ");
-          Serial.println(i);
+          ////Serial.print("turn on loop: ");
+          ////Serial.println(i);
           switchLoop(i, 1);
       }else{
 
@@ -458,13 +458,13 @@ if(encoderValue != lastValue){
               //update loop at loop indx
               
               //check loop at numLoop
-              Serial.print("checking loop: ");
-              Serial.println(currentPreset.knubbies[currentParam].numLoop);
-              Serial.print("value: ");
-              Serial.println(loopsOut[currentPreset.knubbies[currentParam].numLoop]);
+              //Serial.print("checking loop: ");
+              //Serial.println(currentPreset.knubbies[currentParam].numLoop);
+              //Serial.print("value: ");
+              //Serial.println(loopsOut[currentPreset.knubbies[currentParam].numLoop]);
               
               if(checkLoopsOut(currentPreset.knubbies[currentParam].numLoop) == false){
-                  Serial.println("turnOFF");
+                  //Serial.println("turnOFF");
                   //turn loop off
                   switchLoop(currentPreset.knubbies[currentParam].numLoop, 0);
 
@@ -472,7 +472,7 @@ if(encoderValue != lastValue){
 
                   //quick and dirty
                   //turn loop on
-                  Serial.println("turnON");
+                  //Serial.println("turnON");
                   switchLoop(currentPreset.knubbies[currentParam].numLoop, 1);
               }
               

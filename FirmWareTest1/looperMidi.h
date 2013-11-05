@@ -8,16 +8,16 @@ FOR TESTING USE SOFTSERIAL BUT FINAL VERSION USES MAIN SERIAL OUT
 
 byte loopsOut[4];
 
-SoftwareSerial looperSerial(11, 4);
+//SoftwareSerial looperSerial(11, 4);
 
 byte switchLoops[4] = {80, 81, 82, 83};
 byte loopStates[2] = {0, 127};
 
 void switchLoop( byte loopNum, byte state){
 
-	looperSerial.write(CC2Looper);
-	looperSerial.write(switchLoops[loopNum]);
-	looperSerial.write(loopStates[state]);
+	Serial.write(CC2Looper);
+	Serial.write(switchLoops[loopNum]);
+	Serial.write(loopStates[state]);
 }
 
 void fillLoopsOut(byte indx, byte val){

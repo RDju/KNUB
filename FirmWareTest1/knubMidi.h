@@ -1,4 +1,4 @@
-#include "SoftwareSerial.h"
+	#include "SoftwareSerial.h"
 
 //#define DEBUG_MIDI //uncomment this to activate midi debugging
 
@@ -55,6 +55,25 @@ void midiInRead(byte pageLev){
 					loadFlag = false;
 					
 
+					// fill up loopsOut array
+  					for(uint8_t i = 0; i<numKnubbies; i++){
+
+    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+  					}	
+
+  					// check loops state and update
+
+  					for(uint8_t i = 0; i<4; i++){
+
+      				if(checkLoopsOut(i) == true){
+          				//Serial.print("turn on loop: ");
+          				//Serial.println(i);
+          				switchLoop(i, 1);
+      					}else{
+
+          					switchLoop(i, 0);
+      					}
+    				}
 					time2ChangePage = true;
 					prevRead = readAdr;
 
