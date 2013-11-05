@@ -15,9 +15,9 @@ byte loopStates[2] = {0, 127};
 
 void switchLoop( byte loopNum, byte state){
 
-	looperSerial.write(CC2Looper);
-	looperSerial.write(switchLoops[loopNum]);
-	looperSerial.write(loopStates[state]);
+	looperSerial.print(CC2Looper);
+	looperSerial.print(switchLoops[loopNum]);
+	looperSerial.print(loopStates[state]);
 }
 
 void clearLoopsOut(){
