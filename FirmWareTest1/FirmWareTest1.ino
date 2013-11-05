@@ -98,9 +98,8 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
+  //read last loaded ID and load that one
   lastID = readByte(eepromAddr1, lastPresetMemSpace);
-  Serial.println(lastID);
-  
   readKnubPreset(eepromAddr1, lastID * presetSize, &currentPreset);
   delay(50);
   
@@ -111,6 +110,7 @@ void setup(){
     fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
   }
   
+  Serial.println(loopsOut[0]);
   //startUp sequence
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
   delay(500);
