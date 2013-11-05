@@ -85,10 +85,10 @@ uint16_t expVal;
 void setup(){
 
   lcd.begin(9600);
-  Serial.begin(31250);
+  //Serial.begin(9600);
   Wire.begin();
   midiSerial.begin(31250);
-  //looperSerial.begin(31250);
+  looperSerial.begin(31250);
 
   initDisplay();
 

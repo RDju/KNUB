@@ -44,17 +44,7 @@ void midiInRead(byte pageLev){
 			if(pageLev == 2){
 				if(inMessage[1]<8 && readAdr != prevRead && loadFlag == false){
 					
-					
-					loadFlag = true;
-					//readPrest
-					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-					//turnKnubs
-					updateKnubs(&currentPreset);
-					//save last loaded ID
-					writeByte(eepromAddr1, lastPresetMemSpace, inMessage[1]);
-					loadFlag = false;
-					
-
+					clearLoopsOut();
 					// fill up loopsOut array
   					for(uint8_t i = 0; i<numKnubbies; i++){
 
@@ -73,7 +63,18 @@ void midiInRead(byte pageLev){
 
           					switchLoop(i, 0);
       					}
-    				}
+    				}	
+
+					loadFlag = true;
+					//readPrest
+					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+					//turnKnubs
+					updateKnubs(&currentPreset);
+					//save last loaded ID
+					writeByte(eepromAddr1, lastPresetMemSpace, inMessage[1]);
+					loadFlag = false;
+					
+
 					time2ChangePage = true;
 					prevRead = readAdr;
 
