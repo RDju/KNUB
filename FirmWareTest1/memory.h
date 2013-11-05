@@ -36,31 +36,7 @@ struct aKnubPreset{
 };
 typedef struct aKnubPreset aKnubPreset;
 
-  /*
-  void writeLastPresetID(byte pNum){
-
-      Wire.beginTransmission(eepromAddr1);
-      Wire.write((int)(lastPresetMemSpace >> 8)); // MSB
-      Wire.write((int)(lastPresetMemSpace & 0xFF)); // LSB
-      Wire.write(pNum);
-      Wire.endTransmission();
-
-  }
-
-  byte readLastPresetID() {
-    
-    Wire.beginTransmission(eepromAddr1);
-    Wire.write((int)(lastPresetMemSpace >> 8)); // MSB
-    Wire.write((int)(lastPresetMemSpace & 0xFF)); // LSB
-    Wire.endTransmission();
-    
-    Wire.requestFrom(lastPresetMemSpace,1);
-    
-      if (Wire.available()){
-      return(Wire.read());
-    }
-}
-  */
+ 
   void writeKnubPresetName( int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset ) {
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddresspage >> 8)); // MSB

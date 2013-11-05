@@ -127,9 +127,7 @@ bool checkLoopsOut(byte indx ){
 
 void printPresetName(aKnubPreset *kPreset){
 
-
-  Serial.println(kPreset->name);
-
+    Serial.println(kPreset->name);
 }
 
 

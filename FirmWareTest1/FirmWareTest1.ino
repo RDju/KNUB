@@ -140,7 +140,7 @@ void loop(){
    
   midiInRead(pageLevel);
 
-  if(pageLevel == 2){
+  if(pageLevel == 2 | pageLevel == 3){
       
     doExpressionPedal(analogRead(expressionPin));
       
@@ -520,8 +520,6 @@ void checkEdition(){
 
   if(isEdited == false){
 
-
-      isEdited = true;
-
+    isEdited = true;
   }
 }
