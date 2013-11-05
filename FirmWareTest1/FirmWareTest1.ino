@@ -141,13 +141,11 @@ void loop(){
   midiInRead(pageLevel);
 
   if(pageLevel == 2){
-
-    expVal = analogRead(expressionPin);
-      if(expVal != prevExpVal){ 
-      doExpressionPedal(expVal);
-      prevExpVal = expVal;
-    }
+      
+    doExpressionPedal(analogRead(expressionPin));
+      
   }
+  
 
   ////dealing with pages 
    if(time2ChangePage){

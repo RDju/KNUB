@@ -25,7 +25,7 @@ byte knob2_ch2 = B01000110;
 
 byte loopsOut[4];
 
-uint16_t  lowVal, highVal;
+uint16_t  lowVal, highVal, prevExp;
 
 
 //function for multiWrite : 
@@ -133,27 +133,19 @@ void printPresetName(aKnubPreset *kPreset){
 }
 
 
-void doExpressionPedal(uint16_t expVal){
+void doExpressionPedal(unsigned int expVal){
 
+  expVal = expVal >> 2;
 
-  //for(int i = 0; i<4; i++){
+    if(abs(expVal - prevExp) > 4){
 
-    //if(currentPreset.knubbies[i].modOn == 1){
+      for(uint8_t i =0; i<3; i++){
+        if(currentPreset.knubbies[i].modOn == 1){
+          turnKnub(i, map(expVal, 0, 255, currentPreset.knubbies[i].params[i], currentPreset.knubbies[0].params[1]));
+        }
+      }
 
-        /*
-        //turnKnub(i, map(expVal, 97, 1015, currentPreset.knubbies[i].params[0], currentPreset.knubbies[i].params[1]));
-        Serial.print(constrain(expVal, 97 ,1015));
-        Serial.print(" ");
-        Serial.println(map(constrain(expVal, 97, 1015), 97, 1015, currentPreset.knubbies[0].params[0], currentPreset.knubbies[0].params[1]));
-    //
-    }
-  */
-
-
-  //}
-
-
-
-
-
+    prevExp = expVal;
+  }
 }
+
