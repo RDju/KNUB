@@ -1,4 +1,4 @@
-	#include "SoftwareSerial.h"
+//#include "SoftwareSerial.h"
 
 //#define DEBUG_MIDI //uncomment this to activate midi debugging
 
@@ -44,49 +44,7 @@ void midiInRead(byte pageLev){
 			if(pageLev == 2){
 				if(inMessage[1]<8 && readAdr != prevRead && loadFlag == false){
 					
-					Serial.println("clearing loops");
-					clearLoopsOut();
-					Serial.println("loops cleared");
-					
-					Serial.print(loopsOut[0]);
-  					Serial.print(", ");
-  					Serial.print(loopsOut[1]);
-  					Serial.print(", ");
-  					Serial.print(loopsOut[2]);
-  					Serial.print(", ");
-  					Serial.println(loopsOut[3]);
-					// fill up loopsOut array
-  					Serial.println("filling loops");
-  					for(uint8_t i = 0; i<numKnubbies; i++){
 
-    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-  					}	
-  					Serial.println("loops filled");
-  					// check loops state and update
-  					
-  					Serial.print(loopsOut[0]);
-  					Serial.print(", ");
-  					Serial.print(loopsOut[1]);
-  					Serial.print(", ");
-  					Serial.print(loopsOut[2]);
-  					Serial.print(", ");
-  					Serial.println(loopsOut[3]);
-  					
-
-  					Serial.println("checking loops");
-  					for(uint8_t i = 0; i<4; i++){
-
-      					if(checkLoopsOut(i) == true){
-          					//Serial.print("turn on loop: ");
-          					//Serial.println(i);
-          					switchLoop(i, 1);
-      					}else{
-
-          					switchLoop(i, 0);
-      					}
-    				}	
-    				Serial.println("loops checked");
-    				/*
 					loadFlag = true;
 					//readPrest
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
@@ -95,9 +53,30 @@ void midiInRead(byte pageLev){
 					//save last loaded ID
 					writeByte(eepromAddr1, lastPresetMemSpace, inMessage[1]);
 					loadFlag = false;
-					*/
+					
+					clearLoopsOut();
+					
+					// fill up loopsOut array
+  					
+  					for(uint8_t i = 0; i<numKnubbies; i++){
 
-					time2ChangePage = true;
+    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+  					}	
+  					
+  					// check loops state and update
+  					
+  					for(uint8_t i = 0; i<4; i++){
+
+      					if(checkLoopsOut(i) == true){
+          					
+          					switchLoop(i, 1);
+      					}else{
+
+          					switchLoop(i, 0);
+      					}
+    				}	
+    				
+    				time2ChangePage = true;
 					prevRead = readAdr;
 
 				}

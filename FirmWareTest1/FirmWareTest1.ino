@@ -84,16 +84,19 @@ uint16_t expVal;
 
 void setup(){
 
-  //lcd.begin(9600);
-  Serial.begin(9600);
+  lcd.begin(9600);
+  Serial.begin(31250);
   
   Wire.begin();
   
 
   midiSerial.begin(31250);
-  //looperSerial.begin(31250);
+  looperSerial.begin(31250);
 
   initDisplay();
+  
+  //enable read for midiSerial only
+  midiSerial.listen();
 
   pinMode(encoderPin1, INPUT); 
   pinMode(encoderPin2, INPUT);
@@ -146,7 +149,7 @@ void setup(){
 
   updatePreset(currentPreset.name, isEdited);
 
-  Serial.println("READY");
+ 
 }
 
 void loop(){
