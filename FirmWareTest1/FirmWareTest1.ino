@@ -89,7 +89,6 @@ void setup(){
   
   Wire.begin();
   
-
   midiSerial.begin(31250);
   looperSerial.begin(31250);
 
