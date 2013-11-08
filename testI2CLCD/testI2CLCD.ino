@@ -28,14 +28,11 @@ Serial.begin(9600);
 
 void loop() {
 
-	for(int i =0; i<sizeof(paramTabs)/sizeof(paramTabs[0]); i++){
-
-		clearScreen();
-		tab(paramTabs[i]);
-		lcd.print("X");
-		delay(500);
-
-	}
+//startUp sequence
+  (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
+  delay(500);
+  (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
+  delay(500);
 
 
 

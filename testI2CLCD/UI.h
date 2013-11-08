@@ -1,9 +1,3 @@
-
-
-#define shortDel 2
-#define longDel 5
-
-
 #include "Arduino.h"
 
 LiquidCrystal_I2C lcd(0x20, 16, 2);
@@ -18,11 +12,6 @@ uint8_t numTabs[] = {0, 0, 2, 7, 0};
 
 char tmpStr[4];
 
-//char* fxTabs[] = {"7, 0", "7, 1"};
-//char* paramTabs[] = {"0,0", "2,0", "13,0", "13,1", "2,1", "6,1", "10,1", "10,0"};
-//char* chParamTabs[] = {"1,1", "5,1", "9,1", "12,1", "12,0", "9,0"};
-//char* effectTabs[] = {"7,0", "7,1"};
-//char* customCursorTabs[] = {"0,1", "5,1", "10,1"};
 
 
 byte fxTabs[] = {B01110000, B01110001};
@@ -100,21 +89,18 @@ void updateParam2(uint8_t prmIndx, char newVal[]){
   lcd.print(newVal);
 }
 
-/*
-void updatePreset(char preset[], char pName[], boolean editMode){
+
+void updatePreset(/*char preset[],*/ char pName[], boolean editMode){
 
   if(editMode){
-    lcd.write("ss");
-    lcd.write(pName);
-    lcd.write("%");
-    lcd.write(";");
-    delay(longDel);
-  }else{
-    lcd.write("ss");
-    lcd.write(pName);
-    lcd.write(";");
-    delay(longDel);
   
+    lcd.print(pName);
+    lcd.print("%");
+    
+  }else{
+    
+    lcd.print(pName);
+    
   }
 }
 
@@ -122,12 +108,11 @@ void clearAllTabs(){
 
   for(int i=0; i<6; i++){
     
-      lcd.write("sd");
-      lcd.write(chParamTabs[i]);
-      lcd.write(";");
-      delay(longDel);
-      lcd.write("ss ;");
-      delay(longDel);
+      
+      tab(chParamTabs[i]);
+      
+      lcd.print(" ");
+      
   
   }
 }
@@ -149,57 +134,40 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
       break;
       case 1:
         clearAllTabs();
-        lcd.write("sd");
-        lcd.write(chParamTabs[0]);
-        lcd.write(";");
-        delay(longDel);
-        lcd.write("ss>;");
-        delay(longDel);
+        tab(chParamTabs[0]);
+        lcd.print(">");
+      
       break;
       case 2:
-         clearAllTabs();
-         lcd.write("sd");
-        lcd.write(chParamTabs[1]);
-        lcd.write(";");
-        delay(longDel);
-        lcd.write("ss>;");
-        delay(longDel);
+        clearAllTabs();
+        tab(chParamTabs[1]);
+        lcd.print(">");
+        
       break;
       case 3:
         clearAllTabs();
-        lcd.write("sd");
-        lcd.write(chParamTabs[2]);
-        lcd.write(";");
-        delay(longDel);
-        lcd.write("ss>;");
-        delay(longDel);
+        tab(chParamTabs[2]);
+        lcd.print(">");
+        
      break;
      case 4:
         clearAllTabs();
-        lcd.write("sd");
-        lcd.write(chParamTabs[3]);
-        lcd.write(";");
-        delay(longDel);
-        lcd.write("ss>;");
-        delay(longDel);
+        tab(chParamTabs[3]);
+        lcd.print(">");
+        
      break;
      case 5:
         clearAllTabs();
-        lcd.write("sd");
-        lcd.write(chParamTabs[4]);
-        lcd.write(";");
-        delay(longDel);
-        lcd.write("ss>;");
-        delay(longDel);
+        tab(chParamTabs[4]);
+        lcd.print(">");
+        
      break;
      case 6:
         clearAllTabs();
-        lcd.write("sd");
-        lcd.write(chParamTabs[5]);
-        lcd.write(";");
-        delay(longDel);
-        lcd.write("ss>;");
-        delay(longDel);
+        tab(chParamTabs[5]);
+        
+        lcd.print(">");
+        
      break;
      
     }
@@ -208,24 +176,25 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
       switch(cusTab){
   
       case 0:
-        lcd.write("sd0,6;");
-        delay(longDel);
-        lcd.write("ss>;");
-        delay(longDel);
-        lcd.write("sd1,6;");
-        delay(longDel);
-        lcd.write("ss:;");
-      delay(longDel);
+        lcd.setCursor(6,0);
+        lcd.print(">");
+        
+      
+        
+        lcd.setCursor(6,1);
+        
+        lcd.print(":");
+      
       break;
       case 1:
-        lcd.write("sd1,6;");
-        delay(longDel);
-        lcd.write("ss>;");
-        delay(longDel);
-        lcd.write("sd0,6;");
-        delay(longDel);
-        lcd.write("ss:;");
-      delay(longDel);
+        lcd.setCursor(6,1);
+        
+        lcd.print(">");
+        
+        lcd.setCursor(6,0);
+        
+        lcd.print(":");
+    
       break;
     }
     break;
@@ -251,119 +220,80 @@ char* stateToString(uint8_t state){
 ///////////// PAGES ///////////////////////////////////
 
 void productPage(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
- lcd.write("sc;");
- delay(10);
- lcd.write("sd0,0;");
- delay(longDel);
- lcd.write("ss");
+ clearScreen();
+ lcd.setCursor(0,0);
+ 
  lcd.print("    LE KNUB   ");
- lcd.write(";");
- delay(longDel);
- lcd.write("sd1,0;");
- delay(longDel);
- lcd.write("ss");
+ 
+ 
+ lcd.setCursor(0,1);
+ 
+
  lcd.print(" by Combosquare ");
- lcd.write(";");
- delay(longDel);
 }
 
 void softwareVersion(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
- lcd.write("sc;");
- delay(10);
- lcd.write("sd0,0;");
- delay(longDel);
- lcd.write("ss");
+ clearScreen();
+ lcd.setCursor(0,0);
+
  lcd.print(" Firmware: v0.1b");
- lcd.write(";");
- delay(longDel);
 }
 
 void savePage(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
-  lcd.write("sd0,0;");
-  delay(longDel);
-  lcd.write("ssSAVING...;");
-  delay(longDel);
+  lcd.setCursor(0,0);
+  
+  lcd.print("SAVING...;");
+
 }
 
 
 void presetPage(char presetName[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
- lcd.write("sc;");
- delay(longDel);
- lcd.write("sd0,0;");
- delay(longDel);
- lcd.write("ssPRESET:;");
- delay(longDel);
- lcd.write("ss");
- lcd.write(presetName);
- lcd.write(";");
- delay(longDel);
+ clearScreen();
+
+ lcd.setCursor(0,0);
+ lcd.print("PRESET:");
+
+ 
+ lcd.print(presetName);
 }
 
 void knubbiePage(char knubbieName[], char knubbieV1[], char knubbieV2[], char knubbieCrv[], char knubbieMod[], char knubbieState[], char knubbieLoop[], char knubbieSwitch[], char knubNum[]){
   
   //name
-  lcd.write("sd0,0;");
-  delay(longDel);
-  lcd.write("ss");
-  lcd.write(knubNum);
-  lcd.write(";");
-  delay(longDel);
+  lcd.setCursor(0,0);
+  lcd.print(knubNum);
   
   //mod
-  lcd.write("sd0,2;");
-  delay(longDel);
-  lcd.write("ss");
-  lcd.write(knubbieName);
-  lcd.write(";");
-  delay(longDel);
+  lcd.setCursor(2,0);
+  lcd.print(knubbieName);
 
 
   //state
-  lcd.write("sd0,10");
-  delay(longDel);
-  lcd.write("ss");
-  lcd.write(knubbieMod);
-  delay(longDel);
+  lcd.setCursor(10,0);
+  lcd.print(knubbieMod);
   
   //loop
-  lcd.write("sd0,15;");
-  delay(longDel);
-  lcd.write("ss");
-  lcd.write(knubbieState);
-  lcd.write(";");
-  delay(longDel);  
-
+  lcd.setCursor(15,0);
+  lcd.print(knubbieState);
+  
   //val1
-  lcd.write("sd1,2;");
-  delay(longDel);
-  lcd.write("ss");
-  lcd.write(knubbieV1);
-  lcd.write(";");
-  delay(longDel); 
- 
+  lcd.setCursor(2, 1);
+  lcd.print(knubbieV1);
+  
  //val2
-  lcd.write("sd1,6;");
-  delay(longDel);
-  lcd.write("ss");
-  lcd.write(knubbieV2);
-  lcd.write(";");
-  delay(longDel);   
-
+  lcd.setCursor(6,1);
+  lcd.print(knubbieV2);
+  
  //curve
  
-  lcd.write("sd1,13;");
-  delay(longDel);
-  lcd.write("ss");
-  lcd.write(knubbieCrv);
-  lcd.write(";");
-  delay(longDel); 
+  lcd.setCursor(13,1);
+  lcd.print(knubbieCrv);
 }
 
 void (*drawFuncs[6])(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]) = {productPage, softwareVersion, presetPage, knubbiePage, knubbiePage, savePage};
 
 
 
-*/
