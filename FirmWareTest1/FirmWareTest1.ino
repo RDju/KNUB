@@ -93,6 +93,7 @@ void setup(){
   Wire.begin();
   lcd.init();
   lcd.backlight();
+  Serial.begin(9600);
   midiSerial.begin(31250);
   looperSerial.begin(31250);
 
@@ -160,12 +161,13 @@ void loop(){
 
    
   midiInRead(pageLevel);
-
-  if(pageLevel == 2 | pageLevel == 3){
+  /*
+  if(pageLevel == 2){
       
     doExpressionPedal(analogRead(expressionPin));
       
   }
+  */
   ////dealing with pages 
    if(time2ChangePage){
      switch(pageLevel){

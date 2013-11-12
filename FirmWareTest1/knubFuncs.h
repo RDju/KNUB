@@ -123,7 +123,8 @@ void doExpressionPedal(unsigned int expVal){
 
       for(uint8_t i =0; i<3; i++){
         if(currentPreset.knubbies[i].modOn == 1){
-          turnKnub(i, map(expVal, 0, 255, currentPreset.knubbies[i].params[i], currentPreset.knubbies[0].params[1]));
+          //turnKnub(i, map(expVal, 0, 255, currentPreset.knubbies[i].params[i], currentPreset.knubbies[0].params[1]));
+          Serial.println(expVal);
         }
       }
 
