@@ -12,14 +12,10 @@ uint8_t numTabs[] = {0, 0, 2, 7, 0};
 
 char tmpStr[4];
 
-
-
 byte fxTabs[] = {B01110000, B01110001};
 byte paramTabs[] = {B00000000, B00100000, B11010000, B11010001, B00100001, B01100001, B10100001, B10100000};
 byte customCursorTabs[] = {B00000001, B01010001, B10100001};
 byte chParamTabs[] = {B00010001, B01010001, B10010001, B11000001, B11000000, B10010000};
-
-
 
 uint8_t customDigits[256] = {
 

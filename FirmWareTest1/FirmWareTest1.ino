@@ -2,7 +2,7 @@
 #include <SoftwareSerial.h>
 #include <stdlib.h>
 #include <Wire.h>
-
+#include "LiquidCrystal_I2C.h"
 
 #include "memory.h"
 #include "presets.h"
@@ -10,6 +10,8 @@
 #include "UI.h"
 #include "looperMidi.h"
 #include "knubMidi.h"
+
+
 
 
 /*
@@ -82,17 +84,19 @@ uint16_t prevExpVal;
 uint16_t expVal;
 
 
+
 void setup(){
 
-  lcd.begin(9600);
-  Serial.begin(31250);
+  //lcd.begin(9600);
+  //Serial.begin(31250);
   
   Wire.begin();
-  
+  lcd.init();
+  lcd.backlight();
   midiSerial.begin(31250);
   looperSerial.begin(31250);
 
-  initDisplay();
+  //initDisplay();
   
   //enable read for midiSerial only
   midiSerial.listen();
@@ -135,10 +139,10 @@ void setup(){
 
   //startUp sequence
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
-  delay(500);
+  delay(1000);
   (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
-  delay(500);
-  initMemDisp();
+  delay(1000);
+  //initMemDisp();
 
   clearScreen();
   pageLevel = 2;
