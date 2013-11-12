@@ -1,6 +1,6 @@
 //#include "SoftwareSerial.h"
 
-//#define DEBUG_MIDI //uncomment this to activate midi debugging
+#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
 
 SoftwareSerial midiSerial(7, 10);
 byte inMessage[2];
@@ -29,12 +29,12 @@ void midiInRead(byte pageLev){
 			
 			inRead = 0;
 			
-			#ifdef DEBUG_MIDI
+			#ifdef DEBUG_LOAD_PRESET
+				Serial.print("MIDI message: ");
+				Serial.print(" ");
 				Serial.print(inMessage[0]);
 				Serial.print(", ");
 				Serial.println(inMessage[1]);
-				//Serial.print(", ");
-				//Serial.println(inMessage[2]);
 			#endif
 			
 			/* PGM change to change preset*/
@@ -46,14 +46,17 @@ void midiInRead(byte pageLev){
 					
 
 					loadFlag = true;
-					//readPrest
+					
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-					//turnKnubs
+					
 					updateKnubs(&currentPreset);
-					//save last loaded ID
+					
 					writeByte(eepromAddr1, lastPresetMemSpace, inMessage[1]);
 					loadFlag = false;
 					
+					#ifdef DEBUG_LOAD_PRESET
+						debugKnubPreset(&currentPreset);
+					#endif
 					clearLoopsOut();
 					
 					// fill up loopsOut array

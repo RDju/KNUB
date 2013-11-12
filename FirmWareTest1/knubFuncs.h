@@ -99,7 +99,7 @@ void turnKnub(byte knubNum,byte knubVal){
 
 void updateKnubs(aKnubPreset * kPreset){
  
-      for(uint8_t i = 0; i<4; i++){
+      for(uint8_t i = 0; i<3; i++){
         if(kPreset->knubbies[i].state == 1){
           turnKnub(i, kPreset->knubbies[i].params[0]);
         }
@@ -132,3 +132,17 @@ void doExpressionPedal(unsigned int expVal){
   }
 }
 
+
+void debugKnubPreset(aKnubPreset *kPreset){
+
+  Serial.print("PRESET NAME: ");
+  Serial.println(kPreset->name);
+
+  for(uint8_t  i = 0; i<numKnubbies;i++){
+
+    Serial.print("KNUBBIE: ");
+    Serial.println(kPreset->knubbies[i].name);
+    Serial.print("VAL1: ");
+    Serial.println(kPreset->knubbies[i].params[0]);
+  }
+}
