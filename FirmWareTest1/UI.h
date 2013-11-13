@@ -12,10 +12,13 @@ uint8_t numTabs[] = {0, 0, 2, 7, 0};
 
 char tmpStr[4];
 
-byte fxTabs[] = {B01110000, B01110001};
-byte paramTabs[] = {B00000000, B00100000, B11010000, B11010001, B00100001, B01100001, B10100001, B10100000};
-byte customCursorTabs[] = {B00000001, B01010001, B10100001};
-byte chParamTabs[] = {B00010001, B01010001, B10010001, B11000001, B11000000, B10010000};
+byte fxTabs[2] = {B01110000, B01110001};
+byte paramTabs[8] = {B00000000, B00100000, B11010000, B11010001, B00100001, B01100001, B10100001, B10100000};
+byte customCursorTabs[3] = {B00000001, B01010001, B10100001};
+byte chParamTabs[6] = {B00010001, B01010001, B10010001, B11000001, B11000000, B10010000};
+byte ledPositions[4] = {B00010001, B01010001, B10010001, B11010001};
+
+// 1,1  5,1  9,1  13,1
 
 uint8_t customDigits[256] = {
 
@@ -29,6 +32,38 @@ uint8_t customDigits[256] = {
 79, 79, 80, 80, 80, 81, 81, 81, 82, 82, 83, 83, 83, 84, 84, 85, 85, 85, 86, 86, 87, 87, 87, 88, 88, 89, 89, 89, 
 90, 90, 90, 91, 91, 92, 92, 92, 93, 93, 94, 94, 94, 95, 95, 96, 96, 96, 97, 97, 98, 98, 98, 99, 99, 100
 };
+
+
+uint8_t ledOFF[8] = {
+  0b00000,
+  0b00000,
+  0b00000,
+  0b00000,
+  0b00000,
+  0b00000,
+  0b11111,
+  0b11111
+};
+
+uint8_t ledON[8] = {
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111,
+  0b11111
+};
+
+
+void switchUILed(uint8_t wichLed, uint8_t status){
+//sitch led on ou off
+  lcd.setCursor(ledPositions[wichLed]>>4, ledPositions[wichLed]&B00001111);
+  lcd.write(status);
+  lcd.write(status);
+}
+
 
 char* toString(uint8_t val){
 
@@ -53,7 +88,6 @@ void updateParam(uint8_t prmIndx, char newVal[]){
     tab(paramTabs[prmIndx]);
     lcd.print(newVal);
 }
-
 
 void updateNumParam(uint8_t prmIndx, uint8_t newVal){
   

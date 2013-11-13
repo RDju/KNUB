@@ -102,6 +102,11 @@ void setup(){
   //enable read for midiSerial only
   midiSerial.listen();
 
+
+
+  lcd.createChar(0, ledOFF);
+  lcd.createChar(1, ledON);
+
   pinMode(encoderPin1, INPUT); 
   pinMode(encoderPin2, INPUT);
   digitalWrite(encoderPin1, HIGH);
@@ -152,7 +157,7 @@ void setup(){
   (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
 
   updatePreset(currentPreset.name, isEdited);
-
+  checkUILeds();
  
 }
 
@@ -187,7 +192,7 @@ void loop(){
        (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
 
        updatePreset(currentPreset.name, isEdited);
-
+       checkUILeds();
        time2ChangePage = false;
        break;
       

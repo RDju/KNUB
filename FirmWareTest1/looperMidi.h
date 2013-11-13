@@ -2,8 +2,6 @@
 /*
 FOR TESTING USE SOFTSERIAL BUT FINAL VERSION USES MAIN SERIAL OUT
 */
-
-
 #define CC2Looper 176
 
 byte loopsOut[4];
@@ -43,6 +41,25 @@ bool checkLoopsOut(byte indx ){
       return false;
   }
 }
+
+
+void checkUILeds(){
+
+
+	for(uint8_t i =0; i<4;i++){
+
+		if(checkLoopsOut(i)){
+			switchUILed(i, 1);
+
+		}else{switchUILed(i, 0);}
+		
+
+	}
+
+
+
+}
+
 
 void updateLoops(byte indx, byte val){
 

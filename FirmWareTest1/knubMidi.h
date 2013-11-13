@@ -73,9 +73,11 @@ void midiInRead(byte pageLev){
       					if(checkLoopsOut(i) == true){
           					
           					switchLoop(i, 1);
+          					
       					}else{
 
           					switchLoop(i, 0);
+          					
       					}
     				}	
     				
