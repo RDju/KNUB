@@ -8,8 +8,22 @@ byte loopsOut[4];
 
 SoftwareSerial looperSerial(11, 4);
 
-byte switchLoops[4] = {80, 81, 82, 83};
+byte switchSysEx[8] = {240, 0, 0, 7, 1, 8, 16, 247};
+
+byte switchLoops[8] = {80, 81, 82, 83, 84, 85, 86, 87};
 byte loopStates[2] = {0, 127};
+
+
+void sendSwitchSysEx(){
+
+
+	for(uint8_t i = 0; i<8;i++){
+		
+		looperSerial.write(switchSysEx[i]);
+	}
+}
+
+
 
 void switchLoop( byte loopNum, byte state){
 
