@@ -282,12 +282,13 @@ void savePage(char dummy[], char dummy1[], char dummy2[], char dummy3[], char du
 void presetPage(char presetName[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
  clearScreen();
-
+ /*
  lcd.setCursor(0,0);
  lcd.print("PRESET:");
-
+  */
  
  lcd.print(presetName);
+  
 }
 
 void knubbiePage(char knubbieName[], char knubbieV1[], char knubbieV2[], char knubbieCrv[], char knubbieMod[], char knubbieState[], char knubbieLoop[], char knubbieSwitch[], char knubNum[]){

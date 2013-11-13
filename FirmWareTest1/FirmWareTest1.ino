@@ -157,7 +157,7 @@ void setup(){
   (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
 
   updatePreset(currentPreset.name, isEdited);
-  //checkUILeds();
+  checkUILeds();
  
 }
 
@@ -192,7 +192,7 @@ void loop(){
        (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
 
        updatePreset(currentPreset.name, isEdited);
-       //checkUILeds();
+       checkUILeds();
        time2ChangePage = false;
        break;
       
