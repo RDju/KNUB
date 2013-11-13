@@ -58,8 +58,8 @@ uint8_t currFx = 0;
 int8_t encoderDir;
 
 uint8_t currentPresetID = 0;
-boolean isActive;
-boolean isEdited;
+//boolean isActive;
+//boolean isEdited;
 
 uint8_t currentFx = 0;
 uint8_t currentParam = 0;
@@ -157,7 +157,7 @@ void setup(){
   (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
 
   updatePreset(currentPreset.name, isEdited);
-  checkUILeds();
+  //checkUILeds();
  
 }
 
@@ -192,7 +192,7 @@ void loop(){
        (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
 
        updatePreset(currentPreset.name, isEdited);
-       checkUILeds();
+       //checkUILeds();
        time2ChangePage = false;
        break;
       
@@ -208,7 +208,7 @@ void loop(){
        updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
        updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
        updateNumParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
-       updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
+       //updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
        updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
        time2ChangePage = false;
 

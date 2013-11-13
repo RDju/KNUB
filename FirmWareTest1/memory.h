@@ -17,6 +17,9 @@
 #define eepromAddr1 0x50
 #define lastPresetMemSpace 100
 
+boolean isActive;
+boolean isEdited;
+
 struct aKnub{
   char name[maxNameLength];
   byte params[3];

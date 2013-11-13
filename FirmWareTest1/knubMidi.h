@@ -53,6 +53,7 @@ void midiInRead(byte pageLev){
 					
 					writeByte(eepromAddr1, lastPresetMemSpace, inMessage[1]);
 					loadFlag = false;
+					isEdited = false;
 					
 					#ifdef DEBUG_LOAD_PRESET
 						debugKnubPreset(&currentPreset);
@@ -77,7 +78,7 @@ void midiInRead(byte pageLev){
       					}else{
 
           					switchLoop(i, 0);
-          					
+
       					}
     				}	
     				
