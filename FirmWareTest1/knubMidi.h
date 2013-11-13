@@ -1,6 +1,6 @@
 //#include "SoftwareSerial.h"
 
-#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
+//#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
 
 SoftwareSerial midiSerial(7, 10);
 byte inMessage[2];
