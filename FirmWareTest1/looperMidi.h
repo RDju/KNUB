@@ -6,7 +6,7 @@ FOR TESTING USE SOFTSERIAL BUT FINAL VERSION USES MAIN SERIAL OUT
 
 byte loopsOut[4];
 
-SoftwareSerial looperSerial(11, 4);
+SoftwareSerial looperSerial(2, 4);
 
 byte switchSysEx[8] = {240, 0, 0, 7, 1, 8, 16, 247};
 

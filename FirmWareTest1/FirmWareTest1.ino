@@ -11,9 +11,6 @@
 #include "looperMidi.h"
 #include "knubMidi.h"
 
-
-
-
 /*
 !!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
 
@@ -166,13 +163,13 @@ void loop(){
 
    
   midiInRead(pageLevel);
-  /*
+  
   if(pageLevel == 2){
       
     doExpressionPedal(analogRead(expressionPin));
       
   }
-  */
+  
   ////dealing with pages 
    if(time2ChangePage){
      switch(pageLevel){
@@ -526,6 +523,7 @@ if(encoderValue != lastValue){
     }
     break;
     case 2:
+    //here to change preset from encoding wheel 
       /*
         scaledEncoderValueParam = encoderValue%25;
         if(scaledEncoderValueParam == 0){
