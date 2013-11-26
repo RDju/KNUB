@@ -5,8 +5,9 @@ uint16_t  myPort  = 10000;
 Z_OSCServer server;
 Z_OSCMessage *rcvMes;
 
-char *subAddress[5]={"pn", "/kn", "/k", "/ks", "kl"};
+char *subAddress[5]={"/pn", "/kn", "/k", "/ks", "kl"};
 char *knubbieName;
+char *presetName;
 
 void knubDoOsc(){
 
@@ -16,11 +17,18 @@ void knubDoOsc(){
    
    //deals with pots messages
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[0])){
-        knubbieName = rcvMes->getString(0);
-        Serial.println(knubbieName);    
+        presetName = rcvMes->getString(0);
+        Serial.println(presetName);    
     }
-    
+
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
+        knubbieName = rcvMes->getString(0);
+        Serial.println(presetName);    
+    }
+
+
+    
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[2])){
       
 
         unsigned long knubParams = rcvMes->getInteger32(0);
