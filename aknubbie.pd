@@ -1,19 +1,19 @@
-#N canvas 208 109 847 603 10;
-#X obj 107 124 hsl 100 30 0 255 0 0 \$0-p1 nil empty -2 -8 0 10 -262144
+#N canvas 196 115 847 603 10;
+#X obj 107 142 hsl 100 30 0 255 0 0 \$0-p1 nil empty -2 -8 0 10 -262144
 -1 -1 0 1;
-#X obj 220 124 hsl 100 30 0 255 0 0 \$0-p2 \$0-l2p1 empty -2 -8 0 10
+#X obj 220 142 hsl 100 30 0 255 0 0 \$0-p2 \$0-l2p1 empty -2 -8 0 10
 -262144 -1 -1 0 1;
-#X obj 329 124 nbx 3 30 0 7 0 0 \$0-c nil empty 0 -8 0 16 -262144 -1
+#X obj 329 142 nbx 3 30 0 7 0 0 \$0-c nil empty 0 -8 0 16 -262144 -1
 -1 0 256;
-#X obj 396 124 tgl 30 0 \$0-e nil empty 17 7 0 10 -262144 -1 -1 0 1
+#X obj 396 142 tgl 30 0 \$0-e nil empty 17 7 0 10 -262144 -1 -1 0 1
 ;
-#X obj 434 124 tgl 30 0 \$0-s nil empty 17 7 0 10 -262144 -1 -1 0 1
+#X obj 434 142 tgl 30 0 \$0-s nil empty 17 7 0 10 -262144 -1 -1 0 1
 ;
-#X obj 473 124 nbx 3 30 0 7 0 0 \$0-l nil empty 0 -8 0 16 -262144 -1
+#X obj 473 142 nbx 3 30 0 7 0 0 \$0-l nil empty 0 -8 0 16 -262144 -1
 -1 0 256;
-#X obj 558 124 bng 30 250 50 0 \$0-up nil update -4 -10 0 10 -262144
+#X obj 558 142 bng 30 250 50 0 \$0-up nil update -4 -10 0 10 -262144
 -1 -1;
-#N canvas 227 169 754 397 gutsy 0;
+#N canvas 225 170 754 397 gutsy 0;
 #X obj 477 16 r \$0-s;
 #X obj 176 30 << 8;
 #X obj 161 83 i;
@@ -94,15 +94,19 @@
 #X obj 215 232 r \$0-p1;
 #X obj 215 268 spigot;
 #X obj 282 239 r \$0-link;
-#X obj 208 157 tgl 10 0 \$0-link nil linked 0 17 0 10 -262144 -1 -1
+#X obj 208 175 tgl 10 0 \$0-link nil linked 0 17 0 10 -262144 -1 -1
 0 1;
 #X obj 216 300 s \$0-l2p1;
 #X floatatom 154 299 5 0 0 0 - - -;
-#X obj 558 160 nbx 3 14 0 7 0 1 \$0-k \$0-up empty 0 -8 0 10 -262144
+#X obj 558 178 nbx 3 14 0 7 0 1 \$0-k \$0-up empty 0 -8 0 10 -262144
 -1 -1 0 256;
-#X obj 626 208 loadbang;
+#X obj 616 217 loadbang;
 #X obj 73 290 outlet;
-#X msg 622 235 1;
+#X obj 616 240 \$1;
+#X symbolatom 105 113 20 0 0 0 - nill #0-kn;
+#X obj 568 359 outlet;
+#X obj 568 317 r \$0-kn;
+#X obj 568 338 route symbol;
 #X connect 7 0 17 0;
 #X connect 9 0 10 0;
 #X connect 9 0 14 0;
@@ -110,4 +114,6 @@
 #X connect 11 0 10 1;
 #X connect 16 0 18 0;
 #X connect 18 0 15 0;
-#X coords 0 -1 1 1 500 80 2 100 100;
+#X connect 21 0 22 0;
+#X connect 22 0 20 0;
+#X coords 0 -1 1 1 500 100 2 100 100;

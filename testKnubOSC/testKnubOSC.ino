@@ -16,8 +16,6 @@ void setup() {
 
  	Serial.println("READY");
 
-
-
 }
 
 void loop() {

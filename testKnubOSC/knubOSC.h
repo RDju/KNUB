@@ -5,12 +5,9 @@ uint16_t  myPort  = 10000;
 Z_OSCServer server;
 Z_OSCMessage *rcvMes;
 
-char *subAddress[4]={"/kn", "/k", "/ks", "kl"};
+char *subAddress[5]={"pn", "/kn", "/k", "/ks", "kl"};
 char *knubbieName;
 
-
-//byte masks[] = {8, 7, 1, 7};
-//byte shift[] = {8, };
 void knubDoOsc(){
 
   if(server.available()){
@@ -29,8 +26,6 @@ void knubDoOsc(){
         unsigned long knubParams = rcvMes->getInteger32(0);
         //Serial.println(knubParams);
 
-        
-  
         Serial.println(knubParams);
         Serial.println(" ");
         
@@ -51,9 +46,6 @@ void knubDoOsc(){
         
         Serial.println("curve");
         Serial.println(((knubParams>>16)&255)&7);
-
-
-
 
         Serial.println("exp");
         Serial.println((((knubParams>>16)&255)>>3)&1);
