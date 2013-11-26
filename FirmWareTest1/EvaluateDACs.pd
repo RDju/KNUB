@@ -1,0 +1,197 @@
+#N canvas 388 22 713 642 10;
+#X declare -lib mrpeach;
+#X obj 34 174 hsl 255 40 0 255 0 1 slid1 auto1 slid1 -2 -8 0 10 -262144
+-1 -1 25400 1;
+#X obj 29 9 bng 50 250 50 0 connect empty connect_to_knub 60 7 0 10
+-262144 -1 -1;
+#X obj 277 10 bng 50 250 50 0 disconnect empty disconnect 60 7 0 10
+-262144 -1 -1;
+#X obj 496 12 tgl 50 0 empty connected connected 60 7 0 10 -262144
+-1 -1 0 1;
+#N canvas 395 90 672 435 auto1 0;
+#X obj 67 228 line;
+#X obj 118 142 i;
+#X obj 133 120 r duration1;
+#X obj 269 139 bng 15 250 50 0 do1 empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 67 53 r do1;
+#X obj 67 276 s auto1;
+#X obj 67 253 i;
+#X obj 251 113 nbx 5 14 -1e+37 1e+37 0 0 duration1 empty empty 0 -8
+0 11 -262144 -1 -1 10000 256;
+#X obj 47 140 i 0;
+#X obj 76 141 i 255;
+#X obj 67 79 t b b b;
+#X obj 58 177 pack i i i;
+#X msg 67 203 \$1 \, \$2 \$3;
+#X connect 0 0 6 0;
+#X connect 1 0 11 2;
+#X connect 2 0 1 1;
+#X connect 4 0 10 0;
+#X connect 6 0 5 0;
+#X connect 8 0 11 0;
+#X connect 9 0 11 1;
+#X connect 10 0 8 0;
+#X connect 10 1 9 0;
+#X connect 10 2 1 0;
+#X connect 11 0 12 0;
+#X connect 12 0 0 0;
+#X coords 0 -1 1 1 87 108 1 235 70;
+#X restore 28 507 pd auto1;
+#N canvas 142 51 864 638 guts 0;
+#X obj 15 18 import mrpeach;
+#X msg 234 127 disconnect;
+#X msg 72 125 connect 192.168.8 10000;
+#N canvas 368 157 698 486 gutsy 0;
+#X obj 220 274 packOSC;
+#X obj 221 72 r slid1;
+#X obj 232 119 r slid2;
+#X obj 85 366 udpsend;
+#X obj 85 320 inlet;
+#X obj 104 342 inlet;
+#X obj 85 390 outlet;
+#X msg 221 96 sendtyped /dac/cvA i \$1;
+#X obj 390 269 r dacMin;
+#X msg 389 297 sendtyped /dac/minVal i \$1;
+#X obj 393 360 r dacMax;
+#X msg 392 388 sendtyped /dac/maxVal i \$1;
+#X msg 232 142 sendtyped /dac/cvB i \$1;
+#X connect 0 0 3 0;
+#X connect 1 0 7 0;
+#X connect 2 0 12 0;
+#X connect 3 0 6 0;
+#X connect 4 0 3 0;
+#X connect 5 0 3 0;
+#X connect 7 0 0 0;
+#X connect 8 0 9 0;
+#X connect 9 0 0 0;
+#X connect 10 0 11 0;
+#X connect 11 0 0 0;
+#X connect 12 0 0 0;
+#X restore 91 155 pd gutsy;
+#X obj 72 104 r connect;
+#X obj 234 105 r disconnect;
+#X obj 91 180 s connected;
+#X msg 81 321 devices;
+#X obj 145 298 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -8 0 11
+-262144 -1 -1 32 256;
+#X msg 145 322 open \$1;
+#X msg 208 321 close;
+#X obj 115 380 comport 9600;
+#X obj 115 408 s vactrol;
+#X obj 145 274 i 32;
+#X obj 145 246 r connect;
+#X obj 208 295 r disconnect;
+#X obj 562 440 tabwrite vactrol;
+#X obj 609 382 r slid1;
+#X obj 498 384 r vacval;
+#X obj 552 320 r orig;
+#X obj 598 319 r new;
+#X msg 552 349 set O_;
+#X msg 598 349 set _N;
+#X connect 1 0 3 0;
+#X connect 2 0 3 0;
+#X connect 3 0 6 0;
+#X connect 4 0 2 0;
+#X connect 5 0 1 0;
+#X connect 7 0 11 0;
+#X connect 8 0 9 0;
+#X connect 9 0 11 0;
+#X connect 10 0 11 0;
+#X connect 11 0 12 0;
+#X connect 13 0 8 0;
+#X connect 14 0 13 0;
+#X connect 15 0 10 0;
+#X connect 17 0 16 1;
+#X connect 18 0 16 0;
+#X connect 19 0 21 0;
+#X connect 20 0 22 0;
+#X connect 21 0 16 0;
+#X connect 22 0 16 0;
+#X restore 682 621 pd guts;
+#X obj 32 231 nbx 5 30 -1e+37 1e+37 0 0 vacval vactrol empty 0 -8 0
+20 -262144 -1 -1 238 256;
+#X obj 30 103 nbx 10 30 -1e+37 1e+37 0 0 dacMin empty empty 0 -8 0
+20 -262144 -1 -1 1490 256;
+#X obj 234 103 nbx 10 30 -1e+37 1e+37 0 0 dacMax empty empty 0 -8 0
+20 -262144 -1 -1 3500 256;
+#X text 28 83 DAC MIN;
+#X text 232 81 DAC MAX;
+#N canvas 0 0 450 300 (subpatch) 0;
+#X array _N 255 float 5;
+#A 0 17 3 3 4 6 10 14 21 29 41 52 62 73 86 98 106 115 124 133 140 145
+151 156 162 166 166 170 174 177 180 183 185 188 190 192 194 195 197
+199 200 201 203 204 205 206 207 208 209 210 210 211 213 214 214 215
+215 216 216 217 217 218 218 219 219 220 220 221 221 221 222 222 222
+223 223 223 223 223 224 224 224 224 225 225 225 226 226 226 226 226
+227 227 227 227 227 227 228 228 228 228 228 228 229 229 229 229 229
+230 230 230 230 230 230 230 230 231 231 231 231 231 231 231 231 231
+231 232 232 232 232 232 232 232 232 232 232 232 232 233 233 233 233
+233 233 233 233 233 233 233 233 233 234 234 234 234 234 234 234 234
+234 234 234 234 234 234 234 234 235 235 235 235 235 235 235 235 235
+235 235 235 235 235 235 235 235 235 235 235 235 235 236 236 236 236
+236 236 236 236 236 236 236 236 236 236 236 236 236 236 236 236 236
+236 236 236 236 236 237 237 237 237 237 237 237 237 237 237 237 237
+237 237 237 237 237 237 237 237 237 237 237 237 237 237 237 237 237
+237 237 237 237 237 238 237 237 238 238 238 238 238;
+#X coords 0 255 254 0 301 253 1 0 0;
+#X restore 405 199 graph;
+#X text 143 237 VACTROL A;
+#X obj 38 322 hsl 255 40 0 255 0 1 slid2 auto2 slid1 -2 -8 0 10 -262144
+-1 -1 25400 1;
+#X obj 36 379 nbx 5 30 -1e+37 1e+37 0 0 vacval2 vactrol2 empty 0 -8
+0 20 -262144 -1 -1 0 256;
+#X text 147 385 VACTROL B;
+#N canvas 395 90 672 435 auto2 0;
+#X obj 67 228 line;
+#X obj 118 142 i;
+#X obj 269 139 bng 15 250 50 0 do2 empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 67 253 i;
+#X obj 251 113 nbx 5 14 -1e+37 1e+37 0 0 duration2 empty empty 0 -8
+0 11 -262144 -1 -1 0 256;
+#X obj 47 140 i 0;
+#X obj 76 141 i 255;
+#X obj 67 79 t b b b;
+#X obj 58 177 pack i i i;
+#X msg 67 203 \$1 \, \$2 \$3;
+#X obj 67 275 s auto2;
+#X obj 133 120 r duration2;
+#X obj 67 53 r do2;
+#X connect 0 0 3 0;
+#X connect 1 0 8 2;
+#X connect 3 0 10 0;
+#X connect 5 0 8 0;
+#X connect 6 0 8 1;
+#X connect 7 0 5 0;
+#X connect 7 1 6 0;
+#X connect 7 2 1 0;
+#X connect 8 0 9 0;
+#X connect 9 0 0 0;
+#X connect 11 0 1 1;
+#X connect 12 0 7 0;
+#X coords 0 -1 1 1 87 108 1 235 70;
+#X restore 137 508 pd auto2;
+#N canvas 0 0 450 300 (subpatch) 0;
+#X array O_ 255 float 5;
+#A 0 18 0 0 1 3 7 10 19 28 39 53 63 75 88 101 111 119 128 136 144 150
+156 161 167 171 171 174 178 181 185 187 189 191 194 196 197 199 201
+202 203 205 206 207 208 209 210 211 212 213 213 214 215 216 217 217
+218 218 219 219 220 220 221 221 221 222 222 223 223 223 224 224 224
+224 225 225 225 225 226 226 226 226 227 227 227 227 228 228 228 228
+228 228 229 229 229 229 229 229 230 230 230 230 230 230 231 231 231
+231 231 231 231 231 232 232 232 232 232 232 232 232 232 232 233 233
+233 233 233 233 233 233 233 233 233 233 233 234 234 234 234 234 234
+234 234 234 234 234 234 234 234 234 235 235 235 235 235 235 235 235
+235 235 235 235 235 235 235 235 235 236 236 236 236 236 236 236 236
+236 236 236 236 236 236 236 236 236 236 236 236 236 236 236 236 237
+237 237 237 236 237 237 237 237 237 237 237 237 237 237 237 237 237
+237 237 237 237 237 237 237 237 237 238 237 237 237 238 238 238 238
+238 238 238 238 238 238 238 238 238 238 238 238 238 238 238 238 238
+238 238 238 238 238 238 238 238 238 238 238 238 238;
+#X coords 0 255 254 0 301 253 1 0 0;
+#X restore 405 200 graph;
+#X obj 27 478 bng 15 250 50 0 orig empty orig 17 7 0 10 -262144 -1
+-1;
+#X obj 90 478 bng 15 250 50 0 new empty new 17 7 0 10 -262144 -1 -1
+;

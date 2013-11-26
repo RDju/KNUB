@@ -19,7 +19,7 @@ byte myMac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 byte myIp[]  = { 192, 168, 0, 8 };
 int  myPort  = 10000;
 
-char *subAddress[6]={"/knub/turn", "/knub/save", "/knub/load", "/dac/cvD", "/dac/minVal", "/dac/maxVal"};
+char *subAddress[6]={"/pn", "/kn", "/k", "/lp", "/sp"};
 
 Z_OSCServer server;
 Z_OSCMessage *rcvMes;
@@ -49,12 +49,12 @@ if(server.available()){
         byte val =  rcvMes->getInteger32(1);   
         
         knubValues[wichPot - 1] = val;
-        /*
+        
         turnKnub(wichPot, 1, knubValues[wichPot - 1]);
         
         analogInVal = analogRead(0);
         Serial.write(map(analogInVal, 0, 1024, 0, 255));
-         */
+         
    }
 
    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[4])){
