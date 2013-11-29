@@ -22,8 +22,16 @@ void knubDoOsc(){
     }
 
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
+        
+        //Serial.println("hey");
+
         knubbieName = rcvMes->getString(0);
-        Serial.println(presetName);    
+        
+        /*
+        then check knubbieName[0] for knubbie index
+        */
+    
+        Serial.println(knubbieName);    
     }
 
 
@@ -63,6 +71,12 @@ void knubDoOsc(){
 
         Serial.println("loop");
         Serial.println((((knubParams>>16)&255)>>5)&7);
+
+    }
+
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[3])){
+
+        Serial.println("SAVING");
 
     }
    
