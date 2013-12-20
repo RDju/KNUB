@@ -136,26 +136,7 @@ void doExpressionPedal(unsigned int expVal){
 
 
 
-void doSwitchInDec(){
 
-  bool currUp  = digitalRead(upPin);
-  bool currDown = digitalRead(downPin);
-
-  if(currUp != prevUp && readAdr < (7*presetSize)){
-
-    readAdr = readAdr + presetSize;
-
-
-
-
-
-  }
-  if(currDown != prevDown && pgm > 1){
-
-    readAdr = readAdr - presetSize;
-
-  }
-}
 
 
 void debugKnubPreset(aKnubPreset *kPreset){

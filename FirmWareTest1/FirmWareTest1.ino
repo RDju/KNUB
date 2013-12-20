@@ -11,14 +11,7 @@
 #include "looperMidi.h"
 #include "knubMidi.h"
 
-/*
-!!!!!! MUST USE POINTERS AND REF WHENEVER IS POSSIBLE
 
-
-change the way params are updated via the encoder use function to wich you'll pass pointer so as to save up RAM space.
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*/
 
 #define encoderPin1 2
 #define encoderPin2 3
@@ -33,6 +26,8 @@ change the way params are updated via the encoder use function to wich you'll pa
 
 #define upPin 6
 #define downPin 5
+
+
 
 volatile uint8_t lastValue = 0;
 volatile uint8_t lastEncoderValue = 0;
