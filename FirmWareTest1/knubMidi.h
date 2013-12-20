@@ -6,6 +6,7 @@ SoftwareSerial midiSerial(7, 10);
 byte inMessage[2];
 byte inRead  = 0;
 uint16_t prevRead = 5*presetSize;
+uint8_t readinx;
 uint16_t readAdr;
 bool loadFlag = false;
 
@@ -38,11 +39,11 @@ void midiInRead(byte pageLev){
 			#endif
 			
 			/* PGM change to change preset*/
-			
-			 readAdr = inMessage[1]*presetSize;
+			readinx = inMessage[1];
+			 readAdr = readinx*presetSize;
 			
 			if(pageLev == 2){
-				if(inMessage[1]<8 && readAdr != prevRead && loadFlag == false){
+				if(readinx<8 && readAdr != prevRead && loadFlag == false){
 					
 
 					loadFlag = true;
@@ -51,7 +52,7 @@ void midiInRead(byte pageLev){
 					
 					updateKnubs(&currentPreset);
 					
-					writeByte(eepromAddr1, lastPresetMemSpace, inMessage[1]);
+					writeByte(eepromAddr1, lastPresetMemSpace, readindx);
 					loadFlag = false;
 					isEdited = false;
 					
