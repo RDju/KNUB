@@ -1,4 +1,6 @@
-byte myMac[] = { 11, 22, 33, 44, 55};
+//byte myMac[] = { 11, 22, 33, 44, 55, 66};
+byte myMac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02};
+
 byte myIp[]  = { 192, 168, 0, 8 };
 uint16_t  myPort  = 10000;
 

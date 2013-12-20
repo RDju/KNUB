@@ -28,6 +28,8 @@ byte knob2_ch2 = B01000110;
 uint16_t  lowVal, highVal, prevExp;
 
 
+bool prevUp, prevDown;
+
 //function for multiWrite : 
   
 void multiWriteDac(byte addr, byte wrid, byte wrid2, uint16_t val, uint16_t val2){
@@ -132,6 +134,25 @@ void doExpressionPedal(unsigned int expVal){
   }
 }
 
+
+/*
+void doSwitchInDec(){
+
+  bool currUp  = digitalRead(upPin);
+  bool currDown = digitalRead(downPin);
+
+  if(currUp != prevUp && pgm < 4){
+
+    ///pgm ++
+
+  }
+  if(currDown != prevDown && pgm > 1){
+
+    //pgm -- 
+
+  }
+}
+*/
 
 void debugKnubPreset(aKnubPreset *kPreset){
 
