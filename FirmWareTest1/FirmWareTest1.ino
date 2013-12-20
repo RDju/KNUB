@@ -24,11 +24,6 @@
 
 /* to be removed*/
 
-#define upPin 6
-#define downPin 5
-
-
-
 volatile uint8_t lastValue = 0;
 volatile uint8_t lastEncoderValue = 0;
 volatile uint8_t encoderValue = 0;

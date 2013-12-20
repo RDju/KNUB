@@ -2,9 +2,15 @@
 
 //#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
 
+
+#define upPin 6
+#define downPin 5
+
 SoftwareSerial midiSerial(7, 10);
+
 byte inMessage[2];
 byte inRead  = 0;
+
 uint16_t prevRead = 5*presetSize;
 uint8_t readindx;
 uint16_t readAdr;
@@ -39,11 +45,11 @@ void midiInRead(byte pageLev){
 			#endif
 			
 			/* PGM change to change preset*/
-			readinx = inMessage[1];
-			 readAdr = readinx*presetSize;
+			readindx = inMessage[1];
+			 readAdr = readindx*presetSize;
 			
 			if(pageLev == 2){
-				if(readinx<8 && readAdr != prevRead && loadFlag == false){
+				if(readindx<8 && readAdr != prevRead && loadFlag == false){
 					
 
 					loadFlag = true;
@@ -93,109 +99,8 @@ void midiInRead(byte pageLev){
 	}
 }
 
-void doSwitchInDec(){
+void doSwitchInDec(byte pageLev){
 
   bool currUp  = digitalRead(upPin);
   bool currDown = digitalRead(downPin);
-
-  if(currUp != prevUp && readindx < 8){
-
-    	readindx ++;
-    	readAdr = readindx*presetSize;
-
-    	if(pageLev == 2){
-				if(readinx<8 && readAdr != prevRead && loadFlag == false){
-					
-
-					loadFlag = true;
-					
-					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-					
-					updateKnubs(&currentPreset);
-					
-					writeByte(eepromAddr1, lastPresetMemSpace, readindx);
-					loadFlag = false;
-					isEdited = false;
-					
-					#ifdef DEBUG_LOAD_PRESET
-						debugKnubPreset(&currentPreset);
-					#endif
-					clearLoopsOut();
-					
-					// fill up loopsOut array
-  					
-  					for(uint8_t i = 0; i<numKnubbies; i++){
-
-    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-  					}	
-  					
-  					// check loops state and update
-  					
-  					for(uint8_t i = 0; i<4; i++){
-
-      					if(checkLoopsOut(i) == true){
-          					
-          					switchLoop(i, 1);
-          					
-      					}else{
-
-          					switchLoop(i, 0);
-
-      					}
-    				}	
-    				
-    				time2ChangePage = true;
-					prevRead = readAdr;
-	}
-  if(currDown != prevDown && readindx > 5){
-
-    	readindx -= 1;
-    	readAdr = readindx*presetSize;
-
-    	if(pageLev == 2){
-				if(readinx<8 && readAdr != prevRead && loadFlag == false){
-					
-
-					loadFlag = true;
-					
-					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-					
-					updateKnubs(&currentPreset);
-					
-					writeByte(eepromAddr1, lastPresetMemSpace, readindx);
-					loadFlag = false;
-					isEdited = false;
-					
-					#ifdef DEBUG_LOAD_PRESET
-						debugKnubPreset(&currentPreset);
-					#endif
-					clearLoopsOut();
-					
-					// fill up loopsOut array
-  					
-  					for(uint8_t i = 0; i<numKnubbies; i++){
-
-    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-  					}	
-  					
-  					// check loops state and update
-  					
-  					for(uint8_t i = 0; i<4; i++){
-
-      					if(checkLoopsOut(i) == true){
-          					
-          					switchLoop(i, 1);
-          					
-      					}else{
-
-          					switchLoop(i, 0);
-
-      					}
-    				}	
-    				
-    				time2ChangePage = true;
-					prevRead = readAdr;
-
-
-  	}
 }
