@@ -3,8 +3,8 @@
 //#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
 
 
-#define upPin 6
-#define downPin 5
+//#define upPin 6
+//#define checkPin 5
 
 SoftwareSerial midiSerial(7, 10);
 
@@ -53,6 +53,8 @@ void midiInRead(byte pageLev){
 					
 
 					loadFlag = true;
+	
+					digitalWrite(5, HIGH);
 					
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 					
@@ -89,6 +91,8 @@ void midiInRead(byte pageLev){
       					}
     				}	
     				
+    				digitalWrite(5, LOW);
+    				
     				time2ChangePage = true;
 					prevRead = readAdr;
 
@@ -99,8 +103,130 @@ void midiInRead(byte pageLev){
 	}
 }
 
+
+
+// to be double Check:
+/*
 void doSwitchInDec(byte pageLev){
 
   bool currUp  = digitalRead(upPin);
   bool currDown = digitalRead(downPin);
+
+
+  if(currUP != prevUp){
+  	readindx ++;
+  	readAdr = readindx*presetSize;
+			
+			if(pageLev == 2){
+				if(readindx<8 && readAdr != prevRead && loadFlag == false){
+					
+
+					loadFlag = true;
+	
+					digitalWrite(5, HIGH);
+					
+					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+					
+					updateKnubs(&currentPreset);
+					
+					writeByte(eepromAddr1, lastPresetMemSpace, readindx);
+					loadFlag = false;
+					isEdited = false;
+					
+					#ifdef DEBUG_LOAD_PRESET
+						debugKnubPreset(&currentPreset);
+					#endif
+					clearLoopsOut();
+					
+					// fill up loopsOut array
+  					
+  					for(uint8_t i = 0; i<numKnubbies; i++){
+
+    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+  					}	
+  					
+  					// check loops state and update
+  					
+  					for(uint8_t i = 0; i<4; i++){
+
+      					if(checkLoopsOut(i) == true){
+          					
+          					switchLoop(i, 1);
+          					
+      					}else{
+
+          					switchLoop(i, 0);
+
+      					}
+    				}	
+    				
+    				digitalWrite(5, LOW);
+    				
+    				time2ChangePage = true;
+					prevRead = readAdr;
+
+
+					prevUp = currUP;
+
 }
+
+	if(currDwon != prevDown){
+  	readindx -= 1;
+  	readAdr = readindx*presetSize;
+			
+			if(pageLev == 2){
+				if(readindx<8 && readAdr != prevRead && loadFlag == false){
+					
+
+					loadFlag = true;
+	
+					digitalWrite(5, HIGH);
+					
+					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+					
+					updateKnubs(&currentPreset);
+					
+					writeByte(eepromAddr1, lastPresetMemSpace, readindx);
+					loadFlag = false;
+					isEdited = false;
+					
+					#ifdef DEBUG_LOAD_PRESET
+						debugKnubPreset(&currentPreset);
+					#endif
+					clearLoopsOut();
+					
+					// fill up loopsOut array
+  					
+  					for(uint8_t i = 0; i<numKnubbies; i++){
+
+    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+  					}	
+  					
+  					// check loops state and update
+  					
+  					for(uint8_t i = 0; i<4; i++){
+
+      					if(checkLoopsOut(i) == true){
+          					
+          					switchLoop(i, 1);
+          					
+      					}else{
+
+          					switchLoop(i, 0);
+
+      					}
+    				}	
+    				
+    				digitalWrite(5, LOW);
+    				
+    				time2ChangePage = true;
+					prevRead = readAdr;
+
+
+					prevUp = currUP;
+
+	}
+
+}
+
+*/

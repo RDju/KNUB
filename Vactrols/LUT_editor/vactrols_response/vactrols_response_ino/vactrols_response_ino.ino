@@ -54,7 +54,7 @@ if(server.available()){
    }
    
    //deals with dacB 
-    /*
+   /* 
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
         
         val = rcvMes->getInteger32(0);
@@ -63,7 +63,7 @@ if(server.available()){
         Serial.write(map(analogInVal, 0, 1024, 0, 255));
      
    }
-   */
+  */
    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[4])){
         
        minDacVal = rcvMes->getInteger32(0);

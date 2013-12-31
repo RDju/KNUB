@@ -2,10 +2,11 @@
 #include "luts.h"
 
 
-//#define vacMin 1490
-//#define vacMax 2050
+
 #define vacMin 1200
 #define vacMax 2500
+
+
 
 //#define vacMin  0
 //#define vacMax 4095
@@ -61,8 +62,15 @@ void turnKnub(byte knubNum,byte knubVal){
     
     byte hiRead = 255 - knubVal;
 
-    lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
-    highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
+
+    if(knubNum != 0){
+      lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
+      highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
+    }else{
+      lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, 0, 4095);
+      highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, 0, 4095);
+
+    }
 
   switch(knubNum){
   

@@ -11,8 +11,6 @@
 #include "looperMidi.h"
 #include "knubMidi.h"
 
-
-
 #define encoderPin1 2
 #define encoderPin2 3
 
@@ -21,7 +19,7 @@
 
 #define expressionPin 0
 
-
+#define checkPin 5
 /* to be removed*/
 
 volatile uint8_t lastValue = 0;
@@ -104,6 +102,9 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
+  pinMode(checkPin, OUTPUT);
+  digitalWrite(checkPin, HIGH);
+
   //read last loaded ID and load that one
   lastID = readByte(eepromAddr1, lastPresetMemSpace);
   
@@ -116,6 +117,9 @@ void setup(){
   for(uint8_t i = 0; i<numKnubbies; i++){
 
     fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+  
+    
+
   }
 
   // check loops state and update
