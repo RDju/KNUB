@@ -3,8 +3,8 @@
 //#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
 
 
-//#define upPin 6
-//#define checkPin 5
+#define upPin 6
+#define downPin 5
 
 SoftwareSerial midiSerial(7, 10);
 
@@ -15,6 +15,7 @@ uint16_t prevRead = 5*presetSize;
 uint8_t readindx;
 uint16_t readAdr;
 bool loadFlag = false;
+bool prevUp, prevDown;
 
 
 void midiInRead(byte pageLev){
@@ -106,14 +107,14 @@ void midiInRead(byte pageLev){
 
 
 // to be double Check:
-/*
+
 void doSwitchInDec(byte pageLev){
 
   bool currUp  = digitalRead(upPin);
   bool currDown = digitalRead(downPin);
 
 
-  if(currUP != prevUp){
+  if(currUp != prevUp){
   	readindx ++;
   	readAdr = readindx*presetSize;
 			
@@ -166,11 +167,13 @@ void doSwitchInDec(byte pageLev){
 					prevRead = readAdr;
 
 
-					prevUp = currUP;
+					prevUp = currUp;
+
+		}
+	}
 
 }
-
-	if(currDwon != prevDown){
+	if(currDown != prevDown){
   	readindx -= 1;
   	readAdr = readindx*presetSize;
 			
@@ -223,10 +226,10 @@ void doSwitchInDec(byte pageLev){
 					prevRead = readAdr;
 
 
-					prevUp = currUP;
+					prevUp = currUp;
 
+			}
+
+		}
 	}
-
 }
-
-*/

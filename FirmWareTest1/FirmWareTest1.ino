@@ -77,13 +77,7 @@ uint16_t expVal;
 
 
 void setup(){
-
-
-
-
-
-
-
+  
   Wire.begin();
   lcd.init();
   lcd.backlight();
@@ -121,9 +115,6 @@ void setup(){
   for(uint8_t i = 0; i<numKnubbies; i++){
 
     fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-  
-    
-
   }
 
   // check loops state and update

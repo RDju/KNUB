@@ -29,7 +29,6 @@ byte knob2_ch2 = B01000110;
 uint16_t  lowVal, highVal, prevExp;
 
 
-bool prevUp, prevDown;
 
 //function for multiWrite : 
   
