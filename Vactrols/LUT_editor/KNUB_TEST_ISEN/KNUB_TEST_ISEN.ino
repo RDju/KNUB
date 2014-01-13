@@ -6,7 +6,7 @@
 #include <Ethernet.h>
 #include <Z_OSC.h>
 #include <Wire.h>
-////#include "luts.h"
+#include "luts2.h"
 //#include "knubFuncs.h"
 //#include "memory.h"
 
@@ -19,7 +19,12 @@ byte myMac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 byte myIp[]  = { 192, 168, 0, 8 };
 int  myPort  = 10000;
 
-char *subAddress[6]={"/dac/cvA", "/dac/cvB", "/dac/cvC", "/dac/cvD", "/dac/minVal", "/dac/maxVal"};
+
+byte lin[255];
+byte preDist[255];
+byte lut[255];
+
+char *subAddress[9]={"/dac/cvA", "/dac/cvB", "/dac/cvC", "/dac/cvD", "/dac/minVal", "/dac/maxVal", "/lut/calc", "/lut/send", "/dac/pre"};
 
 Z_OSCServer server;
 Z_OSCMessage *rcvMes;
@@ -44,14 +49,9 @@ byte knob1_ch2 = B01000010;
 byte knob2_ch1 = B01000100;
 byte knob2_ch2 = B01000110;
 
-
-
 uint16_t  lowVal, highVal, prevExp;
 
-
 bool prevUp, prevDown;
-
-
 
 void setup(){
 
@@ -60,6 +60,14 @@ void setup(){
   server.sockOpen(myPort);
   Serial.begin(9600);
   
+
+  for(int i = 0; i<255;i++){
+
+    lin[i] = i;
+
+ }
+
+
 }
 
 
@@ -72,31 +80,18 @@ if(server.available()){
     //deals with first knubbie
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[0])){
         
-       
-        byte val =  rcvMes->getInteger32(0);   
-        
+   
+
         turnKnub(0, val);
         
         analogInVal = analogRead(0);
-        
-        Serial.write(map(analogInVal, 0, 1024, 0, 255));
+        analogInVal = map(analogInVal, 0, 1024, 0, 255);
+        Serial.write(analogInVal);
+        //preDist[val]  = analogInVal;
          
    }
-
-   //deals with second knubbie
-    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
-        
-       
-        byte val =  rcvMes->getInteger32(0);   
-        
-        turnKnub(1, val);
-        
-        analogInVal = analogRead(1);
-        
-        Serial.write(map(analogInVal, 0, 1024, 0, 255));
-         
-   }
-
+ 
+   
    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[4])){
         
        vacMin = rcvMes->getInteger32(0);
@@ -104,6 +99,30 @@ if(server.available()){
    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[5])){
         
        vacMax = rcvMes->getInteger32(0);
+   }
+   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[6])){
+        
+       calcLut();
+   }
+   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[7])){
+        
+       for(int i = 0; i <255; i++){
+
+          Serial.write(lut[i]);
+      }
+   }
+   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[8])){
+        byte val =  rcvMes->getInteger32(0);   
+        
+        int lutVal = lut[val];
+
+        turnKnub(1, val);
+        
+        analogInVal = analogRead(0);
+        analogInVal = map(analogInVal, 0, 1024, 0, 255);
+        Serial.write(lutVal);
+          
+         
    }
   }
 }
@@ -137,45 +156,37 @@ void turnKnub(byte knubNum,byte knubVal){
     
     byte hiRead = 255 - knubVal;
 
-    if(knubNum == 1){
+      
+      if(knubNum == 0){
 
-      lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
-      highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
-    }else{
-    
-      lowVal = map(knubVal, 0, 255, vacMin, vacMax);
-      highVal = map(hiRead, 0, 255, vacMin, vacMax);
-  }
-  switch(knubNum){
+        lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
+        highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
   
-    case 0:
-      multiWriteDac(dacIDZ[0], knob1_ch1, knob1_ch2, lowVal, highVal);
-    break;
-    case 1:
-     multiWriteDac(dacIDZ[0], knob2_ch1, knob2_ch2, lowVal, highVal);
-    break;
+        multiWriteDac(dacIDZ[0], knob1_ch1, knob1_ch2, lowVal, highVal);
+      }
+      else if(knubNum == 1){
+
+        lowVal = map(knubVal, 0, 255, vacMin2, vacMax2);
+        highVal = map(hiRead, 0, 255, vacMin2, vacMax2);
+
+        multiWriteDac(dacIDZ[0], knob2_ch1, knob2_ch2, lowVal, highVal);
+
+      }
     
-    case 2:
-      multiWriteDac(dacIDZ[1], knob1_ch1, knob1_ch2, lowVal, highVal);
-    break;
-    
-    case 3:
-      multiWriteDac(dacIDZ[1], knob2_ch1, knob2_ch2, lowVal, highVal);
-    break;
-    /*
-    case 4:
-     multiWriteDac(dacIDZ[2], write_cmds[0], write_cmds[1], lowVal, highVal);
-    break;
-    case 5:
-      multiWriteDac(dacIDZ[2], write_cmds[2], write_cmds[3], lowVal, highVal);
-    break;
-    case 6:
-      multiWriteDac(dacIDZ[3], write_cmds[0], write_cmds[1], lowVal, highVal);
-    break;
-    case 7:
-      multiWriteDac(dacIDZ[3], write_cmds[2], write_cmds[3], lowVal, highVal);
-    break;
-    */
+}
+
+
+
+void calcLut(){
+
+  for(int i =0; i<255;i++){
+
+    if(preDist[i] > lin[i]){
+      
+      lut[i] = lin[i] - (preDist[i] - lin[i]);
+    }else if (preDist[i] < lin[i]){
+      
+      lut[i] = lin[i] + (lin[i] - preDist[i]);
     }
-    
+  }
 }

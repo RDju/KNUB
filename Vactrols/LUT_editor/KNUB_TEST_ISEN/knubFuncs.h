@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "luts.h"
+#include "luts2.h"
 
 
 
@@ -61,16 +61,16 @@ void singleWriteDac(byte addr, byte wrcmd, uint16_t val){
 }
 
 //actual turn knub func
-
+/*
 void turnKnub(byte knubNum,byte knubVal){
     
     byte hiRead = 255 - knubVal;
 
-    //lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
-    //highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
+    lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
+    highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
 
-    lowVal = map(knubVal, 0, 255, vacMin, vacMax);
-    highVal = map(hiRead, 0, 255, vacMin, vacMax);
+    // lowVal = map(knubVal, 0, 255, vacMin, vacMax);
+    // highVal = map(hiRead, 0, 255, vacMin, vacMax);
 
   switch(knubNum){
   

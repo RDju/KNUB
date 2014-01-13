@@ -7,9 +7,26 @@ o = 0;
 
 ~duino = NetAddr.new("192.168.0.8", 10000);
 
-//working LUT for DAC : 
+//working LUT for DAC :
 
-~val = [1 , 4 ,  5 ,  6 ,  7 ,  8 ,  8 ,  9 ,  9 ,  9 ,  9 ,  10 ,  10 ,  10 ,  10 ,  10 ,  10 ,  10 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,  12 ,  12 ,  12 ,  12 ,  12 ,  12 ,  12 ,  12 ,  13 ,  13 ,  13 ,  13 ,  13 ,  14 ,  14 ,  14 ,  15 ,  15 ,  15 ,  15 ,  15 ,  15 ,  15 ,  15 ,  16 ,  16 ,  16 ,  16 ,  16 ,  16 ,  16 ,  16 ,  16 ,  16 ,  17 ,  17 ,  17 ,  17 ,  17 ,  17 ,  17 ,  17 ,  17 ,  17 ,  17 ,  18 ,  18 ,  18 ,  18 ,  18 ,  18 ,  18 ,  18 ,  19 ,  19 ,  19 ,  19 ,  19 ,  19 ,  20 ,  20 ,  20 ,  20 ,  20 ,  20 ,  20 ,  20 ,  20 ,  20 ,  20 ,  21 ,  21 ,  21 ,  21 ,  21 ,  22 ,  22 ,  22 ,  22 ,  22 ,  22 ,  23 ,  23 ,  23 ,  23 ,  24 ,  24 ,  24 ,  24 ,  24 ,  24 ,  24 ,  24 ,  24 ,  24 ,  25 ,  25 ,  25 ,  26 ,  26 ,  26 ,  26 ,  26 ,  27 ,  27 ,  27 ,  27 ,  27 ,  28 ,  28 ,  28 ,  28 ,  29 ,  29 ,  29 ,  29 ,  30 ,  30 ,  30 ,  30 ,  30 ,  30 ,  31 ,  31 ,  31 ,  31 ,  32 ,  32 ,  32 ,  32 ,  33 ,  33 ,  33 ,  33 ,  33 ,  33 ,  33 ,  33 ,  34 ,  35 ,  35 ,  36 ,  36 ,  36 ,  37 ,  37 ,  38 ,  39 ,  39 ,  40 ,  40 ,  41 ,  41 ,  42 ,  42 ,  43 ,  43 ,  43 ,  44 ,  45 ,  46 ,  46 ,  47 ,  48 ,  48 ,  49 ,  50 ,  51 ,  52 ,  53 ,  53 ,  54 ,  55 ,  56 ,  57 ,  58 ,  60 ,  62 ,  63 ,  65 ,  66 ,  68 ,  69 ,  71 ,  72 ,  74 ,  76 ,  78 ,  80 ,  83 ,  86 ,  88 ,  91 ,  97 ,  99 ,  102 ,  108 ,  111 ,  113 ,  116 ,  122 ,  128 ,  131 ,  134 ,  139 ,  146 ,  153 ,  158 ,  171 ,  179 ,  187 ,  200 ,  207 ,  237 ,  239 ,  242 ,  246 ,  250 ,  253 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255];
+~val = [1 ,  2 ,  3 ,  3 ,  3 ,  4 ,  4 ,  5 ,  5 ,  6 ,  6 ,  6 ,  6 ,  6 ,  6 ,  6 ,  6 ,
+7 ,  7 ,  7 ,  7 ,  8 ,  8 ,  8 ,  8 ,  8 ,  8 ,  8 ,  8 ,  8 ,  8 ,  9 ,  9 ,  9 ,
+ 9 ,  9 ,  9 ,  9 ,  9 ,  9 ,  9 ,  10 ,  10 ,  10 ,  10 ,  10 ,  10 ,  10 ,  10 ,
+ 10 ,  10 ,  10 ,  10 ,  10 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,
+ 12 ,  12 ,  12 ,  12 ,  12 ,  13 ,  13 ,  13 ,  13 ,  13 ,  13 ,  14 ,  13 ,  13 ,
+ 14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,
+ 15 ,  15 ,  15 ,  15 ,  15 ,  15 ,  16 ,  16 ,  16 ,  16 ,  16 ,  17 ,  17 ,  17 ,
+ 17 ,  17 ,  17 ,  17 ,  17 ,  17 ,  17 ,  18 ,  18 ,  18 ,  18 ,  18 ,  18 ,  19 ,
+ 18 ,  18 ,  19 ,  19 ,  19 ,  19 ,  19 ,  20 ,  20 ,  20 ,  20 ,  21 ,  21 ,  21 ,
+ 21 ,  21 ,  21 ,  21 ,  22 ,  22 ,  23 ,  24 ,  24 ,  24 ,  24 ,  25 ,  26 ,  26 ,
+ 26 ,  27 ,  27 ,  27 ,  27 ,  27 ,  27 ,  28 ,  28 ,  29 ,  29 ,  30 ,  30 ,  30 ,
+ 30 ,  31 ,  31 ,  32 ,  32 ,  32 ,  33 ,  33 ,  34 ,  34 ,  35 ,  35 ,  36 ,  36 ,
+ 37 ,  37 ,  37 ,  38 ,  38 ,  39 ,  39 ,  39 ,  40 ,  41 ,  41 ,  42 ,  42 ,  43 ,
+ 43 ,  44 ,  45 ,  45 ,  46 ,  47 ,  47 ,  48 ,  49 ,  50 ,  51 ,  52 ,  53 ,  54 ,
+ 55 ,  56 ,  57 ,  58 ,  60 ,  61 ,  61 ,  62 ,  64 ,  64 ,  66 ,  67 ,  68 ,  70 ,
+ 72 ,  73 ,  75 ,  80 ,  82 ,  85 ,  90 ,  95 ,  100 ,  106 ,  111 ,  125 ,  130 ,
+ 141 ,  147 ,  152 ,  163 ,  169 ,  176 ,  180 ,  188 ,  198 ,  203 ,  209 ,  216 ,
+ 221 ,  225 ,  231 ,  234 ,  239 ,  243 ,  247 ,  251 ,  252 ,  254 ,  255 ,  255, 255 ];
 
 
 ~norms = Array.fill(255, {arg v; ~val[v]/255});
@@ -32,8 +49,8 @@ o = 0;
 ~resp = OSCresponder(~duino, '/O2A/vac1', {arg time, resp, mess;
 	mess.postln;
 	~vactrol.put(mess[1], mess[2]/1024);
-	
-	
+
+
 
 }).add;
 
@@ -44,9 +61,9 @@ o = 0;
 	t.refresh;}, {l.value = ~vactrol;
 	l.refresh;});
 	*/
-	
+
 	AppClock.sched(0.0, {~curves.value = ~vactrol});
-	AppClock.sched(0.0, {~d2.valueAction_(1);});	
+	AppClock.sched(0.0, {~d2.valueAction_(1);});
 
 }).add;
 
@@ -74,7 +91,7 @@ w.view.background_(Color.white);
 w.front;
 
 
-p = MultiSliderView(w,Rect(10,10,255*4+2,600)); 
+p = MultiSliderView(w,Rect(10,10,255*4+2,600));
 p.elasticMode = true;
 p.thumbSize = 1;
 p.value=~linear;
@@ -87,32 +104,32 @@ p.background_(Color.clear);
 
 
 ~sendRout = Routine({
-				
+
 			255.do({
-				arg i;	
+				arg i;
 				m.index_(i);
 				m.doAction;
 
-			0.02.wait;			
+			0.02.wait;
 			});
-			
+
 });
 
  ~curves = MultiSliderView(w,Rect(10,10,255*4+2,600)).thumbSize_(1).drawLines_(true).elasticMode_(true).strokeColor_(Color.new255(0, 0, 0)).background_(Color.gray(0.8).alpha_(0.3));
 
 
-m = MultiSliderView(w,Rect(10,10,255*4+2,600)); 
+m = MultiSliderView(w,Rect(10,10,255*4+2,600));
 m.elasticMode = true;
 m.thumbSize = 1;
 m.value=~norms;
 
 m.showIndex = true;
 m.action = { arg q;
-	
+
 	~val.put(q.index, (q.value.at(q.index)*255).asInteger);
-	~duino.sendMsg("/O2A/lookupVal", q.index, (q.value.at(q.index)*255).asInteger);	
-	
-};	
+	~duino.sendMsg("/O2A/lookupVal", q.index, (q.value.at(q.index)*255).asInteger);
+
+};
 
 m.strokeColor_(Color.red);
 m.drawLines = true;
@@ -122,17 +139,17 @@ m.background_(Color.clear);
 ~d1 = Button(w, Rect(10, 620, 150, 30));
 ~d1.states = [["update LUT", Color.black, Color.yellow]];
 ~d1.action = {~d2.valueAction_(0);
-		
-		~sendRout.reset.play(AppClock);		
-		
+
+		~sendRout.reset.play(AppClock);
+
 };
 
 ~p1 = Button(w, Rect(170, 620, 150, 30));
 ~p1.states = [["do POT", Color.black, Color.yellow]];
 ~p1.action = {~d2.valueAction_(0);
-		
-		~duino.sendMsg("/O2A/doPot");		
-		
+
+		~duino.sendMsg("/O2A/doPot");
+
 };
 
 ~t1 = Button(w, Rect(330, 620, 150, 30));
@@ -152,14 +169,14 @@ m.background_(Color.clear);
 ~z1.states = [["compute LUT", Color.black, Color.blue]];
 ~z1.action = {
              255.do({
-             
+
                 arg i;
                 ~val[i]= ~linear[i] - ~curves[1][i];
-             
-             
+
+
              }) ;
              AppClock.sched(0.0, {m.value = ~val});
-                
+
 
 }
 */

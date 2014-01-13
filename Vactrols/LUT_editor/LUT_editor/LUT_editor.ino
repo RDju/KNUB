@@ -18,19 +18,15 @@ so they can be matched
 
 #include <Z_OSC.h>
 #include <Wire.h>
+#include "knubFuncs.h"
+
+
 //was 1959
-#define maxSend 2050
+#define maxSend 4095
 //was 1172
-#define minSend 1490
+#define minSend 0
 
-byte write_cmds[] = {B01011000, B01011010, B01011100, B01011110};
 
-byte dacID = B1100000; 
-byte knob1_ch1  = B01000000;
-byte knob1_ch2 = B01000010;
-
-byte knob2_ch1 = B01000100;
-byte knob2_ch2 = B01000110;
 
 Z_OSCClient client;
 int optoId;
@@ -41,23 +37,24 @@ boolean goLinear;
 
 int vacResp[255];
 
-int lookup[255] = {
-0 ,  55 ,  59 ,  62 ,  64 ,  66 ,  67 ,  69 ,  70 ,  72 ,  75 ,  76 ,  78 ,  
-80 ,  83 ,  84 ,  85 ,  87 ,  88 ,  88 ,  89 ,  90 ,  91 ,  92 ,  93 ,  94 ,  
-95 ,  96 ,  97 ,  98 ,  99 ,  101 ,  102 ,  103 ,  104 ,  105 ,  106 ,  107 ,  107 ,  108 ,  109 ,  110 ,  111 ,  
-111 ,  112 ,  113 ,  113 ,  113 ,  114 ,  115 ,  115 ,  115 ,  116 ,  116 ,  117 ,  118 ,  118 ,  119 ,  119 ,  119 ,  
-120 ,  120 ,  121 ,  122 ,  122 ,  122 ,  123 ,  123 ,  124 ,  124 ,  125 ,  125 ,  125 ,  126 ,  126 ,  126 ,  
-127 ,  127 ,  128 ,  128 ,  129 ,  130 ,  130 ,  131 ,  131 ,  132 ,  132 ,  133 ,  133 ,  134 ,  135 ,  135 ,  136 ,  
-136 ,  137 ,  137 ,  138 ,  138 ,  138 ,  139 ,  139 ,  140 ,  141 ,  141 ,  142 ,  142 ,  142 ,  143 ,  143 ,  
-144 ,  145 ,  145 ,  146 ,  146 ,  146 ,  147 ,  147 ,  148 ,  148 ,  149 ,  149 ,  149 ,  150 ,  150 ,  150 ,  
-151 ,  151 ,  152 ,  152 ,  153 ,  153 ,  153 ,  154 ,  154 ,  155 ,  155 ,  155 ,  156 ,  156 ,  157 ,  157 ,  
-158 ,  158 ,  159 ,  159 ,  160 ,  160 ,  161 ,  161 ,  162 ,  162 ,  163 ,  163 ,  163 ,  164 ,  165 ,  165 ,  
-165 ,  166 ,  167 ,  167 ,  167 ,  168 ,  168 ,  169 ,  170 ,  170 ,  171 ,  171 ,  172 ,  173 ,  173 ,  174 ,  175 ,  
-175 ,  176 ,  176 ,  177 ,  177 ,  178 ,  178 ,  179 ,  179 ,  180 ,  181 ,  181 ,  181 ,  182 ,  183 ,  183 ,  184 ,  185 ,  185 ,  186 ,  
-186 ,  187 ,  187 ,  188 ,  189 ,  189 ,  190 ,  190 ,  191 ,  191 ,  192 ,  193 ,  194 ,  195 ,  196 ,  197 ,  198 ,  
-199 ,  201 ,  202 ,  204 ,  205 ,  206 ,  208 ,  209 ,  210 ,  214 ,  215 ,  217 ,  219 ,  220 ,  222 ,  223 ,  225 ,  228 ,  
-229 ,  230 ,  231 ,  232 ,  234 ,  234 ,  235 ,  235 ,  236 ,  236 ,  236 ,  236 ,  236 ,  236 ,  236 ,  236 ,  236 ,  235 ,  235 ,  235 ,  236 ,  236 ,  236 ,  236,  236 ,  
-236};
+int lookup[255] = {1 ,  2 ,  3 ,  3 ,  3 ,  4 ,  4 ,  5 ,  5 ,  6 ,  6 ,  6 ,  6 ,  6 ,  6 ,  6 ,  6 ,  
+7 ,  7 ,  7 ,  7 ,  8 ,  8 ,  8 ,  8 ,  8 ,  8 ,  8 ,  8 ,  8 ,  8 ,  9 ,  9 ,  9 , 
+ 9 ,  9 ,  9 ,  9 ,  9 ,  9 ,  9 ,  10 ,  10 ,  10 ,  10 ,  10 ,  10 ,  10 ,  10 ,  
+ 10 ,  10 ,  10 ,  10 ,  10 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,  11 ,  
+ 12 ,  12 ,  12 ,  12 ,  12 ,  13 ,  13 ,  13 ,  13 ,  13 ,  13 ,  14 ,  13 ,  13 ,  
+ 14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  14 ,  
+ 15 ,  15 ,  15 ,  15 ,  15 ,  15 ,  16 ,  16 ,  16 ,  16 ,  16 ,  17 ,  17 ,  17 , 
+ 17 ,  17 ,  17 ,  17 ,  17 ,  17 ,  17 ,  18 ,  18 ,  18 ,  18 ,  18 ,  18 ,  19 ,  
+ 18 ,  18 ,  19 ,  19 ,  19 ,  19 ,  19 ,  20 ,  20 ,  20 ,  20 ,  21 ,  21 ,  21 ,  
+ 21 ,  21 ,  21 ,  21 ,  22 ,  22 ,  23 ,  24 ,  24 ,  24 ,  24 ,  25 ,  26 ,  26 ,  
+ 26 ,  27 ,  27 ,  27 ,  27 ,  27 ,  27 ,  28 ,  28 ,  29 ,  29 ,  30 ,  30 ,  30 ,  
+ 30 ,  31 ,  31 ,  32 ,  32 ,  32 ,  33 ,  33 ,  34 ,  34 ,  35 ,  35 ,  36 ,  36 ,  
+ 37 ,  37 ,  37 ,  38 ,  38 ,  39 ,  39 ,  39 ,  40 ,  41 ,  41 ,  42 ,  42 ,  43 ,  
+ 43 ,  44 ,  45 ,  45 ,  46 ,  47 ,  47 ,  48 ,  49 ,  50 ,  51 ,  52 ,  53 ,  54 ,  
+ 55 ,  56 ,  57 ,  58 ,  60 ,  61 ,  61 ,  62 ,  64 ,  64 ,  66 ,  67 ,  68 ,  70 ,  
+ 72 ,  73 ,  75 ,  80 ,  82 ,  85 ,  90 ,  95 ,  100 ,  106 ,  111 ,  125 ,  130 ,  
+ 141 ,  147 ,  152 ,  163 ,  169 ,  176 ,  180 ,  188 ,  198 ,  203 ,  209 ,  216 ,  
+ 221 ,  225 ,  231 ,  234 ,  239 ,  243 ,  247 ,  251 ,  252 ,  254 ,  255 ,  255, 255 };
 
 
 byte myMac[] = { 11, 22, 33, 44, 55};
@@ -106,13 +103,12 @@ if(server.available()){
       
           for(int i = 0; i <255; i++){
             
-           
-            int v1 = map(lookup[i], 0, 255, minSend, maxSend);
-            int v2 = map(lookup[255 - i], 0, 255, minSend, maxSend);
+            //int v1 = map(lookup[i], 0, 255, minSend, maxSend);
+            //int v2 = map(lookup[255 - i], 0, 255, minSend, maxSend);
             //int v2 = 0;
             //multiWriteDac(dacID, knob1_ch1, knob1_ch2, v1, v2);
-            
-            writeDac(dacID, write_cmds[0], v1);
+            //singleWriteDac(dacIDZ[0], write_cmds[0], v1);
+            turnKnub(0, i);
             delay(5);
             vacResp[i] = constrain(map(analogRead(0), 0, 1024, 0, 1024), 0, 1024);
             delay(5);  
@@ -160,25 +156,34 @@ if(server.available()){
   }
 }
 
-void writeDac(byte addr, byte wrid, int val){
-  //map(val,0, 255, 0, 1024);
-  Wire.beginTransmission(addr);
-  Wire.write(wrid);
-  Wire.write(highByte(val));
-  Wire.write(lowByte(val)); 
-  Wire.endTransmission();
-}
 
-///function for multiWrite : 
+void turnKnub(byte knubNum,byte knubVal){
+    
+    byte hiRead = 255 - knubVal;
 
-void multiWriteDac(byte addr, byte wrid, byte wrid2, int val, int val2){
+    lowVal = map(lookup[knubVal], 0, 255, vacMin, vacMax);
+    highVal = map(lookup[hiRead], 0, 255, vacMin, vacMax);
+
+    // lowVal = map(knubVal, 0, 255, vacMin, vacMax);
+    // highVal = map(hiRead, 0, 255, vacMin, vacMax);
+
+  switch(knubNum){
   
-  Wire.beginTransmission(addr);
-  Wire.write(wrid);
-  Wire.write(highByte(val));
-  Wire.write(lowByte(val)); 
-  Wire.write(wrid2);
-  Wire.write(highByte(val2));
-  Wire.write(lowByte(val2)); 
-  Wire.endTransmission();
-};
+    case 0:
+      multiWriteDac(dacIDZ[0], knob1_ch1, knob1_ch2, lowVal, highVal);
+    break;
+    case 1:
+     multiWriteDac(dacIDZ[0], knob2_ch1, knob2_ch2, lowVal, highVal);
+    break;
+    
+    case 2:
+      multiWriteDac(dacIDZ[1], knob1_ch1, knob1_ch2, lowVal, highVal);
+    break;
+    
+    case 3:
+      multiWriteDac(dacIDZ[1], knob2_ch1, knob2_ch2, lowVal, highVal);
+    break;
+   
+    }
+    
+}

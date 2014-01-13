@@ -3,13 +3,17 @@
 
 
 
-#define vacMin 1200
-#define vacMax 2500
+//#define vacMin 1200
+//#define vacMax 2500
 
-
+//int vacMin = 0;
+//int vacMax = 4095;
 
 //#define vacMin  0
 //#define vacMax 4095
+
+int vacMin = 0;
+int vacMax = 4095;
 
 //DAC communication MCP4728
 // might change those to PROGMEM prog_uchar arrays
@@ -57,20 +61,16 @@ void singleWriteDac(byte addr, byte wrcmd, uint16_t val){
 }
 
 //actual turn knub func
-
+/*
 void turnKnub(byte knubNum,byte knubVal){
     
     byte hiRead = 255 - knubVal;
 
+    //lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
+    //highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
 
-    if(knubNum != 0){
-      lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
-      highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
-    }else{
-      lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, 0, 4095);
-      highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, 0, 4095);
-
-    }
+    lowVal = map(knubVal, 0, 255, vacMin, vacMax);
+    highVal = map(hiRead, 0, 255, vacMin, vacMax);
 
   switch(knubNum){
   
@@ -102,11 +102,11 @@ void turnKnub(byte knubNum,byte knubVal){
       multiWriteDac(dacIDZ[3], write_cmds[2], write_cmds[3], lowVal, highVal);
     break;
     */
-    }
+    //}
     
-}
+//}
  
-
+/*
 void updateKnubs(aKnubPreset * kPreset){
  
       for(uint8_t i = 0; i<3; i++){
@@ -142,6 +142,11 @@ void doExpressionPedal(unsigned int expVal){
   }
 }
 
+
+
+
+
+
 void debugKnubPreset(aKnubPreset *kPreset){
 
   Serial.print("PRESET NAME: ");
@@ -154,4 +159,6 @@ void debugKnubPreset(aKnubPreset *kPreset){
     Serial.print("VAL1: ");
     Serial.println(kPreset->knubbies[i].params[0]);
   }
-}
+
+
+*/
