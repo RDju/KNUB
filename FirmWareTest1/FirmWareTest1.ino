@@ -11,6 +11,7 @@
 #include "looperMidi.h"
 #include "knubMidi.h"
 
+
 #define encoderPin1 2
 #define encoderPin2 3
 
@@ -77,9 +78,12 @@ uint16_t expVal;
 
 void setup(){
 
-  //lcd.begin(9600);
-  //Serial.begin(31250);
-  
+
+
+
+
+
+
   Wire.begin();
   lcd.init();
   lcd.backlight();

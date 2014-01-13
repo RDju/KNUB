@@ -10,7 +10,7 @@ Z_OSCMessage *rcvMes;
 char *subAddress[5]={"/pn", "/kn", "/k", "/ks", "kl"};
 char *knubbieName;
 char *presetName;
-
+/*
 void knubDoOsc(){
 
   if(server.available()){
@@ -32,7 +32,7 @@ void knubDoOsc(){
         /*
         then check knubbieName[0] for knubbie index
         */
-    
+/*    
         Serial.println(knubbieName);    
     }
 
@@ -84,3 +84,4 @@ void knubDoOsc(){
    
   }
 }
+*/

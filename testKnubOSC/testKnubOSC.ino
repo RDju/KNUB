@@ -1,13 +1,12 @@
 
-#include <SPI.h>
-#include <Ethernet.h> // version IDE 0022
+#include "SPI.h"
+#include "Ethernet.h" // version IDE 0022
 
-#include <Z_OSC.h>
+#include "Z_OSC.h"
 #include "knubOSC.h"
-#include <EthernetUdp.h>
+#include "EthernetUdp.h"
+#include "EthernetBonjour.h"
 
-
-EthernetUDP Udp;
 
 void setup() {
 
@@ -21,19 +20,17 @@ void setup() {
     //if doesn't work use fixed IP
     Ethernet.begin(myMac, myIp);
   
-  } 
- 	//Udp.begin(myPort);
- 	server.sockOpen(myPort);
+  }else{
+    // get IP via DHCP
+    Ethernet.begin(myMac);
+    //startBonjour
+    EthernetBonjour.begin("KNUB");
+    EthernetBonjour.addServiceRecord("THE KNUB by ComboSquare._osc",10000,MDNSServiceUDP);
+    
 
- 	Serial.println("READY");
-
- 	Serial.print("My IP address: ");
-  	for (byte thisByte = 0; thisByte < 4; thisByte++) {
-    // print the value of each byte of the IP address:
-    Serial.print(Ethernet.localIP()[thisByte], DEC);
-    Serial.print("."); 
   }
 
+ server.sockOpen(myPort);
 }
 
 void loop() {
@@ -41,7 +38,7 @@ void loop() {
 	
   
 
-	 knubDoOsc();
+	 //knubDoOsc();
    
    
 }
