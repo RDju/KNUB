@@ -18,15 +18,24 @@ so they can be matched
 
 #include <Z_OSC.h>
 #include <Wire.h>
-#include "knubFuncs.h"
+//#include "knubFuncs.h"
 
 
 //was 1959
-#define maxSend 4095
+#define maxSend 65535
 //was 1172
 #define minSend 0
 
+byte DAC1_addr = B0001100;
+byte writeDacA = B00110001;
+byte writeDacB = B00110010;
+byte writeDacC = B00110100;
+byte writeDacD = B00111000;
 
+
+uint16_t lowVal, highVal;
+ 
+byte writeCommands[4] = {writeDacA, writeDacB,writeDacC, writeDacD};
 
 Z_OSCClient client;
 int optoId;
@@ -162,8 +171,8 @@ void turnKnub(byte knubNum,byte knubVal){
     
     byte hiRead = 255 - knubVal;
 
-    lowVal = map(lookup[knubVal], 0, 255, vacMin, vacMax);
-    highVal = map(lookup[hiRead], 0, 255, vacMin, vacMax);
+    lowVal = map(lookup[knubVal], 0, 255, minSend, maxSend);
+    highVal = map(lookup[hiRead], 0, 255, minSend, maxSend);
 
     // lowVal = map(knubVal, 0, 255, vacMin, vacMax);
     // highVal = map(hiRead, 0, 255, vacMin, vacMax);
@@ -171,20 +180,17 @@ void turnKnub(byte knubNum,byte knubVal){
   switch(knubNum){
   
     case 0:
-      multiWriteDac(dacIDZ[0], knob1_ch1, knob1_ch2, lowVal, highVal);
+      writeDac(0, lowVal);
+      writeDac(1, highVal);
     break;
-    case 1:
-     multiWriteDac(dacIDZ[0], knob2_ch1, knob2_ch2, lowVal, highVal);
-    break;
-    
-    case 2:
-      multiWriteDac(dacIDZ[1], knob1_ch1, knob1_ch2, lowVal, highVal);
-    break;
-    
-    case 3:
-      multiWriteDac(dacIDZ[1], knob2_ch1, knob2_ch2, lowVal, highVal);
-    break;
-   
-    }
-    
+  }
+}
+
+void writeDac(int wichDac, int value){
+
+    Wire.beginTransmission(DAC1_addr);
+    Wire.write(writeCommands[wichDac]);
+    Wire.write(highByte(value));
+    Wire.write(lowByte(value));
+    Wire.endTransmission();
 }
