@@ -1,7 +1,7 @@
-#N canvas 1 85 1351 645 10;
+#N canvas 81 78 1351 645 10;
 #X declare -lib mrpeach;
 #X obj 34 174 hsl 255 40 0 255 0 1 slid1 auto1 slid1 -2 -8 0 10 -262144
--1 -1 100 1;
+-1 -1 11700 1;
 #X obj 29 9 bng 50 250 50 0 connect empty connect_to_knub 60 7 0 10
 -262144 -1 -1;
 #X obj 277 10 bng 50 250 50 0 disconnect empty disconnect 60 7 0 10
@@ -38,11 +38,10 @@
 #X connect 12 0 0 0;
 #X coords 0 -1 1 1 87 108 1 235 70;
 #X restore 28 507 pd auto1;
-#N canvas 231 105 864 638 guts 0;
+#N canvas 217 105 864 638 guts 0;
 #X obj 15 18 import mrpeach;
 #X msg 234 127 disconnect;
-#X msg 72 125 connect 192.168.8 10000;
-#N canvas 348 167 698 486 gutsy 0;
+#N canvas 342 170 698 486 gutsy 0;
 #X obj 220 274 packOSC;
 #X obj 97 38 r slid1;
 #X obj 169 94 r slid2;
@@ -50,7 +49,6 @@
 #X obj 85 320 inlet;
 #X obj 104 342 inlet;
 #X obj 85 390 outlet;
-#X msg 97 62 sendtyped /dac/cvA i \$1;
 #X obj 389 277 r dacMin;
 #X msg 389 297 sendtyped /dac/minVal i \$1;
 #X obj 393 360 r dacMax;
@@ -58,19 +56,20 @@
 #X msg 229 192 send /lut/calc;
 #X obj 229 170 r calc;
 #X msg 169 118 sendtyped /dac/cvC i \$1;
+#X msg 97 62 sendtyped /dac/cvA i \$1;
 #X connect 0 0 3 0;
-#X connect 1 0 7 0;
-#X connect 2 0 14 0;
+#X connect 1 0 14 0;
+#X connect 2 0 13 0;
 #X connect 3 0 6 0;
 #X connect 4 0 3 0;
 #X connect 5 0 3 0;
-#X connect 7 0 0 0;
-#X connect 8 0 9 0;
-#X connect 9 0 0 0;
-#X connect 10 0 11 0;
+#X connect 7 0 8 0;
+#X connect 8 0 0 0;
+#X connect 9 0 10 0;
+#X connect 10 0 0 0;
 #X connect 11 0 0 0;
-#X connect 12 0 0 0;
-#X connect 13 0 12 0;
+#X connect 12 0 11 0;
+#X connect 13 0 0 0;
 #X connect 14 0 0 0;
 #X restore 91 155 pd gutsy;
 #X obj 72 104 r connect;
@@ -94,29 +93,30 @@
 #X msg 616 360 set _N;
 #X obj 115 405 s vacval;
 #X obj 673 438 r slid2;
-#X connect 1 0 3 0;
-#X connect 2 0 3 0;
-#X connect 3 0 6 0;
-#X connect 4 0 2 0;
-#X connect 5 0 1 0;
-#X connect 7 0 11 0;
-#X connect 8 0 9 0;
-#X connect 9 0 11 0;
-#X connect 10 0 11 0;
-#X connect 11 0 22 0;
-#X connect 12 0 8 0;
-#X connect 13 0 12 0;
-#X connect 14 0 10 0;
-#X connect 15 0 19 1;
-#X connect 16 0 19 0;
+#X msg 72 125 connect 192.168.144.23 10000;
+#X connect 1 0 2 0;
+#X connect 2 0 5 0;
+#X connect 3 0 23 0;
+#X connect 4 0 1 0;
+#X connect 6 0 10 0;
+#X connect 7 0 8 0;
+#X connect 8 0 10 0;
+#X connect 9 0 10 0;
+#X connect 10 0 21 0;
+#X connect 11 0 7 0;
+#X connect 12 0 11 0;
+#X connect 13 0 9 0;
+#X connect 14 0 18 1;
+#X connect 15 0 18 0;
+#X connect 16 0 17 0;
 #X connect 17 0 18 0;
-#X connect 18 0 19 0;
-#X connect 20 0 21 0;
-#X connect 21 0 19 0;
-#X connect 23 0 19 1;
+#X connect 19 0 20 0;
+#X connect 20 0 18 0;
+#X connect 22 0 18 1;
+#X connect 23 0 2 0;
 #X restore 682 621 pd guts;
-#X obj 32 231 nbx 5 30 -1e+37 1e+37 0 0 vacval vactrol empty 0 -8 0
-20 -262144 -1 -1 0 256;
+#X obj 32 231 nbx 5 30 -1e+37 1e+37 0 0 empty vacval empty 0 -8 0 20
+-262144 -1 -1 10 256;
 #X obj 30 103 nbx 10 30 -1e+37 1e+37 0 0 dacMin empty empty 0 -8 0
 20 -262144 -1 -1 0 256;
 #X obj 234 103 nbx 10 30 -1e+37 1e+37 0 0 dacMax empty empty 0 -8 0
@@ -173,14 +173,19 @@
 #X restore 137 508 pd auto2;
 #N canvas 0 0 450 300 (subpatch) 0;
 #X array O_ 255 float 5;
-#A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
+#A 0 10 52 248 10 248 248 10 248 248 248 248 10 248 10 248 248 248
+248 248 10 10 248 248 248 10 10 248 248 10 248 248 248 248 10 10 248
+248 248 248 248 248 10 248 127 248 248 248 10 248 10 10 10 52 248 248
+10 248 248 10 13 10 52 248 248 10 248 10 13 248 10 248 248 10 10 10
+10 248 10 10 13 248 248 248 10 10 10 10 52 10 10 52 10 56 56 10 56
+10 10 10 56 56 10 10 10 10 10 52 10 10 10 56 10 10 10 13 56 52 10 50
+10 56 10 50 10 10 10 10 10 10 10 248 248 10 248 10 56 56 10 10 10 52
+10 10 56 56 10 52 10 10 56 52 13 10 10 56 52 56 52 10 10 10 248 10
+10 56 13 13 56 10 10 52 52 13 10 52 10 10 10 10 52 10 52 10 10 10 10
+56 56 10 13 56 52 10 52 10 10 56 50 10 52 10 10 56 56 13 10 10 56 248
+10 10 10 10 10 10 248 10 248 52 56 10 10 52 52 10 52 10 10 56 10 10
+248 10 56 10 10 10 10 10 10 52 56 248 13 10 52 56 248 13 52 10 248
+10 10 10;
 #X coords 0 255 254 0 301 253 1 0 0;
 #X restore 405 200 graph;
 #X obj 27 478 bng 15 250 50 0 orig empty orig 17 7 0 10 -262144 -1

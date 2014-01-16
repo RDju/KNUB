@@ -1,50 +1,46 @@
-/*
-This version works for editing the response of 1 vactrol
-
-This version has been updated from a previous one that was dealing with a digital potentiometer wired as a DAC (rDAC ?)
-this works with the quad DAC mcp4728 found on the evaluation board.
+/* this is used to test thib's eval*/
 
 
-TODO:
-
-check the response of 2 vactrols AT THE SAME TIME
-so they can be matched
-
-*/
-//#include <Client.h>
 #include <SPI.h>
 #include <Ethernet.h>
-//#include <Server.h>
-
 #include <Z_OSC.h>
 #include <Wire.h>
-//#include "knubFuncs.h"
+
+int val, analogInVal, minDacVal, maxDacVal;
+
+char knubValues[8];
+
+byte myMac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
+byte myIp[]  = { 192, 168, 0, 23 };
+int  myPort  = 10000;
 
 
-//was 1959
-#define maxSend 65535
-//was 1172
-#define minSend 0
+byte lin[255];
+byte preDist[255];
+byte lut[255];
 
-  byte DAC1_addr = B0001100;
+char *subAddress[3]={"/K1", "/K2", "/K3"};
+
+Z_OSCServer server;
+Z_OSCMessage *rcvMes;
+
+
+int minSend = 0;
+int maxSend = 65535;
+
+byte DAC1_addr = B0001100;
+byte DAC2_addr = B0001101;
+
+
 byte writeDacA = B00110001;
 byte writeDacB = B00110010;
 byte writeDacC = B00110100;
 byte writeDacD = B00111000;
 
-
-uint16_t lowVal, highVal;
- 
 byte writeCommands[4] = {writeDacA, writeDacB,writeDacC, writeDacD};
 
-Z_OSCClient client;
-int optoId;
-int val;
-int an1, an2;
-int lg, mult;
-boolean goLinear;
+uint16_t  lowVal, highVal, prevExp;
 
-int vacResp[255];
 
 int lookup[255] = {3 ,  6 ,  8 ,  10 ,  11 ,  12 ,  14 ,  15 ,  16 ,  16 ,  17 ,  
   18 ,  19 ,  19 ,  20 ,  20 ,  21 ,  21 ,  22 ,  22 ,  23 ,  23 ,  24 ,  24 ,  24 ,  
@@ -66,112 +62,43 @@ int lookup[255] = {3 ,  6 ,  8 ,  10 ,  11 ,  12 ,  14 ,  15 ,  16 ,  16 ,  17 ,
   151 ,  158 ,  165 ,  173 ,  180 ,  185 ,  190 ,  199 ,  208 ,  212 ,  215 ,  219 ,  
   225 ,  230 ,  235 ,  240 ,  244 ,  250 ,  252 ,  253 ,  254 ,  255 ,  255 ,  255 ,  255 };
 
-
-byte myMac[] = { 11, 22, 33, 44, 55};
-byte myIp[]  = { 192, 168, 0, 23 };
-int  myPort  = 10000;
-
-byte computer[] = {192, 168, 0, 5};
-int scPort = 57120;
-
-char *subAddress[5]={"/O2A/switch","/O2A/doPot", "/O2A/lookupVal", "/O2A/tellMe", "/moveKnob"};
-
-char oscAdr1[] = "/O2A/vac1";
-char oscAdr2[] = "/O2A/done";
-char oscAdr3[] = "/O2A/doneVac";
-char oscAdr4[] = "/O2A/doneVac2";
-
-Z_OSCServer server;
-Z_OSCMessage *rcvMes;
-Z_OSCMessage sendMes;
-
 void setup(){
 
   Wire.begin();
   Ethernet.begin(myMac, myIp);
   server.sockOpen(myPort);
-
-  optoId = 0;
-  pinMode(2, OUTPUT);
-
-  turnKnub(0, 10);
-
+  Serial.begin(9600);
 }
 
 
 void loop(){
 
-  //Serial.println(optoId);
 if(server.available()){
   
     rcvMes = server.getMessage();
     
+    //deals with first knubbie
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[0])){
-    
-        optoId = rcvMes->getInteger32(0); 
+        
+        val = rcvMes->getInteger32(0);
+        //Serial.println(val);
+
+        turnKnub(0, val);
     }
-    //deals with pot1
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
-      
-          for(int i = 0; i <255; i++){
-     
-            turnKnub(0, i);
-            delay(5);
-            vacResp[i] = constrain(map(analogRead(0), 0, 1024, 0, 1024), 0, 1024);
-            delay(5);  
-      }
-       
-      delay(5);
-   
-         Z_OSCMessage message;
-         message.setAddress(computer, scPort);
-         message.setZ_OSCMessage(oscAdr3, "s", "done");
-         client.send(&message);
-    }
-   
-   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[4])){
-      
-           int val = rcvMes->getInteger32(0); 
-     
-            turnKnub(0, val);
-            delay(5);
-            vacResp[val] = constrain(map(analogRead(0), 0, 1024, 0, 1024), 0, 255);
-            delay(5);  
-            Serial.write(vacResp[val]);
-      }
-   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[2])){
-      
-     int tmpIndx = rcvMes->getInteger32(0);
-     int tmpVal =  rcvMes->getInteger32(1);
-     
-     lookup[tmpIndx] = tmpVal;
-     
-   
- }
-   
-   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[3])){ 
-    
-      for(int i = 0; i<255; i++){
         
-        long int tmpIndx = (long int)i;
-        long int tmpValue = (long int)vacResp[i];
+        val = rcvMes->getInteger32(0);
+
+        turnKnub(1, val);
+    }
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[2])){
         
-        Z_OSCMessage message;
-        message.setAddress(computer, scPort);
-        message.setZ_OSCMessage(oscAdr1, "ii", &tmpIndx, &tmpValue);
-       
-        client.send(&message);
-        delay(5);
+        val = rcvMes->getInteger32(0);
+
+        turnKnub(2, val);
     }
-         Z_OSCMessage message;
-         message.setAddress(computer, scPort);
-         message.setZ_OSCMessage(oscAdr2, "s", "done");
-         client.send(&message);
-    }
-    
   }
 }
-
 
 void turnKnub(byte knubNum,byte knubVal){
     
@@ -187,12 +114,30 @@ void turnKnub(byte knubNum,byte knubVal){
       writeDac(0, lowVal);
       writeDac(1, highVal);
     break;
+    case 1:
+      writeDac(2, lowVal);
+      writeDac(3, highVal);
+    break;
+    case 2:
+      writeDac2(0, lowVal);
+      writeDac2(1, highVal);
+    break;
+
   }
 }
 
 void writeDac(int wichDac, int value){
 
     Wire.beginTransmission(DAC1_addr);
+    Wire.write(writeCommands[wichDac]);
+    Wire.write(highByte(value));
+    Wire.write(lowByte(value));
+    Wire.endTransmission();
+}
+
+void writeDac2(int wichDac, int value){
+
+    Wire.beginTransmission(DAC2_addr);
     Wire.write(writeCommands[wichDac]);
     Wire.write(highByte(value));
     Wire.write(lowByte(value));
