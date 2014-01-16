@@ -21,7 +21,7 @@ so they can be matched
 //#include "knubFuncs.h"
 
 
-#define vacMin 1200
+#define vacMin 1250
 #define vacMax 2500
 
 //#define vacMin  0
@@ -50,9 +50,9 @@ int an1, an2;
 int lg, mult;
 boolean goLinear;
 
-int vacResp[255];
+int vacResp[256];
 
-int lookup[255] = {0 ,  0,  4 ,  9 ,  11 ,  13 ,  15 ,  16 ,  17 ,  19 ,  20 ,  
+int lookup[256] = {0 ,  0,  4 ,  9 ,  11 ,  13 ,  15 ,  16 ,  17 ,  19 ,  20 ,  
 21 ,  22 ,  24 ,  25 ,  26 ,  27 ,  27 ,  28 ,  29 ,  29 ,  30 ,  31 ,  31 ,  
 32 ,  33 ,  33 ,  34 ,  34 ,  35 ,  35 ,  36 ,  36 ,  37 ,  37 ,  37 ,  38 ,  
 38 ,  39 ,  39 ,  39 ,  39 ,  40 ,  40 ,  41 ,  41 ,  42 ,  42 ,  42 ,  43 ,  
@@ -102,7 +102,15 @@ void setup(){
   optoId = 0;
   pinMode(2, OUTPUT);
 
-  turnKnub(0, 10);
+
+  for(int i = 0; i < 256; i++){
+
+    lookup[i] = i;
+
+  }
+
+
+  //turnKnub(0, 10);
 
 }
 
