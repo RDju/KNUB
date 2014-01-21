@@ -45,7 +45,11 @@ void setup(){
 	presetIndx = 5;
 	Serial.println("ready");
 	
+	Serial.println("reading preset1 name: ");
 
+	readKnubPresetName(eepromAddr1, presetIndx*presetSize, &currentPreset);
+
+	Serial.println(currentPreset.name);
 
 
 }

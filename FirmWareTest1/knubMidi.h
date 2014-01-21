@@ -107,7 +107,7 @@ void midiInRead(byte pageLev){
 
 
 // to be double Check:
-
+// added debounce func
 void doSwitchInDec(byte pageLev){
 
   bool currUp  = digitalRead(upPin);
@@ -115,121 +115,20 @@ void doSwitchInDec(byte pageLev){
 
 
   if(currUp != prevUp){
-  	readindx ++;
-  	readAdr = readindx*presetSize;
-			
-			if(pageLev == 2){
-				if(readindx<8 && readAdr != prevRead && loadFlag == false){
-					
-
-					loadFlag = true;
+  	
+  	delay(50);
+	Serial.println("UP");	
 	
-					digitalWrite(5, HIGH);
-					
-					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-					
-					updateKnubs(&currentPreset);
-					
-					writeByte(eepromAddr1, lastPresetMemSpace, readindx);
-					loadFlag = false;
-					isEdited = false;
-					
-					#ifdef DEBUG_LOAD_PRESET
-						debugKnubPreset(&currentPreset);
-					#endif
-					clearLoopsOut();
-					
-					// fill up loopsOut array
-  					
-  					for(uint8_t i = 0; i<numKnubbies; i++){
-
-    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-  					}	
-  					
-  					// check loops state and update
-  					
-  					for(uint8_t i = 0; i<4; i++){
-
-      					if(checkLoopsOut(i) == true){
-          					
-          					switchLoop(i, 1);
-          					
-      					}else{
-
-          					switchLoop(i, 0);
-
-      					}
-    				}	
-    				
-    				digitalWrite(5, LOW);
-    				
-    				time2ChangePage = true;
-					prevRead = readAdr;
-
-
-					prevUp = currUp;
-
-		}
+	prevUp = currUp;
 	}
-
-}
+	
 	if(currDown != prevDown){
-  	readindx -= 1;
-  	readAdr = readindx*presetSize;
-			
-			if(pageLev == 2){
-				if(readindx<8 && readAdr != prevRead && loadFlag == false){
-					
-
-					loadFlag = true;
-	
-					digitalWrite(5, HIGH);
-					
-					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-					
-					updateKnubs(&currentPreset);
-					
-					writeByte(eepromAddr1, lastPresetMemSpace, readindx);
-					loadFlag = false;
-					isEdited = false;
-					
-					#ifdef DEBUG_LOAD_PRESET
-						debugKnubPreset(&currentPreset);
-					#endif
-					clearLoopsOut();
-					
-					// fill up loopsOut array
-  					
-  					for(uint8_t i = 0; i<numKnubbies; i++){
-
-    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-  					}	
-  					
-  					// check loops state and update
-  					
-  					for(uint8_t i = 0; i<4; i++){
-
-      					if(checkLoopsOut(i) == true){
-          					
-          					switchLoop(i, 1);
-          					
-      					}else{
-
-          					switchLoop(i, 0);
-
-      					}
-    				}	
-    				
-    				digitalWrite(5, LOW);
-    				
-    				time2ChangePage = true;
-					prevRead = readAdr;
-
-
-					prevUp = currUp;
-
-			}
-
-		}
+  	
+	delay(50);
+  	Serial.println("DOWN");
+  	
+	prevDown = currDown;
 	}
+	
+	
 }

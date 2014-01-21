@@ -103,10 +103,13 @@ void setup(){
   pinMode(checkPin, OUTPUT);
   digitalWrite(checkPin, HIGH);
 
+  
+  //writeByte(eepromAddr1, lastPresetMemSpace, );
   //read last loaded ID and load that one
   lastID = readByte(eepromAddr1, lastPresetMemSpace);
   
   readKnubPreset(eepromAddr1, lastID * presetSize, &currentPreset);
+  
   delay(50);
   
   updateKnubs(&currentPreset);
@@ -147,6 +150,15 @@ void setup(){
 
   updatePreset(currentPreset.name, isEdited);
   checkUILeds();
+
+  pinMode(upPin, INPUT);
+  pinMode(downPin, INPUT);
+  digitalWrite(upPin, HIGH);
+  digitalWrite(downPin, HIGH);
+
+
+  prevUp = digitalRead(upPin);
+  prevDown = digitalRead(downPin);
  
 }
 
@@ -155,12 +167,13 @@ void loop(){
 
    
   midiInRead(pageLevel);
+  doSwitchInDec(pageLevel);
   
-  if(pageLevel == 2){
+  // if(pageLevel == 2){
       
-    doExpressionPedal(analogRead(expressionPin));
+  //   doExpressionPedal(analogRead(expressionPin));
       
-  }
+  // }
   
   ////dealing with pages 
    if(time2ChangePage){
