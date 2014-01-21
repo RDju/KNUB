@@ -20,12 +20,8 @@ so they can be matched
 #include <Wire.h>
 //#include "knubFuncs.h"
 
-
-#define vacMin 1250
-#define vacMax 2500
-
-//#define vacMin  0
-//#define vacMax 4095
+ 
+int vacMin, vacMax;
 
 //DAC communication MCP4728
 // might change those to PROGMEM prog_uchar arrays
@@ -72,7 +68,7 @@ int lookup[256] = {0 ,  0,  4 ,  9 ,  11 ,  13 ,  15 ,  16 ,  17 ,  19 ,  20 ,
 141 ,  143 ,  146 ,  149 ,  152 ,  155 ,  161 ,  164 ,  167 ,  172 ,  176 ,  188 ,  
 203 ,  215 ,  224 ,  233 ,  238 ,  241 ,  244 ,  247 ,  249 ,  251 ,  252 ,  254 ,  
 255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  255 ,  
-255 };
+255, 255};
 
 
 byte myMac[] = { 11, 22, 33, 44, 55};
@@ -82,7 +78,7 @@ int  myPort  = 10000;
 byte computer[] = {192, 168, 0, 5};
 int scPort = 57120;
 
-char *subAddress[5]={"/O2A/switch","/O2A/doPot", "/O2A/lookupVal", "/O2A/tellMe", "/moveKnob"};
+char *subAddress[6]={"/O2A/move","/O2A/doPot", "/O2A/lookupVal", "/O2A/tellMe", "/vacMin", "/vacMax"};
 
 char oscAdr1[] = "/O2A/vac1";
 char oscAdr2[] = "/O2A/done";
@@ -103,14 +99,9 @@ void setup(){
   pinMode(2, OUTPUT);
 
 
-  for(int i = 0; i < 256; i++){
 
-    lookup[i] = i;
-
-  }
-
-
-  //turnKnub(0, 10);
+vacMin = 1210;
+vacMax = 2500;
 
 }
 
@@ -121,11 +112,16 @@ void loop(){
 if(server.available()){
   
     rcvMes = server.getMessage();
-    
+
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[0])){
-    
-        optoId = rcvMes->getInteger32(0); 
-    }
+      
+            int val = rcvMes->getInteger32(0)
+     
+            turnKnub(0, i);
+           
+      }
+
+
     //deals with pot1
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
       
@@ -143,19 +139,8 @@ if(server.available()){
          message.setAddress(computer, scPort);
          message.setZ_OSCMessage(oscAdr3, "s", "done");
          client.send(&message);
-    }
-   
-   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[4])){
-      
-           int val = rcvMes->getInteger32(0); 
-     
-            turnKnub(0, val);
-            delay(5);
-            vacResp[val] = constrain(map(analogRead(0), 0, 1024, 0, 1024), 0, 255);
-            delay(5);  
-            Serial.write(vacResp[val]);
-      }
-   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[2])){
+  }
+  if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[2])){
       
      int tmpIndx = rcvMes->getInteger32(0);
      int tmpVal =  rcvMes->getInteger32(1);
@@ -164,7 +149,6 @@ if(server.available()){
      
    
  }
-   
    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[3])){ 
     
       for(int i = 0; i<255; i++){
@@ -183,11 +167,19 @@ if(server.available()){
          message.setAddress(computer, scPort);
          message.setZ_OSCMessage(oscAdr2, "s", "done");
          client.send(&message);
-    }
     
+    }
+
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[4])){
+
+      vacMin = rcvMes->getInteger32(0);
+    }
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[5])){
+
+      vacMax = rcvMes->getInteger32(0);
+    }
   }
 }
-
 //function for multiWrite : 
   
 void multiWriteDac(byte addr, byte wrid, byte wrid2, uint16_t val, uint16_t val2){

@@ -89,7 +89,7 @@ o = 0;
 
 
 
-w = Window.new("LUT EDITOR", Rect(20, 20, 1050, 680));
+w = Window.new("LUT EDITOR", Rect(20, 20, 1200, 680));
 w.onClose = {~resp.remove; ~resp1.remove; ~resp2.remove; ~resp3.remove;};
 w.view.background_(Color.white);
 w.front;
@@ -184,4 +184,16 @@ m.background_(Color.clear);
 
 }
 */
+~f1 = TextField(w, Rect(800, 620, 150, 30));
+	~f1.action = {arg field; field.value.postln;
+
+	~duino.sendMsg("/vacMin", field.value.asInteger);
+};
+
+~f2 = TextField(w, Rect(950, 620, 150, 30));
+	~f2.action = {arg field; field.value.postln;
+
+	~duino.sendMsg("/vacMax", field.value.asInteger);
+};
+
 )

@@ -1,4 +1,16 @@
+/*
+This version works for editing the response of 1 vactrol
 
+This version has been updated from a previous one that was dealing with a digital potentiometer wired as a DAC (rDAC ?)
+this works with the quad DAC mcp4728 found on the evaluation board.
+
+
+TODO:
+
+check the response of 2 vactrols AT THE SAME TIME
+so they can be matched
+
+*/
 //#include <Client.h>
 #include <SPI.h>
 #include <Ethernet.h>
@@ -8,22 +20,24 @@
 #include <Wire.h>
 //#include "knubFuncs.h"
 
-
-//was 1959
-#define maxSend 65535
-//was 1172
-#define minSend 0
-
-  byte DAC1_addr = B0001100;
-byte writeDacA = B00110001;
-byte writeDacB = B00110010;
-byte writeDacC = B00110100;
-byte writeDacD = B00111000;
-
-
-uint16_t lowVal, highVal;
  
-byte writeCommands[4] = {writeDacA, writeDacB,writeDacC, writeDacD};
+int vacMin, vacMax;
+
+//DAC communication MCP4728
+// might change those to PROGMEM prog_uchar arrays
+
+byte write_cmds[] = {B01011000, B01011010, B01011100, B01011110}; //for single writes not used here.
+
+byte dacIDZ[] = {B1100000, B1100001, B1100010, B1100011};// 4x4 dacs = 16 dacs so 8 knubs.
+
+byte knob1_ch1  = B01000000;
+byte knob1_ch2 = B01000010;
+
+byte knob2_ch1 = B01000100;
+byte knob2_ch2 = B01000110;
+
+uint16_t  lowVal, highVal, prevExp;
+
 
 Z_OSCClient client;
 int optoId;
@@ -64,7 +78,7 @@ int  myPort  = 10000;
 byte computer[] = {192, 168, 0, 5};
 int scPort = 57120;
 
-char *subAddress[5]={"/O2A/move","/O2A/doPot", "/O2A/lookupVal", "/O2A/tellMe", "/moveKnob"};
+char *subAddress[6]={"/O2A/move","/O2A/doPot", "/O2A/lookupVal", "/O2A/tellMe", "/vacMin", "/vacMax"};
 
 char oscAdr1[] = "/O2A/vac1";
 char oscAdr2[] = "/O2A/done";
@@ -84,12 +98,10 @@ void setup(){
   optoId = 0;
   pinMode(2, OUTPUT);
 
-  ///turnKnub(0, 10);
-
-  writeDac(0, 0);
 
 
-
+vacMin = 1350;
+vacMax = 2500;
 
 }
 
@@ -100,13 +112,16 @@ void loop(){
 if(server.available()){
   
     rcvMes = server.getMessage();
-    
-    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[0])){
-    
-        int val = rcvMes-> getInteger32(0);
 
-        turnKnub(0, val);
-    }
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[0])){
+      
+            int val = rcvMes->getInteger32(0)
+     
+            turnKnub(0, i);
+           
+      }
+
+
     //deals with pot1
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
       
@@ -124,20 +139,16 @@ if(server.available()){
          message.setAddress(computer, scPort);
          message.setZ_OSCMessage(oscAdr3, "s", "done");
          client.send(&message);
-    }
-   
-   if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[4])){
+  }
+  if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[2])){
       
-           int val = rcvMes->getInteger32(0); 
+     int tmpIndx = rcvMes->getInteger32(0);
+     int tmpVal =  rcvMes->getInteger32(1);
      
-            turnKnub(0, val);
-            delay(5);
-            vacResp[val] = constrain(map(analogRead(0), 0, 1024, 0, 1024), 0, 255);
-            delay(5);  
-            Serial.write(vacResp[val]);
-      }
-  
+     lookup[tmpIndx] = tmpVal;
+     
    
+ }
    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[3])){ 
     
       for(int i = 0; i<255; i++){
@@ -156,34 +167,71 @@ if(server.available()){
          message.setAddress(computer, scPort);
          message.setZ_OSCMessage(oscAdr2, "s", "done");
          client.send(&message);
-    }
     
+    }
+
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[4])){
+
+      vacMin = rcvMes->getInteger32(0);
+    }
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[5])){
+
+      vacMax = rcvMes->getInteger32(0);
+    }
   }
 }
+//function for multiWrite : 
+  
+void multiWriteDac(byte addr, byte wrid, byte wrid2, uint16_t val, uint16_t val2){
+  
+  Wire.beginTransmission(addr);
+  Wire.write(wrid);
+  Wire.write(highByte(val));
+  Wire.write(lowByte(val)); 
+  Wire.write(wrid2);
+  Wire.write(highByte(val2));
+  Wire.write(lowByte(val2)); 
+  Wire.endTransmission();
+};
 
+
+
+void singleWriteDac(byte addr, byte wrcmd, uint16_t val){
+
+  Wire.beginTransmission(addr);
+  Wire.write(wrcmd);
+  Wire.write(highByte(val));
+  Wire.write(lowByte(val));
+  Wire.endTransmission();
+}
+
+//actual turn knub func
 
 void turnKnub(byte knubNum,byte knubVal){
     
     byte hiRead = 255 - knubVal;
 
-    lowVal = map(knubVal, 0, 255, minSend, maxSend);
-    highVal = map(hiRead, 0, 255, minSend, maxSend);
 
+    lowVal = map(lookup[knubVal], 0, 255, vacMin, vacMax);
+    highVal = map(lookup[hiRead], 0, 255, vacMin, vacMax);
+ 
 
   switch(knubNum){
   
     case 0:
-      writeDac(0, lowVal);
-      writeDac(1, highVal);
+      multiWriteDac(dacIDZ[0], knob1_ch1, knob1_ch2, lowVal, highVal);
+    break;
+    case 1:
+     multiWriteDac(dacIDZ[0], knob2_ch1, knob2_ch2, lowVal, highVal);
+    break;
+    
+    case 2:
+      multiWriteDac(dacIDZ[1], knob1_ch1, knob1_ch2, lowVal, highVal);
+    break;
+    
+    case 3:
+      multiWriteDac(dacIDZ[1], knob2_ch1, knob2_ch2, lowVal, highVal);
     break;
   }
-}
-
-void writeDac(int wichDac, int value){
-
-    Wire.beginTransmission(DAC1_addr);
-    Wire.write(writeCommands[wichDac]);
-    Wire.write(highByte(value));
-    Wire.write(lowByte(value));
-    Wire.endTransmission();
+    
 }

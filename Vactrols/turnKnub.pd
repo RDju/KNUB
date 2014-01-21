@@ -1,0 +1,24 @@
+#N canvas 365 250 450 300 10;
+#X declare -lib mrpeach;
+#X obj 16 18 import mrpeach;
+#X obj 256 238 udpsend;
+#X msg 256 174 connect 192.168.0.23 10000;
+#X msg 276 200 disconnect;
+#X floatatom 256 259 5 0 0 0 - - -;
+#X obj 72 190 packOSC;
+#X msg 72 169 sendtyped /O2A/move i \$1;
+#X obj 75 101 hsl 128 15 0 255 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 12700 1;
+#X floatatom 72 142 5 0 0 0 - - -;
+#X obj 72 79 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -8 0 10
+-262144 -1 -1 255 256;
+#X obj 72 122 i;
+#X connect 1 0 4 0;
+#X connect 2 0 1 0;
+#X connect 3 0 1 0;
+#X connect 5 0 1 0;
+#X connect 6 0 5 0;
+#X connect 7 0 10 0;
+#X connect 8 0 6 0;
+#X connect 9 0 7 0;
+#X connect 10 0 8 0;
