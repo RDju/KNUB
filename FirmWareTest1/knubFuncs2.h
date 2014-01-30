@@ -3,7 +3,7 @@
 
 
 int vacMin = 0;
-int vacMax = 65535;
+int vacMax = 4095;
 
 
 byte DACIDZ[2] = {B0001100, B0001101}

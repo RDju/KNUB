@@ -232,22 +232,22 @@ void loop(){
   //// tab button
   bValid.Update();
   
-  if(bValid.click !=0){
+  if(bValid.clicks !=0){
     switch (pageLevel){
       case 0:
-      if(bValid.click == 1){     
+      if(bValid.clicks == 1){     
         pageLevel ++;
         time2ChangePage = true;
       }
       break;
       case 1:
-      if(bValid.click == 1){
+      if(bValid.clicks == 1){
         pageLevel ++;
         time2ChangePage = true;
       }
       break;
       case 2:
-      if(bValid.click == 2){
+      if(bValid.clicks == 2){
         pageLevel ++;
         
         time2ChangePage = true;
@@ -255,14 +255,14 @@ void loop(){
       break;
       case 4:
 
-      if(bValid.click == 2){
+      if(bValid.clicks == 2){
         pageLevel ++;
         time2ChangePage = true;
 
       }   
       break;
       case 3:
-      if(bValid.click == 1){
+      if(bValid.clicks == 1){
 
        tabIndx++;
        tabIndx = tabIndx%numTabs[pageLevel];
@@ -277,22 +277,22 @@ void loop(){
   //////back button
   bckValid.Update();
 
-  if(bckValid.click != 0){
-    if(bckValid.click==2 && pageLevel > 2){
+  if(bckValid.clicks != 0){
+    if(bckValid.clicks==2 && pageLevel > 2){
 
 
       pageLevel = 2;
       time2ChangePage = true;
 
 
-      }else if(bckValid.click == 2 && pageLevel == 2){
+      }else if(bckValid.clicks == 2 && pageLevel == 2){
         
         pageLevel = 4;
         isEdited = false;
         time2ChangePage = true;
 
 
-        }else if(bckValid.click == 1 && pageLevel == 3){
+        }else if(bckValid.clicks == 1 && pageLevel == 3){
          tabIndx--;
          tabIndx = tabIndx%numTabs[pageLevel];
          tab(chParamTabs[tabIndx]);

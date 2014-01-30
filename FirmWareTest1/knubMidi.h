@@ -1,7 +1,7 @@
 //#include "SoftwareSerial.h"
 
 //#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
-
+#include "Arduino.h"
 
 #define upPin 6
 #define downPin 5
