@@ -1,10 +1,10 @@
 //#include "SoftwareSerial.h"
 
-//#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
+#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
 #include "Arduino.h"
 
-#define upPin 6
-#define downPin 5
+#define upPin 5
+#define downPin 6
 
 SoftwareSerial midiSerial(7, 10);
 
@@ -62,6 +62,7 @@ void midiInRead(byte pageLev){
 					updateKnubs(&currentPreset);
 					
 					writeByte(eepromAddr1, lastPresetMemSpace, readindx);
+					
 					loadFlag = false;
 					isEdited = false;
 					

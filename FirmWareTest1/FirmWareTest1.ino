@@ -2,11 +2,11 @@
 #include <SoftwareSerial.h>
 #include <stdlib.h>
 #include <Wire.h>
-#include "LiquidCrystal_I2C.h"
+#include <LiquidCrystal_I2C.h>
 
 #include "memory.h"
 #include "presets.h"
-#include "knubFuncs.h"
+#include "knubFuncs2.h"
 #include "UI.h"
 #include "looperMidi.h"
 #include "knubMidi.h"
@@ -75,13 +75,15 @@ uint16_t prevExpVal;
 uint16_t expVal;
 
 
-
 void setup(){
   
   Wire.begin();
+  
   lcd.init();
   lcd.backlight();
+  
   Serial.begin(9600);
+  
   midiSerial.begin(31250);
   looperSerial.begin(31250);
 

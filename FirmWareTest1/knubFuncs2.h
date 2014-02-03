@@ -2,19 +2,19 @@
 #include "luts.h"
 
 
-int vacMin = 0;
-int vacMax = 4095;
+uint16_t vacMin = 0;
+uint16_t vacMax = 4095;
 
 
-byte DACIDZ[2] = {B0001100, B0001101}
+byte DACIDZ[2] = {B0001100, B0001101};
 
 byte writeCommands[4] = {B00110001, B00110010,B00110100, B00111000};
 
 uint16_t  lowVal, highVal, prevExp;
 
-bool prevUp, prevDown;
+// bool prevUp, prevDown;
 
-void writeDac(uint16_t id, uint16_t int wichDac, uint16_t value){
+void writeDac(uint8_t id, uint8_t wichDac, uint16_t value){
 
     Wire.beginTransmission(id);
     Wire.write(writeCommands[wichDac]);
@@ -26,7 +26,7 @@ void writeDac(uint16_t id, uint16_t int wichDac, uint16_t value){
 
 
 //actual turn knub func
-/
+
 void turnKnub(byte knubNum,byte knubVal){
     
     byte hiRead = 255 - knubVal;
