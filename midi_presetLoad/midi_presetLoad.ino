@@ -10,8 +10,9 @@
  unsigned long time;
 
 byte presetIndx  = 5;
-
-
+byte indexes[3] = {5, 6, 7};
+int choose;
+int dTime;
 void setup(){
 	
 
@@ -49,39 +50,26 @@ void setup(){
 		Serial.println("ready");
 		
 		
-		for(int i = 0; i<2; i++){
-			presetIndx = 5;
-			Serial.println("reading preset1 name: ");
-
-			readKnubPresetName(eepromAddr1, presetIndx*presetSize+1, &currentPreset);
-
-			Serial.println(currentPreset.name);
-
-			delay(500);
-
-			presetIndx = 6;
-			Serial.println("reading preset2 name: ");
-
-			readKnubPresetName(eepromAddr1, presetIndx*presetSize+1, &currentPreset);
-
-			Serial.println(currentPreset.name);
-
-			delay(500);
-			presetIndx = 7;
-			Serial.println("reading preset3 name: ");
-
-			readKnubPresetName(eepromAddr1, presetIndx*presetSize+1, &currentPreset);
-
-			Serial.println(currentPreset.name);
-	}
+		
 }
 
 
  void loop(){
 
- 	//midiInRead();
+ 	
+			dTime = random(3000)+50;
+			choose = random(3);
 
+			presetIndx = indexes[choose];
+			
+			Serial.println("reading preset1 name: ");
+			Serial.println(dTime);
 
+			readKnubPresetName(eepromAddr1, presetIndx*presetSize+1, &currentPreset);
+
+			Serial.println(currentPreset.name);
+
+			delay(dTime);
 }
 
 

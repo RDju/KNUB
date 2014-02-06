@@ -229,13 +229,14 @@ void readKnubbieNumLoop(int deviceaddress, unsigned int eeaddress, aKnubPreset *
 void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset){
   
     ///first we read the preset's name and ID
-    
+   
     // so name
     readKnubPresetName(deviceaddress, eeaddress, kpreset); 
+    delay(5);
    
     //then ID
     readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
-    
+    delay(5);
     //so now eeaddress is maxNameLength + IDLength
      unsigned int addrPtr = eeaddress + maxNameLength + IDLength;
    
@@ -345,5 +346,4 @@ byte readByte( int deviceaddress, unsigned int eeaddress ) {
     Wire.write(data);
     Wire.endTransmission();
   }
-
 

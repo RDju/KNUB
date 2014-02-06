@@ -1,6 +1,6 @@
 //#include "SoftwareSerial.h"
 
-#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
+//#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
 #include "Arduino.h"
 
 #define upPin 5
@@ -11,7 +11,7 @@ SoftwareSerial midiSerial(7, 10);
 byte inMessage[2];
 byte inRead  = 0;
 
-uint16_t prevRead = 5*presetSize;
+uint16_t prevRead = 5*presetSize+1;
 uint8_t readindx;
 uint16_t readAdr;
 bool loadFlag = false;
@@ -47,7 +47,7 @@ void midiInRead(byte pageLev){
 			
 			/* PGM change to change preset*/
 			readindx = inMessage[1];
-			 readAdr = readindx*presetSize;
+			readAdr = readindx*presetSize+1;
 			
 			if(pageLev == 2){
 				if(readindx<8 && readAdr != prevRead && loadFlag == false){
@@ -57,14 +57,15 @@ void midiInRead(byte pageLev){
 	
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 					
-					updateKnubs(&currentPreset);
+					//updateKnubs(&currentPreset);
 					
-					writeByte(eepromAddr1, lastPresetMemSpace, readindx);
+					//writeByte(eepromAddr1, lastPresetMemSpace, readindx);
 					
 					loadFlag = false;
 					isEdited = false;
 					
 					#ifdef DEBUG_LOAD_PRESET
+						Serial.println(readAdr);
 						debugKnubPreset(&currentPreset);
 					#endif
 					clearLoopsOut();
@@ -90,7 +91,7 @@ void midiInRead(byte pageLev){
 
       					}
     				}	
-    			
+    				
     				
     				time2ChangePage = true;
 					prevRead = readAdr;

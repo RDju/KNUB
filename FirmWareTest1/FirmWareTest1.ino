@@ -103,13 +103,11 @@ void setup(){
   attachInterrupt(1, updateEncoder, CHANGE);
   
   
-
-  
   //writeByte(eepromAddr1, lastPresetMemSpace, );
   //read last loaded ID and load that one
-  lastID = readByte(eepromAddr1, lastPresetMemSpace);
+  lastID = 5;
   
-  readKnubPreset(eepromAddr1, lastID * presetSize, &currentPreset);
+  readKnubPreset(eepromAddr1, lastID * presetSize+1, &currentPreset);
   
   delay(50);
   
@@ -167,14 +165,14 @@ void loop(){
    //testDacs();
 
    
-  midiInRead(pageLevel);
+  
   //doSwitchInDec(pageLevel);
   
-  // if(pageLevel == 2){
-      
+  if(pageLevel == 2){
+      midiInRead(pageLevel);
   //   doExpressionPedal(analogRead(expressionPin));
       
-  // }
+  }
   
   ////dealing with pages 
    if(time2ChangePage){

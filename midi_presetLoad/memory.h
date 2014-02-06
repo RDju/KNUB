@@ -228,10 +228,10 @@ void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpre
     
     // so name
     readKnubPresetName(deviceaddress, eeaddress, kpreset); 
-    
+    delay(5);
     //then ID
     readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
-    
+    delay(5);
     //so now eeaddress is maxNameLength + IDLength
      unsigned int addrPtr = eeaddress + maxNameLength + IDLength;
    
@@ -246,15 +246,15 @@ void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpre
      
      
      readKnubbieName(deviceaddress,addrPtr , kpreset, i);
-     
+     delay(5);
      readKnubbieParams(deviceaddress, addrPtr+maxNameLength, kpreset, i);
-       
+     delay(5);  
      readKnubbiemodOn(deviceaddress, addrPtr+modIndx, kpreset, i);
-     
+     delay(5);
      readKnubbieModState(deviceaddress, addrPtr+stateIndx, kpreset, i);
-     
+     delay(5);
      readKnubbieNumLoop(deviceaddress, addrPtr+loopIndx, kpreset, i);
-         
+     delay(5);    
    }
    
    
