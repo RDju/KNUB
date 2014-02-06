@@ -36,6 +36,7 @@ struct aKnubPreset{
 typedef struct aKnubPreset aKnubPreset;
 
   void writeKnubPresetName( int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset ) {
+    
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddresspage >> 8)); // MSB
     Wire.write((int)(eeaddresspage & 0xFF)); // LSB
@@ -261,17 +262,17 @@ void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpre
 
 void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset){
   
-    ///first we read the preset's name and ID
+   
     
     // so name
     writeKnubPresetName(deviceaddress, eeaddress, kpreset); 
-    delay(5);
+    delay(saveTime);
     //then ID
     writeKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
-    
+    delay(saveTime);
     //so now eeaddress is maxNameLength + IDLength
      unsigned int addrPtr = eeaddress + maxNameLength + IDLength;
-     //delay(5); 
+     delay(saveTime); 
      //writeKnubbieName(deviceaddress, addrPtr, kpreset, 0);
 
    

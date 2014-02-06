@@ -232,7 +232,7 @@ void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpre
     
     // so name
     readKnubPresetName(deviceaddress, eeaddress, kpreset); 
-    
+   
     //then ID
     readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
     

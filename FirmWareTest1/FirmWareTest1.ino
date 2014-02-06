@@ -6,7 +6,7 @@
 
 #include "memory.h"
 #include "presets.h"
-#include "knubFuncs2.h"
+#include "knubFuncs.h"
 #include "UI.h"
 #include "looperMidi.h"
 #include "knubMidi.h"
@@ -20,7 +20,7 @@
 
 #define expressionPin 0
 
-#define checkPin 5
+
 /* to be removed*/
 
 volatile uint8_t lastValue = 0;
@@ -102,8 +102,7 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
-  pinMode(checkPin, OUTPUT);
-  digitalWrite(checkPin, HIGH);
+  
 
   
   //writeByte(eepromAddr1, lastPresetMemSpace, );
@@ -153,14 +152,14 @@ void setup(){
   updatePreset(currentPreset.name, isEdited);
   checkUILeds();
 
-  pinMode(upPin, INPUT);
-  pinMode(downPin, INPUT);
-  digitalWrite(upPin, HIGH);
-  digitalWrite(downPin, HIGH);
+  // pinMode(upPin, INPUT);
+  // pinMode(downPin, INPUT);
+  // digitalWrite(upPin, HIGH);
+  // digitalWrite(downPin, HIGH);
 
 
-  prevUp = digitalRead(upPin);
-  prevDown = digitalRead(downPin);
+  // prevUp = digitalRead(upPin);
+  // prevDown = digitalRead(downPin);
  
 }
 
@@ -169,7 +168,7 @@ void loop(){
 
    
   midiInRead(pageLevel);
-  doSwitchInDec(pageLevel);
+  //doSwitchInDec(pageLevel);
   
   // if(pageLevel == 2){
       

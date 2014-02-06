@@ -55,8 +55,6 @@ void midiInRead(byte pageLev){
 
 					loadFlag = true;
 	
-					digitalWrite(5, HIGH);
-					
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 					
 					updateKnubs(&currentPreset);
@@ -92,8 +90,7 @@ void midiInRead(byte pageLev){
 
       					}
     				}	
-    				
-    				digitalWrite(5, LOW);
+    			
     				
     				time2ChangePage = true;
 					prevRead = readAdr;
@@ -106,7 +103,7 @@ void midiInRead(byte pageLev){
 }
 
 
-
+/*
 // to be double Check:
 // added debounce func
 void doSwitchInDec(byte pageLev){
@@ -133,3 +130,4 @@ void doSwitchInDec(byte pageLev){
 	
 	
 }
+*/
