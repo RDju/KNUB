@@ -12,10 +12,14 @@ byte inMessage[2];
 byte inRead  = 0;
 
 uint16_t prevRead = 5*presetSize+1;
-uint8_t readindx;
+uint8_t readindx  = 5; //this later will be change back to load ID from eeprom
 uint16_t readAdr;
 bool loadFlag = false;
 bool prevUp, prevDown;
+
+
+uint8_t baseAddr = 5;
+uint8_t lastID = 5; // this later woul be removed for consistency with readindx
 
 
 void midiInRead(byte pageLev){
@@ -57,7 +61,7 @@ void midiInRead(byte pageLev){
 	
 					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 					
-					//updateKnubs(&currentPreset);
+					updateKnubs(&currentPreset);
 					
 					//writeByte(eepromAddr1, lastPresetMemSpace, readindx);
 					
@@ -104,10 +108,13 @@ void midiInRead(byte pageLev){
 }
 
 
-/*
+
 // to be double Check:
 // added debounce func
 void doSwitchInDec(byte pageLev){
+
+
+if(pageLev == 2){
 
   bool currUp  = digitalRead(upPin);
   bool currDown = digitalRead(downPin);
@@ -116,19 +123,123 @@ void doSwitchInDec(byte pageLev){
   if(currUp != prevUp){
   	
   	delay(50);
-	Serial.println("UP");	
+	Serial.println("UP");
+
+	//index gut up then load corresponding preset:
 	
-	prevUp = currUp;
+	
+
+				if(readindx < 7){
+					readindx += 1;
+					readAdr = readindx*presetSize+1;
+				}
+
+				if(readAdr != prevRead && loadFlag == false){
+					
+
+					loadFlag = true;
+	
+					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+					
+					updateKnubs(&currentPreset);
+					
+					//writeByte(eepromAddr1, lastPresetMemSpace, readindx);
+					
+					loadFlag = false;
+					isEdited = false;
+					
+					#ifdef DEBUG_LOAD_PRESET
+						Serial.println(readAdr);
+						debugKnubPreset(&currentPreset);
+					#endif
+					clearLoopsOut();
+					
+					// fill up loopsOut array
+  					
+  					for(uint8_t i = 0; i<numKnubbies; i++){
+
+    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+  					}	
+  					
+  					// check loops state and update
+  					
+  					for(uint8_t i = 0; i<4; i++){
+
+      					if(checkLoopsOut(i) == true){
+          					
+          					switchLoop(i, 1);
+          					
+      					}else{
+
+          					switchLoop(i, 0);
+
+      					}
+    				}	
+    				time2ChangePage = true;
+					prevRead = readAdr;
+
+				}
+			
+		prevUp = currUp;
 	}
 	
 	if(currDown != prevDown){
   	
 	delay(50);
   	Serial.println("DOWN");
-  	
-	prevDown = currDown;
-	}
+
+  				if(readindx > 5){
+					readindx -=1;
+					readAdr = readindx*presetSize+1;
+				}
+
+				if(readAdr != prevRead && loadFlag == false){
+					
+
+					loadFlag = true;
 	
+					readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+					
+					updateKnubs(&currentPreset);
+					
+					//writeByte(eepromAddr1, lastPresetMemSpace, readindx);
+					
+					loadFlag = false;
+					isEdited = false;
+					
+					#ifdef DEBUG_LOAD_PRESET
+						Serial.println(readAdr);
+						debugKnubPreset(&currentPreset);
+					#endif
+					clearLoopsOut();
+					
+					// fill up loopsOut array
+  					
+  					for(uint8_t i = 0; i<numKnubbies; i++){
+
+    					fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+  					}	
+  					
+  					// check loops state and update
+  					
+  					for(uint8_t i = 0; i<4; i++){
+
+      					if(checkLoopsOut(i) == true){
+          					
+          					switchLoop(i, 1);
+          					
+      					}else{
+
+          					switchLoop(i, 0);
+
+      					}
+    				}	
+    				time2ChangePage = true;
+					prevRead = readAdr;
+
+				}
+			prevDown = currDown;
+		}
 	
+	}	
 }
-*/

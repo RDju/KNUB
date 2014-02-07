@@ -232,11 +232,11 @@ void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpre
    
     // so name
     readKnubPresetName(deviceaddress, eeaddress, kpreset); 
-    delay(5);
+    //delay(5);
    
     //then ID
     readKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
-    delay(5);
+    //delay(5);
     //so now eeaddress is maxNameLength + IDLength
      unsigned int addrPtr = eeaddress + maxNameLength + IDLength;
    

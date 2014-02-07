@@ -66,9 +66,6 @@ char* fxState[2] = {"OFF", "ON"};
 char* modOns[2] = {"___", "EXP"};
 char* switchTypes[5] = {"L1", "L2", "L3", "L4","__"};
 
-byte baseAddr = 5;
-byte lastID = 5;
-
 byte toPrint;
 
 uint16_t prevExpVal;
@@ -150,14 +147,14 @@ void setup(){
   updatePreset(currentPreset.name, isEdited);
   checkUILeds();
 
-  // pinMode(upPin, INPUT);
-  // pinMode(downPin, INPUT);
-  // digitalWrite(upPin, HIGH);
-  // digitalWrite(downPin, HIGH);
+  pinMode(upPin, INPUT);
+  pinMode(downPin, INPUT);
+  digitalWrite(upPin, HIGH);
+  digitalWrite(downPin, HIGH);
 
 
-  // prevUp = digitalRead(upPin);
-  // prevDown = digitalRead(downPin);
+  prevUp = digitalRead(upPin);
+  prevDown = digitalRead(downPin);
  
 }
 
@@ -166,10 +163,11 @@ void loop(){
 
    
   
-  //doSwitchInDec(pageLevel);
+  doSwitchInDec(pageLevel);
   
   if(pageLevel == 2){
       midiInRead(pageLevel);
+      doSwitchInDec(pageLevel);
   //   doExpressionPedal(analogRead(expressionPin));
       
   }
