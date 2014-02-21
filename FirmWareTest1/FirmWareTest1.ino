@@ -6,7 +6,7 @@
 
 #include "memory.h"
 #include "presets.h"
-#include "knubFuncs.h"
+#include "knubFuncs2.h"
 #include "UI.h"
 #include "looperMidi.h"
 #include "knubMidi.h"

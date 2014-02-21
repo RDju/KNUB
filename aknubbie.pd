@@ -13,7 +13,7 @@
 -1 0 256;
 #X obj 558 142 bng 30 250 50 0 \$0-up nil update -4 -10 0 10 -262144
 -1 -1;
-#N canvas 225 170 754 397 gutsy 0;
+#N canvas 142 63 1035 599 gutsy 1;
 #X obj 477 16 r \$0-s;
 #X obj 176 30 << 8;
 #X obj 161 83 i;
@@ -55,6 +55,13 @@
 #X obj 656 148 << 24;
 #X obj 656 122 r \$0-k;
 #X obj 521 230 +;
+#X text 371 312 cd message est envoye en OSC comme ceci : /Kx (0<=x<=7)
++ int;
+#X text 370 342 un message séparé /kn + string est envoyé pou le
+nom du param ex: dist;
+#X obj 392 410 i;
+#X text 410 391 store;
+#X text 371 390 bang;
 #X connect 0 0 15 0;
 #X connect 1 0 2 1;
 #X connect 2 0 8 1;
