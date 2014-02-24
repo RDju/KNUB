@@ -3,6 +3,10 @@
 #include <stdlib.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
+#include <SPI.h>
+#include <Ethernet.h> // version IDE 0022
+#include <Z_OSC.h>
+
 
 #include "memory.h"
 #include "presets.h"
@@ -10,6 +14,7 @@
 #include "UI.h"
 #include "looperMidi.h"
 #include "knubMidi.h"
+#include "knubOSC.h"
 
 
 #define encoderPin1 2
@@ -19,6 +24,8 @@
 #define backBut 8
 
 #define expressionPin 0
+
+#define Do_OSC
 
 
 /* to be removed*/
@@ -100,6 +107,17 @@ void setup(){
   attachInterrupt(1, updateEncoder, CHANGE);
   
   
+  #ifdef Do_OSC 
+  if(Ethernet.begin(myMac) ==0){
+
+    //if doesn't work use fixed IP
+    Ethernet.begin(myMac, myIp);
+  
+  }
+  //OSC--------------------------------------
+  #endif
+
+
   //writeByte(eepromAddr1, lastPresetMemSpace, );
   //read last loaded ID and load that one
   lastID = 5;

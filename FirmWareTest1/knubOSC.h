@@ -1,11 +1,17 @@
-byte myMac[] = { 11, 22, 33, 44, 55};
-byte myIp[]  = { 192, 168, 0, 8 };
-uint16_t  myPort  = 10000;
+#include "Arduino.h"
 
-Z_OSCServer server;
-Z_OSCMessage *rcvMes;
+//OSC------------------------------------
+  byte myMac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02};
 
-char *subAddress[3]={"/knub/turn", "/knub/loadBank/", "/knub/saveBank"};
+  byte myIp[]  = { 192, 168, 0, 8 };
+  uint16_t  myPort  = 10000;
+
+  Z_OSCServer server;
+  Z_OSCMessage *rcvMes;
+
+
+
+char *subAddress[5]={"/k", "/pl", "/ps"};
 
 
 void knubDoOsc(){
@@ -19,23 +25,51 @@ void knubDoOsc(){
         
       byte wichPot = rcvMes->getInteger32(0);
       byte potVal =  rcvMes->getInteger32(1);   
-        
-      knubsValues[wichPot - 1] = potVal;  
-      turnKnub(wichPot, 1, knubsValues[wichPot - 1]);     
+      
+      turnKnub(wichPot, potVal);     
     }
     
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
-      writeKnubPreset(eepromAddr1, pgmNum*memOffset, (byte *)knubsValues); 
-    }
-    
-    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[2])){
-      
-       pgmNum = rcvMes->getInteger32(0);
+        
+
+          byte readAdr = rcvMes->getInteger32(0);
+          //loac presets
+          loadFlag = true;
+  
+          readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+          
+          updateKnubs(&currentPreset);
        
-       readKnubPreset(eepromAddr1, pgmNum*memOffset, (byte *)knubsValues);
-       setKnubPgm((byte *)knubsValues);
-       ///saves last used pgm
-       writeSingleKnub(eepromAddr1, 0, pgmNum); 
+          loadFlag = false;
+          isEdited = false;
+          
+          #ifdef DEBUG_LOAD_PRESET
+            Serial.println(readAdr);
+            debugKnubPreset(&currentPreset);
+          #endif
+          clearLoopsOut();
+          
+          // fill up loopsOut array
+            
+            for(uint8_t i = 0; i<numKnubbies; i++){
+
+              fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+            } 
+            
+            // check loops state and update
+            
+            for(uint8_t i = 0; i<4; i++){
+
+                if(checkLoopsOut(i) == true){
+                    
+                    switchLoop(i, 1);
+                    
+                }else{
+
+                    switchLoop(i, 0);
+                }
+            } 
+            time2ChangePage = true;
+        }
     }
-  }
 }
