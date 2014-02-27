@@ -23,8 +23,6 @@ void writeDac(uint8_t id, uint8_t wichDac, uint16_t value){
     Wire.endTransmission();
 }
 
-
-
 //actual turn knub func
 
 void turnKnub(byte knubNum,byte knubVal){

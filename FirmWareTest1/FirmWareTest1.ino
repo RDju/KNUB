@@ -15,6 +15,7 @@
 #include "looperMidi.h"
 #include "knubMidi.h"
 #include "knubOSC.h"
+#include "knubUtils.h"
 
 
 #define encoderPin1 2
@@ -25,7 +26,7 @@
 
 #define expressionPin 0
 
-#define Do_OSC
+//#define Do_OSC
 
 
 /* to be removed*/
@@ -106,7 +107,6 @@ void setup(){
   attachInterrupt(0, updateEncoder, CHANGE); 
   attachInterrupt(1, updateEncoder, CHANGE);
   
-  
   #ifdef Do_OSC 
   if(Ethernet.begin(myMac) ==0){
 
@@ -120,7 +120,7 @@ void setup(){
 
   //writeByte(eepromAddr1, lastPresetMemSpace, );
   //read last loaded ID and load that one
-  lastID = 5;
+  lastID = 11;
   
   readKnubPreset(eepromAddr1, lastID * presetSize+1, &currentPreset);
   
@@ -174,6 +174,9 @@ void setup(){
   prevUp = digitalRead(upPin);
   prevDown = digitalRead(downPin);
  
+
+  printCurrentPreset();
+
 }
 
 void loop(){
@@ -326,20 +329,23 @@ if(encoderValue != lastValue){
      case 3 :
        switch(tabIndx){
          case 0:
-            scaledEncoderValueParam = encoderValue%25;
+            scaledEncoderValueParam = encoderValue%2;
             if(scaledEncoderValueParam == 0){
                  
-                 txtParamIndx += encoderDir;
-                 currentParam = txtParamIndx%8;
+                txtParamIndx += encoderDir;
+                currentParam = txtParamIndx%8;
             
-                 updateParam(0, toString(currentParam + 1));
-                 updateParam(1,currentPreset.knubbies[currentParam].name);
-                 updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
-                 updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
-                 updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
-                 updateNumParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
-                 updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);  
-                 updateParam(7, switchTypes[currentPreset.knubbies[currentParam].numLoop]);
+                clearScreen();
+
+                updateParam(0, toString(currentParam + 1));
+                updateParam(1,currentPreset.knubbies[currentParam].name);
+                updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
+                updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
+                updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                updateNumParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
+                //updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
+                updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
+                //time2ChangePage = false;
                  
              }
         break;

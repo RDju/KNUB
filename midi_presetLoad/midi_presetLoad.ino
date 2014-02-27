@@ -2,6 +2,8 @@
 #include "utility/twi.h"
 #include "Wire.h"
 
+
+
 #include "presets.h"
 #include "knubUtils.h"
 #include "knubMidi.h"
@@ -9,8 +11,8 @@
 
  unsigned long time;
 
-byte presetIndx  = 5;
-byte indexes[3] = {5, 6, 7};
+byte presetIndx  = 11;
+byte indexes[3] = {11, 12, 13};
 int choose;
 int dTime;
 void setup(){
@@ -46,9 +48,13 @@ void setup(){
 
 	delay(1000);
 		
-		presetIndx = 5;
+		presetIndx = 11;
 		Serial.println("ready");
-		
+	
+	readKnubPreset(eepromAddr1, presetIndx*presetSize+1, &currentPreset);
+	delay(200);
+			//Serial.println(currentPreset.name);
+			printCurrentPreset();
 		
 		
 }
@@ -57,19 +63,7 @@ void setup(){
  void loop(){
 
  	
-			dTime = random(3000)+50;
-			choose = random(3);
-
-			presetIndx = indexes[choose];
 			
-			Serial.println("reading preset1 name: ");
-			Serial.println(dTime);
-
-			readKnubPresetName(eepromAddr1, presetIndx*presetSize+1, &currentPreset);
-
-			Serial.println(currentPreset.name);
-
-			delay(dTime);
 }
 
 

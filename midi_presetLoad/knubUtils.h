@@ -1,3 +1,12 @@
+void checkEdition(bool editState){
+
+	if(editState == false){
+
+		editState == true;	
+
+	}
+}
+
 
 void printCurrentPreset(){
 
