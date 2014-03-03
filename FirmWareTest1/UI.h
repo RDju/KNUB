@@ -233,6 +233,16 @@ void customCursor(uint8_t cusTab, uint8_t pageLev){
 
 
 
+
+// void browsePages(){
+
+
+  
+
+// }
+
+
+
 char* stateToString(uint8_t state){
 
   if(state == 1){

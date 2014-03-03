@@ -40,7 +40,7 @@ volatile uint8_t scaledEncoderValueParam = 0;
 
 //boolean time2ChangePage;
 
-uint8_t txtParamIndx;
+uint8_t txtParamIndx = 0;
 
 uint8_t lastMSB = 0;
 uint8_t lastLSB = 0;
@@ -329,12 +329,14 @@ if(encoderValue != lastValue){
      case 3 :
        switch(tabIndx){
          case 0:
+            
             scaledEncoderValueParam = encoderValue%2;
-            if(scaledEncoderValueParam == 0){
+            
+            if(scaledEncoderValueParam == 0 && encoderDir == 1 && currentParam < 7){
                  
                 txtParamIndx += encoderDir;
                 currentParam = txtParamIndx%8;
-            
+                
                 clearScreen();
 
                 updateParam(0, toString(currentParam + 1));
@@ -346,13 +348,33 @@ if(encoderValue != lastValue){
                 //updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
                 updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
                 //time2ChangePage = false;
-                 
-             }
+             
+           
+            }else if(scaledEncoderValueParam == 0 && encoderDir == -1 && currentParam > 0){
+
+                txtParamIndx += encoderDir;
+                currentParam = txtParamIndx%8;
+                
+                clearScreen();
+
+                updateParam(0, toString(currentParam + 1));
+                updateParam(1,currentPreset.knubbies[currentParam].name);
+                updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
+                updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
+                updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+                updateNumParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
+                //updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
+                updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
+                //time2ChangePage = false;
+            }else if(scaledEncoderValueParam == 0 && encoderDir == 1 && currentParam  == 7){
+
+            }
+
         break;
         case 6:
               checkEdition();
                scaledEncoderValueParam = encoderValue%25;
-              if(scaledEncoderValueParam == 0){
+              if(scaledEncoderValueParam == 0){   
                  txtParamIndx += encoderDir;
                  currSwIndx = txtParamIndx%13;
              
