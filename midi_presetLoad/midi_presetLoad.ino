@@ -11,8 +11,9 @@
 
  unsigned long time;
 
-byte presetIndx  = 11;
-byte indexes[3] = {11, 12, 13};
+byte presetIndx  = 5;
+byte indexes[6] = {5, 6, 7, 8, 9, 10};
+
 int choose;
 int dTime;
 void setup(){
@@ -24,46 +25,80 @@ void setup(){
 	Wire.begin();
 	delay(500);
 	
+	
+
 	Serial.print("writing at address : ");
-	Serial.println(presetIndx*presetSize+1);
-	
-	writeKnubPreset(eepromAddr1, presetIndx*presetSize+1, &preset1);
-	
-	delay(1000);
-	
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset1);
 	presetIndx ++;
+	delay(500);
+
 	Serial.print("writing at address : ");
-	Serial.println(presetIndx*presetSize+1);
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset2);
+	presetIndx ++;
+	delay(500);
 	
-	writeKnubPreset(eepromAddr1, presetIndx*presetSize+1, &preset2);
-	
-	delay(1000);
-
-	presetIndx++;
 	Serial.print("writing at address : ");
-	Serial.println(presetIndx*presetSize+1);
-		
-	writeKnubPreset(eepromAddr1, presetIndx*presetSize+1, &preset3);
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset3);
+	presetIndx ++;
+	delay(500);
 
+	Serial.print("writing at address : ");
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset4);
+	presetIndx ++;
+	delay(500);
+
+
+	Serial.print("writing at address : ");
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset5);
+	presetIndx ++;
+	delay(500);
+
+	Serial.print("writing at address : ");
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset6);
+	presetIndx ++;
+	delay(500);
 
 	delay(1000);
 		
-		presetIndx = 11;
-		Serial.println("ready");
+	presetIndx = 5;
+	Serial.println("ready");
 	
-	readKnubPreset(eepromAddr1, presetIndx*presetSize+1, &currentPreset);
-	delay(200);
-			//Serial.println(currentPreset.name);
-			printCurrentPreset();
+	
+	for(int i = 5; i < 11; i++){
+		readKnubPreset(eepromAddr1, i*presetSize, &currentPreset);
+		delay(200);
+		Serial.println(currentPreset.name);
+		delay(200);
+	}
 		
-		
+	Serial.println("DONE");	
 }
 
 
  void loop(){
+}
 
- 	
-			
+void eraseEE(){
+
+	for(int i = 5; i < 205; i ++){
+
+
+	Serial.print("writing at address : ");
+	Serial.println(i*presetSize);
+	
+	writeKnubPreset(eepromAddr1, i*presetSize, &emptyPreset);
+	
+	delay(100);
+	
+	}
+
+	Serial.println("ready");
 }
 
 
