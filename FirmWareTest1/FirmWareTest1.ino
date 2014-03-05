@@ -120,9 +120,9 @@ void setup(){
 
   //writeByte(eepromAddr1, lastPresetMemSpace, );
   //read last loaded ID and load that one
-  lastID = 11;
+  lastID = 5;
   
-  readKnubPreset(eepromAddr1, lastID * presetSize+1, &currentPreset);
+  readKnubPreset(eepromAddr1, lastID * presetSize, &currentPreset);
   
   delay(50);
   
@@ -182,9 +182,7 @@ void setup(){
 void loop(){
    //testDacs();
 
-   
-  
-  doSwitchInDec(pageLevel);
+   doSwitchInDec(pageLevel);
   
   if(pageLevel == 2){
       midiInRead(pageLevel);

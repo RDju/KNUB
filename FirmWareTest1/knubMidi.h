@@ -11,15 +11,15 @@ SoftwareSerial midiSerial(7, 10);
 byte inMessage[2];
 byte inRead  = 0;
 
-uint16_t prevRead = 11*presetSize+1;
-uint8_t readindx  = 11; //this later will be change back to load ID from eeprom
+uint16_t prevRead = 5*presetSize;
+uint8_t readindx  = 5; //this later will be change back to load ID from eeprom
 uint16_t readAdr;
 bool loadFlag = false;
 bool prevUp, prevDown;
 
 
-uint8_t baseAddr = 11;
-uint8_t lastID = 11; // this later woul be removed for consistency with readindx
+uint8_t baseAddr = 5;
+uint8_t lastID = 5; // this later woul be removed for consistency with readindx
 
 
 void midiInRead(byte pageLev){
@@ -51,10 +51,10 @@ void midiInRead(byte pageLev){
 			
 			/* PGM change to change preset*/
 			readindx = inMessage[1];
-			readAdr = readindx*presetSize+1;
+			readAdr = readindx*presetSize;
 			
 			if(pageLev == 2){
-				if(readindx<17 && readAdr != prevRead && loadFlag == false){
+				if(readindx<11 && readAdr != prevRead && loadFlag == false){
 					
 
 					loadFlag = true;
@@ -129,9 +129,9 @@ if(pageLev == 2){
 	
 	
 
-				if(readindx < 17){
+				if(readindx < 10){
 					readindx += 1;
-					readAdr = readindx*presetSize+1;
+					readAdr = readindx*presetSize;
 				}
 
 				if(readAdr != prevRead && loadFlag == false){
@@ -188,9 +188,9 @@ if(pageLev == 2){
 	delay(50);
   	Serial.println("DOWN");
 
-  				if(readindx > 11){
+  				if(readindx > 5){
 					readindx -=1;
-					readAdr = readindx*presetSize+1;
+					readAdr = readindx*presetSize;
 				}
 
 				if(readAdr != prevRead && loadFlag == false){

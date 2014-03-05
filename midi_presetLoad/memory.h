@@ -12,7 +12,7 @@
 #define presetSize 126
 #define modIndx maxNameLength+paramLength
 #define stateIndx maxNameLength+paramLength+modOnLength
-#define loopIndx +maxNameLength+paramLength+modOnLength+stateLength
+#define loopIndx maxNameLength+paramLength+modOnLength+stateLength
 
 #define eepromAddr1 0x50
 
@@ -262,8 +262,6 @@ void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpre
 
 void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset){
   
-   
-    
     // so name
     writeKnubPresetName(deviceaddress, eeaddress, kpreset); 
     delay(saveTime);
@@ -281,16 +279,16 @@ void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpr
      ///move addrPtr to start of knubbie
      addrPtr = addrPtr*(i+1);
      
-     delay(5);
+     delay(saveTime);
      writeKnubbieName(deviceaddress,addrPtr , kpreset, i);
      
-     delay(5);
+     delay(saveTime);
      writeKnubbieParams(deviceaddress, addrPtr+maxNameLength, kpreset, i);
-     delay(5);  
+     delay(saveTime);  
      writeKnubbiemodOn(deviceaddress, addrPtr+maxNameLength+paramLength, kpreset, i);
-     delay(5);
+     delay(saveTime);
      writeKnubbieModState(deviceaddress, addrPtr+maxNameLength+paramLength+modOnLength, kpreset, i);
-     delay(5);
+     delay(saveTime);
      writeKnubbieNumLoop(deviceaddress, addrPtr+maxNameLength+paramLength+modOnLength+stateLength, kpreset, i);
     
    }
