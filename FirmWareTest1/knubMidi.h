@@ -11,21 +11,24 @@ SoftwareSerial midiSerial(7, 10);
 byte inMessage[2];
 byte inRead  = 0;
 
-uint16_t prevRead = 5*presetSize;
-uint8_t readindx  = 5; //this later will be change back to load ID from eeprom
+uint16_t prevRead = 100*presetSize;
+uint8_t readindx  = 100; //this later will be change back to load ID from eeprom
 uint16_t readAdr;
 bool loadFlag = false;
 bool prevUp, prevDown;
 
 
-uint8_t baseAddr = 5;
-uint8_t lastID = 5; // this later woul be removed for consistency with readindx
+uint8_t baseAddr = 100;
+uint8_t lastID = 100; // this later woul be removed for consistency with readindx
 
 
 void midiInRead(byte pageLev){
 
 
 	/*reads incomming PGM change and CC's (for modulation of individual parameters)*/
+
+	//must modify this to reflect preset num and pgm nums
+
 
 	if(midiSerial.available()>0){
 
@@ -50,11 +53,11 @@ void midiInRead(byte pageLev){
 			#endif
 			
 			/* PGM change to change preset*/
-			readindx = inMessage[1];
+			readindx = inMessage[1] + 95;
 			readAdr = readindx*presetSize;
 			
 			if(pageLev == 2){
-				if(readindx<11 && readAdr != prevRead && loadFlag == false){
+				if(readindx<100 && readAdr != prevRead && loadFlag == false){
 					
 
 					loadFlag = true;
@@ -123,13 +126,13 @@ if(pageLev == 2){
   if(currUp != prevUp){
   	
   	delay(50);
-	Serial.println("UP");
+	//Serial.println("UP");
 
 	//index gut up then load corresponding preset:
 	
 	
 
-				if(readindx < 10){
+				if(readindx < 100){
 					readindx += 1;
 					readAdr = readindx*presetSize;
 				}
@@ -186,9 +189,9 @@ if(pageLev == 2){
 	if(currDown != prevDown){
   	
 	delay(50);
-  	Serial.println("DOWN");
+  	//Serial.println("DOWN");
 
-  				if(readindx > 5){
+  				if(readindx > 100){
 					readindx -=1;
 					readAdr = readindx*presetSize;
 				}
