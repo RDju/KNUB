@@ -41,7 +41,7 @@ void knubDoOsc(){
           updateKnubs(&currentPreset);
        
           loadFlag = false;
-          isEdited = false;
+          //isEdited = false;
           
           #ifdef DEBUG_LOAD_PRESET
             Serial.println(readAdr);

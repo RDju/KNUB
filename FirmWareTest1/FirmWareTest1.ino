@@ -8,7 +8,7 @@
 #include <Z_OSC.h>
 
 
-#include "memory.h"
+//#include "memory.h"
 #include "presets.h"
 #include "knubFuncs2.h"
 #include "UI.h"
@@ -57,8 +57,8 @@ uint8_t currFx = 0;
 int8_t encoderDir;
 
 uint8_t currentPresetID = 0;
-//boolean isActive;
-//boolean isEdited;
+boolean isActive;
+boolean isEdited;
 
 uint8_t currentFx = 0;
 uint8_t currentParam = 0;
@@ -120,7 +120,7 @@ void setup(){
 
   //writeByte(eepromAddr1, lastPresetMemSpace, );
   //read last loaded ID and load that one
-  lastID = 5;
+  lastID = 100;
   
   readKnubPreset(eepromAddr1, lastID * presetSize, &currentPreset);
   
