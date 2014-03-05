@@ -6,7 +6,7 @@
 #include "knubMidi.h"
 
 
-byte presetIndx  = 100;
+byte presetIndx  = 5;
 
 void setup(){
 	
@@ -22,7 +22,7 @@ void setup(){
 	readAllPresets();
 	
 
-	Serial.println(readByte(eepromAddr1, 126));
+	//Serial.println(readByte(eepromAddr1, 126));
 }
 
 
@@ -31,14 +31,14 @@ void loop(){
 
 void eraseEE(){
 
-	for(int i = 0; i < 200; i ++){
+	for(int i = 0; i < 10000; i ++){
 	
-	Serial.print("writing at address : ");
-	Serial.println(i*presetSize);
+	//Serial.print("writing at address : ");
+	//Serial.println(i*presetSize);
 	
-	writeKnubPreset(eepromAddr1, i*presetSize, &emptyPreset);
+	writeByte(eepromAddr1, i, 0xFF);
 	
-	delay(100);
+	delay(5);
 	
 	}
 
@@ -91,7 +91,7 @@ void writeAllPresets(){
 
 void readAllPresets(){
 
-	presetIndx = 100;
+	presetIndx = 5;
 
 	//1
 	readKnubPreset(eepromAddr1, presetIndx*presetSize, &currentPreset);

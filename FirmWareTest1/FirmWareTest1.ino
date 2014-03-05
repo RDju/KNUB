@@ -120,7 +120,7 @@ void setup(){
 
   //writeByte(eepromAddr1, lastPresetMemSpace, );
   //read last loaded ID and load that one
-  lastID = 100;
+  lastID = 5;
   
   readKnubPreset(eepromAddr1, lastID * presetSize, &currentPreset);
   
