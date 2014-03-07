@@ -10,11 +10,11 @@
 
 
 //was 1959
-#define maxSend 65535
+#define maxSend 4095
 //was 1172
 #define minSend 0
 
-  byte DAC1_addr = B0001100;
+byte DAC1_addr = B0001100;
 byte writeDacA = B00110001;
 byte writeDacB = B00110010;
 byte writeDacC = B00110100;
@@ -64,7 +64,7 @@ int  myPort  = 10000;
 byte computer[] = {192, 168, 0, 5};
 int scPort = 57120;
 
-char *subAddress[5]={"/O2A/move","/O2A/doPot", "/O2A/lookupVal", "/O2A/tellMe", "/moveKnob"};
+char *subAddress[5]={"/turn1", "/turn2", "/turn3", "/turn4"};
 
 char oscAdr1[] = "/O2A/vac1";
 char oscAdr2[] = "/O2A/done";
@@ -87,10 +87,6 @@ void setup(){
   ///turnKnub(0, 10);
 
   writeDac(0, 0);
-
-
-
-
 }
 
 
@@ -107,6 +103,29 @@ if(server.available()){
 
         turnKnub(0, val);
     }
+
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
+    
+        int val = rcvMes-> getInteger32(0);
+
+        turnKnub(1, val);
+    }
+
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[2])){
+    
+        int val = rcvMes-> getInteger32(0);
+
+        turnKnub(2, val);
+    }
+
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[3])){
+    
+        int val = rcvMes-> getInteger32(0);
+
+        turnKnub(3, val);
+    }
+
+    /*
     //deals with pot1
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
       
@@ -157,8 +176,9 @@ if(server.available()){
          message.setZ_OSCMessage(oscAdr2, "s", "done");
          client.send(&message);
     }
-    
+  */   
   }
+ 
 }
 
 
@@ -175,6 +195,10 @@ void turnKnub(byte knubNum,byte knubVal){
     case 0:
       writeDac(0, lowVal);
       writeDac(1, highVal);
+    break;
+    case 1:
+      writeDac(2, lowVal);
+      writeDac(3, highVal);
     break;
   }
 }

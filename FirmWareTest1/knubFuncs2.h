@@ -36,24 +36,24 @@ void turnKnub(byte knubNum,byte knubVal){
   
     case 0:
       
-      writeDac(DACIDZ[0], writeCommands[0], lowVal);
-      writeDac(DACIDZ[0], writeCommands[1], highVal);
+      writeDac(DACIDZ[0], 0, lowVal);
+      writeDac(DACIDZ[0], 1, highVal);
     break;
     
 
     case 1:
-     writeDac(DACIDZ[0], writeCommands[2], lowVal);
-     writeDac(DACIDZ[0], writeCommands[3], highVal);
+     writeDac(DACIDZ[0], 2, lowVal);
+     writeDac(DACIDZ[0], 3, highVal);
     break;
     
     case 2:
-      writeDac(DACIDZ[1], writeCommands[0], lowVal);
-     writeDac(DACIDZ[1], writeCommands[1], highVal);
+      writeDac(DACIDZ[1], 0, lowVal);
+     writeDac(DACIDZ[1], 1, highVal);
     break;
     
     case 3:
-      writeDac(DACIDZ[1], writeCommands[0], lowVal);
-     writeDac(DACIDZ[1], writeCommands[1], highVal);
+      writeDac(DACIDZ[1], 2, lowVal);
+     writeDac(DACIDZ[1], 3, highVal);
     break;
     }
 }
