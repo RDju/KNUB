@@ -27,12 +27,17 @@ void writeDac(uint8_t id, uint8_t wichDac, uint16_t value){
 
 void turnKnub(byte knubNum,byte knubVal){
     
-    byte hiRead = 255 - knubVal;
+    //byte hiRead = 255 - knubVal;
     
-    lowVal = map(knubVal, 0, 255, vacMin, vacMax);
-    highVal = map(hiRead, 0, 255, vacMin, vacMax);
+    // lowVal = map(knubVal, 0, 255, vacMin, vacMax);
+    // highVal = map(hiRead, 0, 255, vacMin, vacMax);
 
-  switch(knubNum){
+    byte hiRead = 255 - knubVal;
+
+    lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
+    highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
+    
+    switch(knubNum){
   
     case 0:
       
