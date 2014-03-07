@@ -1,0 +1,62 @@
+#N canvas 98 52 1086 714 10;
+#X declare -lib mrpeach;
+#X obj 39 43 import mrpeach;
+#X obj 65 435 udpsend;
+#X msg 79 373 disconnect;
+#X floatatom 64 457 5 0 0 0 - - -;
+#X obj 35 284 packOSC;
+#X msg 37 122 sendtyped /K1 i \$1;
+#X msg 206 123 sendtyped /K2 i \$1;
+#X msg 376 123 sendtyped /K3 i \$1;
+#X obj 40 93 hsl 128 15 0 255 0 0 empty empty empty -2 -8 0 10 -262144
+-1 -1 0 1;
+#X obj 209 95 hsl 128 15 0 255 0 0 0 254 empty -2 -8 0 10 -262144 -1
+-1 0 1;
+#X obj 379 93 hsl 128 15 0 255 0 0 0 254 empty -2 -8 0 10 -262144 -1
+-1 0 1;
+#X msg 65 346 connect 192.168.0.23 10000;
+#X obj 551 91 hsl 128 15 0 255 0 0 0 254 empty -2 -8 0 10 -262144 -1
+-1 0 1;
+#X msg 548 121 sendtyped /K4 i \$1;
+#X msg 369 296 devices;
+#X obj 433 273 nbx 5 14 -1e+37 1e+37 0 0 empty empty empty 0 -8 0 11
+-262144 -1 -1 0 256;
+#X msg 433 297 open \$1;
+#X msg 496 296 close;
+#X obj 403 355 comport 9600;
+#X text 131 323 OSC;
+#X text 511 272 SERIAL;
+#N canvas 0 22 450 278 (subpatch) 0;
+#X array vactrol 256 float 5;
+#A 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;
+#X coords 0 255 255 0 400 250 1 0 0;
+#X restore 612 412 graph;
+#X obj 403 433 tabwrite vactrol;
+#X obj 76 161 s indx;
+#X obj 496 405 r indx;
+#X connect 1 0 3 0;
+#X connect 2 0 1 0;
+#X connect 4 0 1 0;
+#X connect 5 0 4 0;
+#X connect 6 0 4 0;
+#X connect 7 0 4 0;
+#X connect 8 0 5 0;
+#X connect 8 0 23 0;
+#X connect 9 0 6 0;
+#X connect 10 0 7 0;
+#X connect 11 0 1 0;
+#X connect 12 0 13 0;
+#X connect 13 0 4 0;
+#X connect 14 0 18 0;
+#X connect 15 0 16 0;
+#X connect 16 0 18 0;
+#X connect 17 0 18 0;
+#X connect 18 0 22 0;
+#X connect 24 0 22 1;

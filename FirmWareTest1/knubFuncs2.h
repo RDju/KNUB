@@ -48,7 +48,7 @@ void turnKnub(byte knubNum,byte knubVal){
     
     case 2:
       writeDac(DACIDZ[1], 0, lowVal);
-     writeDac(DACIDZ[1], 1, highVal);
+      writeDac(DACIDZ[1], 1, highVal);
     break;
     
     case 3:

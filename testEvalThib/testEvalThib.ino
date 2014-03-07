@@ -19,14 +19,14 @@ byte lin[255];
 byte preDist[255];
 byte lut[255];
 
-char *subAddress[3]={"/K1", "/K2", "/K3"};
+char *subAddress[3]={"/K1", "/K2", "/K3", "/K3"};
 
 Z_OSCServer server;
 Z_OSCMessage *rcvMes;
 
 
 int minSend = 0;
-int maxSend = 65535;
+int maxSend = 4095;
 
 byte DAC1_addr = B0001100;
 byte DAC2_addr = B0001101;
@@ -84,18 +84,40 @@ if(server.available()){
         //Serial.println(val);
 
         turnKnub(0, val);
+
+        analogInVal = analogRead(0);
+        analogInVal = map(analogInVal, 0, 1024, 0, 255);
+        Serial.println(analogInVal);
     }
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
         
         val = rcvMes->getInteger32(0);
 
         turnKnub(1, val);
+
+        analogInVal = analogRead(0);
+        analogInVal = map(analogInVal, 0, 1024, 0, 255);
+        Serial.println(analogInVal);
     }
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[2])){
         
         val = rcvMes->getInteger32(0);
 
         turnKnub(2, val);
+
+        analogInVal = analogRead(0);
+        analogInVal = map(analogInVal, 0, 1024, 0, 255);
+        Serial.println(analogInVal);
+    }
+    if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[3])){
+        
+        val = rcvMes->getInteger32(0);
+
+        turnKnub(3, val);
+
+        analogInVal = analogRead(0);
+        analogInVal = map(analogInVal, 0, 1024, 0, 255);
+        Serial.println(analogInVal);
     }
   }
 }
@@ -122,6 +144,10 @@ void turnKnub(byte knubNum,byte knubVal){
       writeDac2(0, lowVal);
       writeDac2(1, highVal);
     break;
+    case 3:
+      writeDac2(2, lowVal);
+      writeDac2(3, highVal);
+     break;
 
   }
 }
