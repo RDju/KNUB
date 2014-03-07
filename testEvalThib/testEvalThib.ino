@@ -19,7 +19,7 @@ byte lin[255];
 byte preDist[255];
 byte lut[255];
 
-char *subAddress[3]={"/K1", "/K2", "/K3", "/K3"};
+char *subAddress[4]={"/K1", "/K2", "/K3", "/K3"};
 
 Z_OSCServer server;
 Z_OSCMessage *rcvMes;
@@ -87,7 +87,7 @@ if(server.available()){
 
         analogInVal = analogRead(0);
         analogInVal = map(analogInVal, 0, 1024, 0, 255);
-        Serial.println(analogInVal);
+        Serial.write(analogInVal);
     }
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
         
@@ -97,7 +97,7 @@ if(server.available()){
 
         analogInVal = analogRead(0);
         analogInVal = map(analogInVal, 0, 1024, 0, 255);
-        Serial.println(analogInVal);
+        Serial.write(analogInVal);
     }
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[2])){
         
@@ -107,7 +107,7 @@ if(server.available()){
 
         analogInVal = analogRead(0);
         analogInVal = map(analogInVal, 0, 1024, 0, 255);
-        Serial.println(analogInVal);
+        Serial.write(analogInVal);
     }
     if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[3])){
         
@@ -117,7 +117,7 @@ if(server.available()){
 
         analogInVal = analogRead(0);
         analogInVal = map(analogInVal, 0, 1024, 0, 255);
-        Serial.println(analogInVal);
+        Serial.write(analogInVal);
     }
   }
 }
