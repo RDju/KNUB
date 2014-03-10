@@ -132,7 +132,7 @@ if(pageLev == 2){
 	
 	
 
-				if(readindx < 8){
+				if(readindx < 7){
 					readindx += 1;
 					readAdr = readindx*presetSize;
 				}

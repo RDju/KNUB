@@ -1,5 +1,28 @@
 #include "Arduino.h"
-#include "luts.h"
+//#include "luts.h"
+
+uint8_t redLUT[] = {3 ,  6 ,  8 ,  10 ,  11 ,  12 ,  14 ,  15 ,  16 ,  
+  16 ,  17 ,  18 ,  19 ,  19 ,  20 ,  20 ,  21 ,  21 ,  22 ,  22 ,  23 ,  23 ,  
+  24 ,  24 ,  24 ,  25 ,  25 ,  25 ,  26 ,  26 ,  26 ,  27 ,  27 ,  27 ,  28 ,  
+  28 ,  28 ,  29 ,  29 ,  29 ,  29 ,  30 ,  30 ,  30 ,  30 ,  30 ,  31 ,  31 ,  
+  31 ,  31 ,  32 ,  32 ,  32 ,  33 ,  33 ,  33 ,  33 ,  34 ,  34 ,  35 ,  35 ,  
+  35 ,  35 ,  36 ,  36 ,  36 ,  36 ,  36 ,  36 ,  36 ,  37 ,  37 ,  38 ,  38 ,  
+  38 ,  39 ,  39 ,  39 ,  40 ,  41 ,  41 ,  42 ,  42 ,  42 ,  43 ,  43 ,  43 ,  
+  44 ,  44 ,  44 ,  45 ,  45 ,  46 ,  46 ,  46 ,  46 ,  47 ,  47 ,  47 ,  48 ,  
+  48 ,  48 ,  49 ,  49 ,  49 ,  50 ,  50 ,  51 ,  51 ,  51 ,  52 ,  52 ,  53 ,  
+  53 ,  54 ,  54 ,  55 ,  55 ,  55 ,  56 ,  56 ,  57 ,  57 ,  58 ,  58 ,  58 ,  
+  59 ,  59 ,  59 ,  60 ,  60 ,  61 ,  61 ,  61 ,  62 ,  62 ,  62 ,  63 ,  63 ,  
+  64 ,  64 ,  64 ,  65 ,  66 ,  66 ,  66 ,  67 ,  67 ,  67 ,  67 ,  68 ,  68 ,  
+  68 ,  69 ,  69 ,  69 ,  70 ,  70 ,  70 ,  71 ,  71 ,  72 ,  72 ,  73 ,  73 ,  
+  74 ,  74 ,  75 ,  75 ,  76 ,  76 ,  77 ,  77 ,  77 ,  78 ,  79 ,  80 ,  80 ,  
+  81 ,  82 ,  83 ,  83 ,  84 ,  85 ,  85 ,  86 ,  87 ,  87 ,  88 ,  89 ,  89 ,  
+  90 ,  91 ,  91 ,  92 ,  92 ,  94 ,  94 ,  95 ,  97 ,  97 ,  98 ,  100 ,  101 ,  
+  102 ,  103 ,  104 ,  105 ,  106 ,  107 ,  108 ,  109 ,  111 ,  112 ,  113 ,  115 ,  
+  116 ,  118 ,  120 ,  122 ,  125 ,  127 ,  128 ,  131 ,  132 ,  135 ,  137 ,  140 ,  
+  145 ,  145 ,  151 ,  158 ,  165 ,  173 ,  180 ,  185 ,  190 ,  199 ,  208 ,  212 ,  
+  215 ,  219 ,  225 ,  230 ,  235 ,  240 ,  244 ,  250 ,  252 ,  253 ,  254 ,  255 ,  
+  255 ,  255 ,  255};
+
 
 
 uint16_t vacMin = 0;
@@ -26,16 +49,12 @@ void writeDac(uint8_t id, uint8_t wichDac, uint16_t value){
 //actual turn knub func
 
 void turnKnub(byte knubNum,byte knubVal){
-    
-    //byte hiRead = 255 - knubVal;
-    
-    // lowVal = map(knubVal, 0, 255, vacMin, vacMax);
-    // highVal = map(hiRead, 0, 255, vacMin, vacMax);
+
 
     byte hiRead = 255 - knubVal;
 
-    lowVal = map(pgm_read_byte(redLUT + knubVal), 0, 255, vacMin, vacMax);
-    highVal = map(pgm_read_byte(redLUT + hiRead), 0, 255, vacMin, vacMax);
+    lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
+    highVal = map(redLUT[hiRead], 0, 255, vacMin, vacMax);
     
     switch(knubNum){
   
@@ -64,14 +83,12 @@ void turnKnub(byte knubNum,byte knubVal){
 }
  void updateKnubs(aKnubPreset * kPreset){
  
-      for(uint8_t i = 0; i<3; i++){
+      for(uint8_t i = 0; i<7; i++){
         if(kPreset->knubbies[i].state == 1){
           turnKnub(i, kPreset->knubbies[i].params[0]);
         }
       }
 }
-
-
 
 
 void printPresetName(aKnubPreset *kPreset){
@@ -89,7 +106,7 @@ void doExpressionPedal(unsigned int expVal){
       for(uint8_t i =0; i<3; i++){
         if(currentPreset.knubbies[i].modOn == 1){
           turnKnub(i, map(expVal, 0, 255, currentPreset.knubbies[i].params[0], currentPreset.knubbies[i].params[1]));
-          //Serial.println(expVal);
+       
         }
       }
 

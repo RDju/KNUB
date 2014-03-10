@@ -187,11 +187,11 @@ void loop(){
   if(pageLevel == 2){
       midiInRead(pageLevel);
       doSwitchInDec(pageLevel);
-      doExpressionPedal(analogRead(expressionPin));
+      //doExpressionPedal(analogRead(expressionPin));
       
   }
   
-  ////dealing with pages 
+  ////dealing with pages s
    if(time2ChangePage){
      switch(pageLevel){
        case 0:
