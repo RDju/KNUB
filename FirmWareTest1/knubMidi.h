@@ -17,7 +17,7 @@ uint16_t readAdr;
 bool loadFlag = false;
 bool prevUp, prevDown;
 
-uint8_t debounceDelay = 50;
+uint8_t debounceDelay = 5;
 
 uint8_t baseAddr = 5;
 uint8_t lastID = 5; // this later woul be removed for consistency with readindx

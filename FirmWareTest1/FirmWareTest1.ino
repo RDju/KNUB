@@ -138,8 +138,8 @@ void setup(){
   for(uint8_t i = 0; i<4; i++){
 
       if(checkLoopsOut(i) == true){
-          ////Serial.print("turn on loop: ");
-          ////Serial.println(i);
+          //////Serial.printl("turn on loop: ");
+          //////Serial.printlln(i);
           switchLoop(i, 1);
       }else{
 
@@ -513,13 +513,13 @@ if(encoderValue != lastValue){
               //update loop at loop indx
               
               //check loop at numLoop
-              //Serial.print("checking loop: ");
-              //Serial.println(currentPreset.knubbies[currentParam].numLoop);
-              //Serial.print("value: ");
-              //Serial.println(loopsOut[currentPreset.knubbies[currentParam].numLoop]);
+              ////Serial.printl("checking loop: ");
+              ////Serial.printlln(currentPreset.knubbies[currentParam].numLoop);
+              ////Serial.printl("value: ");
+              ////Serial.printlln(loopsOut[currentPreset.knubbies[currentParam].numLoop]);
               
               if(checkLoopsOut(currentPreset.knubbies[currentParam].numLoop) == false){
-                  //Serial.println("turnOFF");
+                  ////Serial.printlln("turnOFF");
                   //turn loop off
                   switchLoop(currentPreset.knubbies[currentParam].numLoop, 0);
 
@@ -527,7 +527,7 @@ if(encoderValue != lastValue){
 
                   //quick and dirty
                   //turn loop on
-                  //Serial.println("turnON");
+                  ////Serial.printlln("turnON");
                   switchLoop(currentPreset.knubbies[currentParam].numLoop, 1);
               }
               
@@ -536,59 +536,7 @@ if(encoderValue != lastValue){
       
      }
      break;
-   case 4:
-      
-      switch(tabIndx){
-       
-        case 0:
-            /*
-            scaledEncoderValueParam = encoderValue%25;
-            if(scaledEncoderValueParam == 0){
-                 txtParamIndx += encoderDir;
-                 currentFx = txtParamIndx%3;
-                 
-                 updatePedalName(currentPreset.knubbies[currentFx].name);
-                 updatePedalState(fxState[currentPreset.knubbies[currentFx].isOn]);
-                 
-                 if(currentFx != 0){
-                   
-                   currentFx += encoderDir;
-                   currentFx -= 1;
-                   (currentFx);
-                 
-                 }
-               }
-          */
-        break;
-       
-        
-    }
-    break;
-    case 2:
-    //here to change preset from encoding wheel 
-      /*
-        scaledEncoderValueParam = encoderValue%25;
-        if(scaledEncoderValueParam == 0){
-            if(encoderDir == 1){     
-                 currentPresetID += encoderDir;
-                 itoa(currentPresetID, valBuf, 10);
-              
-                 readKnubPresetName(eepromAddr1, currentPresetID*maxNameLength, &currentPreset);
-                 
-                 updatePreset(currentPreset.name, isEdited);
-        }else if(encoderDir == -1 && currentPresetID > 0){
-        
-          currentPresetID += encoderDir;
-          itoa(currentPresetID, valBuf, 10);
-          
-          readKnubPresetName(eepromAddr1, currentPresetID*maxNameLength, &currentPreset);  
-          
-          updatePreset(currentPreset.name, isEdited);
-          }
-        }
-      */
-    break;
-   }
+  }
  }
    lastValue = encoderValue;
   
