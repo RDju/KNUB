@@ -17,7 +17,6 @@
 #include "knubOSC.h"
 #include "knubUtils.h"
 
-
 #define encoderPin1 2
 #define encoderPin2 3
 
@@ -175,17 +174,14 @@ void setup(){
   prevDown = digitalRead(downPin);
  
 
-  printCurrentPreset();
+  //printCurrentPreset();
 
 }
 
 void loop(){
-   //testDacs();
-
-   doSwitchInDec(pageLevel);
   
   if(pageLevel == 2){
-      midiInRead(pageLevel);
+      //midiInRead(pageLevel);
       doSwitchInDec(pageLevel);
       //doExpressionPedal(analogRead(expressionPin));
       

@@ -85,6 +85,7 @@ void turnKnub(byte knubNum,byte knubVal){
  
       for(uint8_t i = 0; i<7; i++){
         if(kPreset->knubbies[i].state == 1){
+      
           turnKnub(i, kPreset->knubbies[i].params[0]);
         }
       }

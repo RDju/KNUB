@@ -1,4 +1,0 @@
-#N canvas 120 128 1081 586 10;
-#X obj -670 -34 cnv 15 1200 600 empty empty empty 20 12 0 14 -232576
--66577 0;
-#X obj -532 19 aknubbie;
