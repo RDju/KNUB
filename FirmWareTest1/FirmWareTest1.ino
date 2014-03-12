@@ -70,7 +70,7 @@ uint8_t currSwIndx = 0;
 boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
-char* modOns[2] = {"___", "EXP"};
+char* modOns[3] = {"___", "EXP","MID"};
 char* switchTypes[5] = {"L1", "L2", "L3", "L4","__"};
 
 byte toPrint;
@@ -380,7 +380,7 @@ if(encoderValue != lastValue){
               scaledEncoderValueParam = encoderValue%25;
               if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
-                 currModIndx = txtParamIndx%2;
+                 currModIndx = txtParamIndx%3;
              
                  updateParam(3, modOns[currModIndx]);
             } 
