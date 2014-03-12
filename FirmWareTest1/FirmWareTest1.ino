@@ -27,9 +27,6 @@
 
 //#define Do_OSC
 
-
-/* to be removed*/
-
 volatile uint8_t lastValue = 0;
 volatile uint8_t lastEncoderValue = 0;
 volatile uint8_t encoderValue = 0;
