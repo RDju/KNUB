@@ -75,7 +75,6 @@ byte toPrint;
 uint16_t prevExpVal;
 uint16_t expVal;
 
-
 void setup(){
   
   Wire.begin();
@@ -88,8 +87,6 @@ void setup(){
   midiSerial.begin(31250);
   looperSerial.begin(31250);
 
-  //initDisplay();
-  
   //enable read for midiSerial only
   midiSerial.listen();
 
@@ -169,18 +166,15 @@ void setup(){
 
   prevUp = digitalRead(upPin);
   prevDown = digitalRead(downPin);
- 
-
-  //printCurrentPreset();
 
 }
 
 void loop(){
   
   if(pageLevel == 2){
-      //midiInRead(pageLevel);
-      doSwitchInDec(pageLevel);
-      //doExpressionPedal(analogRead(expressionPin));
+      midiInRead();
+      doSwitchInDec();
+      doExpressionPedal(analogRead(expressionPin));
       
   }
   

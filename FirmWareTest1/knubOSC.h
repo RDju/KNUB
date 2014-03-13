@@ -9,10 +9,7 @@
   Z_OSCServer server;
   Z_OSCMessage *rcvMes;
 
-
-
-char *subAddress[5]={"/k", "/pl", "/ps"};
-
+char *subAddress[3]={"/k", "/pl", "/ps"};
 
 void knubDoOsc(){
 
@@ -70,6 +67,14 @@ void knubDoOsc(){
                 }
             } 
             time2ChangePage = true;
+        }
+
+      if(!strcmp(rcvMes->getZ_OSCAddress(), subAddress[1])){
+
+
+          //save current preset
+          writeKnubPreset(eepromAddr1, readAdr, &currentPreset);
+          delay(saveTime*5);
         }
     }
 }

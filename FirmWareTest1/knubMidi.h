@@ -8,7 +8,7 @@
 
 SoftwareSerial midiSerial(7, 10);
 
-byte inMessage[2];
+byte inMessage[3];
 byte inRead  = 0;
 
 uint16_t prevRead = 5*presetSize;
@@ -23,7 +23,7 @@ uint8_t baseAddr = 5;
 uint8_t lastID = 5; // this later woul be removed for consistency with readindx
 
 
-void midiInRead(byte pageLev){
+void midiInRead(){
 
 
 	/*reads incomming PGM change and CC's (for modulation of individual parameters)*/
@@ -34,14 +34,16 @@ void midiInRead(byte pageLev){
 	if(midiSerial.available()>0){
 
 
-		if(inRead < 2){
+		if(inRead < 3){
 
 			inMessage[inRead] = midiSerial.read();
 			inRead ++;
 
 		}
 
-		if(inRead >=2 && inMessage[0] == 192){
+		//program change:
+
+		if(inRead >=3 && inMessage[0] == 192){
 			
 			inRead = 0;
 			
@@ -57,7 +59,7 @@ void midiInRead(byte pageLev){
 			readindx = inMessage[1];
 			readAdr = readindx*presetSize;
 			
-			if(pageLev == 2){
+			
 				if(readindx<8 && readAdr != prevRead && loadFlag == false){
 					
 
@@ -105,20 +107,46 @@ void midiInRead(byte pageLev){
 					prevRead = readAdr;
 
 				}
-			}
+			
 			
 		}
 	}
+		//
+		//control change:
+		if(inRead >=3 && inMessage[0] == 176){
+
+			inRead = 0;
+
+			///turn knub 
+			switch(inMessage[1]){
+
+				case 1:
+					//maybe use a lookup instead of map to save cpu
+					turnKnub(0, map(inMessage[2], 0, 127, 0, 255));
+				break;
+				case 2:
+					
+					turnKnub(1, map(inMessage[2], 0, 127, 0, 255));
+				break;
+				case 3:
+					
+					turnKnub(2, map(inMessage[2], 0, 127, 0, 255));
+				break;
+				case 4:
+					
+					turnKnub(3, map(inMessage[2], 0, 127, 0, 255));
+				break;
+
+				//and so on for other knubs.
+			}
+		}
 }
 
 
 
 // to be double Check:
 // added debounce func
-void doSwitchInDec(byte pageLev){
-
-
-if(pageLev == 2){
+void doSwitchInDec(){
 
   bool currUp  = digitalRead(upPin);
   bool currDown = digitalRead(downPin);
@@ -244,6 +272,5 @@ if(pageLev == 2){
 				}
 			prevDown = currDown;
 		}
-	
-	}	
+		
 }
