@@ -3,8 +3,8 @@
 //#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
 #include "Arduino.h"
 
-#define upPin 5
-#define downPin 6
+#define upPin 6
+#define downPin 5
 
 SoftwareSerial midiSerial(7, 10);
 
@@ -13,15 +13,20 @@ byte inRead  = 0;
 
 uint16_t prevRead = 5*presetSize;
 uint8_t readindx  = 5; //this later will be change back to load ID from eeprom
+
 uint16_t readAdr;
+
+
+
 bool loadFlag = false;
 bool prevUp, prevDown;
+
 
 uint8_t debounceDelay = 5;
 
 uint8_t baseAddr = 5;
 uint8_t lastID = 5; // this later woul be removed for consistency with readindx
-
+uint8_t toRead = 0;
 
 void midiInRead(){
 
@@ -32,32 +37,24 @@ void midiInRead(){
 
 
 	if(midiSerial.available()>0){
-
-
-		if(inRead < 3){
-
-			inMessage[inRead] = midiSerial.read();
-			inRead ++;
-
-		}
-
-		//program change:
-
-		if(inRead >=3 && inMessage[0] == 192){
 			
-			inRead = 0;
+			inMessage[0] = midiSerial.read();//read first byte
 			
-			#ifdef DEBUG_LOAD_PRESET
-				Serial.print("MIDI message: ");
-				Serial.print(" ");
-				Serial.print(inMessage[0]);
-				Serial.print(", ");
-				Serial.println(inMessage[1]);
-			#endif
+
+			if(inMessage[0] == 192){//if first byte is PC
+				
+				toRead = 2;			//num of bytes to read : 2 for PC
+				
+				for(uint8_t i = 1; i<toRead; i++){
+
+					inMessage[i] = midiSerial.read(); // reads remaining bytes
+				}	
 			
-			/* PGM change to change preset*/
-			readindx = inMessage[1];
-			readAdr = readindx*presetSize;
+			
+				//we have a valid PC message change preset accordingly
+
+				readindx = inMessage[1];
+				readAdr = readindx*presetSize;
 			
 			
 				if(readindx<8 && readAdr != prevRead && loadFlag == false){
@@ -105,14 +102,33 @@ void midiInRead(){
     				
     				time2ChangePage = true;
 					prevRead = readAdr;
+					toRead = 0;
 
 				}
-			
-			
+			}else if(inMessage[0]==176){//if first byte is CC
+
+				toRead = 3;
+
+				for(uint8_t i = 1; i<toRead; i++){
+
+					inMessage[i] = midiSerial.read(); // reads remaining bytes
+				}
+
+				//we have a valid cc 
+
+				if(inMessage[1] == 127){
+
+					for(uint8_t i =0; i<4; i++){
+       				 if(currentPreset.knubbies[i].modOn == 1){
+          				turnKnub(i, map(inMessage[2], 0, 127, currentPreset.knubbies[i].params[0], currentPreset.knubbies[i].params[1]));
+       					}
+      				}
+      			}
+				toRead = 0;
+			}
 		}
 	}
-		//
-		//control change:
+		/*
 		if(inRead >=3 && inMessage[0] == 176){
 
 			inRead = 0;
@@ -140,7 +156,8 @@ void midiInRead(){
 				//and so on for other knubs.
 			}
 		}
-}
+		*/
+
 
 
 

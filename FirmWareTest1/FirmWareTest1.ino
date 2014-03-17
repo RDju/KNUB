@@ -3,18 +3,16 @@
 #include <stdlib.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include <SPI.h>
-#include <Ethernet.h> // version IDE 0022
-#include <Z_OSC.h>
+//#include <SPI.h>
+//#include <Ethernet.h> // version IDE 0022
+//#include <Z_OSC.h>
 
-
-//#include "memory.h"
 #include "presets.h"
 #include "knubFuncs2.h"
 #include "UI.h"
 #include "looperMidi.h"
 #include "knubMidi.h"
-#include "knubOSC.h"
+//#include "knubOSC.h"
 #include "knubUtils.h"
 
 #define encoderPin1 2
@@ -219,6 +217,10 @@ void loop(){
 
        break;
        case 4:
+
+       //time to save things.
+
+
        clearScreen();
        (*drawFuncs[pageLevel+1])("", "",  "",  "", "", "", "", "", "");
        time2ChangePage = false;
