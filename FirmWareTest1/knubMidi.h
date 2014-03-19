@@ -114,7 +114,9 @@ void midiInRead(){
 
 					for(uint8_t i =0; i<4; i++){
        				 if(currentPreset.knubbies[i].modOn == 1){
-          				turnKnub(i, map(inMessage[2], 0, 127, currentPreset.knubbies[i].params[0], currentPreset.knubbies[i].params[1]));
+          				if(inMessage[2] != 255){
+          					turnKnub(i, map(inMessage[2], 0, 127, currentPreset.knubbies[i].params[0], currentPreset.knubbies[i].params[1]));
+       						}
        					}
       				}
       			

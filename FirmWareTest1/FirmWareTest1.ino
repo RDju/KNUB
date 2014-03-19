@@ -80,7 +80,7 @@ void setup(){
   lcd.init();
   lcd.backlight();
   
-  //Serial.begin(9600);
+  Serial.begin(9600);
   
   midiSerial.begin(31250);
   looperSerial.begin(31250);
@@ -416,74 +416,6 @@ void loop(){
     }
   }
 
-    /*
-    else if(bckValid.clicks == 2 && pageLevel == 2){
-        
-        pageLevel = 4;
-        isEdited = false;
-        time2ChangePage = true;
-
-
-        }else if(bValid.clicks == 1 && pageLevel == 2){
-
-          if(readindx > 5){
-          readindx -=1;
-          readAdr = readindx*presetSize;
-        }
-
-        if(readAdr != prevRead && loadFlag == false){
-          
-
-          loadFlag = true;
-  
-          readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-          
-          updateKnubs(&currentPreset);
-          
-          //writeByte(eepromAddr1, lastPresetMemSpace, readindx);
-          
-          loadFlag = false;
-          //isEdited = false;
-          
-     
-          clearLoopsOut();
-          
-          // fill up loopsOut array
-            
-            for(uint8_t i = 0; i<numKnubbies; i++){
-
-              fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-            } 
-            
-            // check loops state and update
-            
-            for(uint8_t i = 0; i<4; i++){
-
-                if(checkLoopsOut(i) == true){
-                    
-                    switchLoop(i, 1);
-                    
-                }else{
-
-                    switchLoop(i, 0);
-
-                }
-            } 
-            time2ChangePage = true;
-            prevRead = readAdr;
-
-          }
-        }
-        
-        else if(bckValid.clicks == 1 && pageLevel == 3){
-         tabIndx--;
-         tabIndx = tabIndx%numTabs[pageLevel];
-         tab(chParamTabs[tabIndx]);
-
-         customCursor(tabIndx, pageLevel);
-       }
-     }
-      */
 
   //////////////////////////////////////////////
   
