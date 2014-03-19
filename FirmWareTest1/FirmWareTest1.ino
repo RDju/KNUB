@@ -80,13 +80,15 @@ void setup(){
   lcd.init();
   lcd.backlight();
   
-  Serial.begin(9600);
+  //Serial.begin(9600);
   
   midiSerial.begin(31250);
   looperSerial.begin(31250);
 
   //enable read for midiSerial only
   midiSerial.listen();
+
+  sendSwitchSysEx();
 
   lcd.createChar(0, ledOFF);
   lcd.createChar(1, ledON);
@@ -130,8 +132,7 @@ void setup(){
   for(uint8_t i = 0; i<4; i++){
 
       if(checkLoopsOut(i) == true){
-          //////Serial.printl("turn on loop: ");
-          //////Serial.printlln(i);
+  
           switchLoop(i, 1);
       }else{
 
@@ -170,7 +171,7 @@ void setup(){
 void loop(){
   
   if(pageLevel == 2){
-      midiInRead();
+      //midiInRead();
       doSwitchInDec();
       doExpressionPedal(analogRead(expressionPin));
       
@@ -256,7 +257,62 @@ void loop(){
         pageLevel ++;
         
         time2ChangePage = true;
+      }else if(bValid.clicks==1){
+
+        //increment preset and load
+
+        if(readindx < 12){
+          readindx += 1;
+          readAdr = readindx*presetSize;
+        }
+
+        if(readAdr != prevRead && loadFlag == false){
+          
+
+          loadFlag = true;
+  
+          readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+          
+          updateKnubs(&currentPreset);
+          
+          //writeByte(eepromAddr1, lastPresetMemSpace, readindx);
+          
+          loadFlag = false;
+          //isEdited = false;
+          
+          #ifdef DEBUG_LOAD_PRESET
+            Serial.println(readAdr);
+            debugKnubPreset(&currentPreset);
+          #endif
+          clearLoopsOut();
+          
+          // fill up loopsOut array
+            
+            for(uint8_t i = 0; i<numKnubbies; i++){
+
+              fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+            } 
+            
+            // check loops state and update
+            
+            for(uint8_t i = 0; i<4; i++){
+
+                if(checkLoopsOut(i) == true){
+                    
+                    switchLoop(i, 1);
+                    
+                }else{
+
+                    switchLoop(i, 0);
+
+                }
+            } 
+            time2ChangePage = true;
+          prevRead = readAdr;
+
+        }
       }
+
       break;
       case 4:
 
@@ -283,21 +339,139 @@ void loop(){
   bckValid.Update();
 
   if(bckValid.clicks != 0){
+    
     if(bckValid.clicks==2 && pageLevel > 2){
-
-
       pageLevel = 2;
       time2ChangePage = true;
+    }
 
+    switch(pageLevel){
 
-      }else if(bckValid.clicks == 2 && pageLevel == 2){
+      case 2:
+        if(bckValid.clicks == 2){
+
+          pageLevel = 4;
+          isEdited = false;
+          time2ChangePage = true;
+        }else if(bckValid.clicks == 1){
+
+          if(readindx > 5){
+          readindx -=1;
+          readAdr = readindx*presetSize;
+        }
+
+        if(readAdr != prevRead && loadFlag == false){
+          
+          loadFlag = true;
+  
+          readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+          
+          updateKnubs(&currentPreset);
+          
+          //writeByte(eepromAddr1, lastPresetMemSpace, readindx);
+          
+          loadFlag = false;
+          //isEdited = false;
+          clearLoopsOut();
+          
+          // fill up loopsOut array
+            for(uint8_t i = 0; i<numKnubbies; i++){
+
+              fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+            } 
+            
+            // check loops state and update
+            
+            for(uint8_t i = 0; i<4; i++){
+
+                if(checkLoopsOut(i) == true){
+                    
+                    switchLoop(i, 1);
+                    
+                }else{
+
+                    switchLoop(i, 0);
+
+                }
+            } 
+            time2ChangePage = true;
+            prevRead = readAdr;
+
+          }
+        }
+        break;
+        case 3:
+          if(bckValid.clicks == 1){
+          tabIndx--;
+          tabIndx = tabIndx%numTabs[pageLevel];
+          tab(chParamTabs[tabIndx]);
+
+         customCursor(tabIndx, pageLevel);
+       }
+      break;
+    }
+  }
+
+    /*
+    else if(bckValid.clicks == 2 && pageLevel == 2){
         
         pageLevel = 4;
         isEdited = false;
         time2ChangePage = true;
 
 
-        }else if(bckValid.clicks == 1 && pageLevel == 3){
+        }else if(bValid.clicks == 1 && pageLevel == 2){
+
+          if(readindx > 5){
+          readindx -=1;
+          readAdr = readindx*presetSize;
+        }
+
+        if(readAdr != prevRead && loadFlag == false){
+          
+
+          loadFlag = true;
+  
+          readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+          
+          updateKnubs(&currentPreset);
+          
+          //writeByte(eepromAddr1, lastPresetMemSpace, readindx);
+          
+          loadFlag = false;
+          //isEdited = false;
+          
+     
+          clearLoopsOut();
+          
+          // fill up loopsOut array
+            
+            for(uint8_t i = 0; i<numKnubbies; i++){
+
+              fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
+            } 
+            
+            // check loops state and update
+            
+            for(uint8_t i = 0; i<4; i++){
+
+                if(checkLoopsOut(i) == true){
+                    
+                    switchLoop(i, 1);
+                    
+                }else{
+
+                    switchLoop(i, 0);
+
+                }
+            } 
+            time2ChangePage = true;
+            prevRead = readAdr;
+
+          }
+        }
+        
+        else if(bckValid.clicks == 1 && pageLevel == 3){
          tabIndx--;
          tabIndx = tabIndx%numTabs[pageLevel];
          tab(chParamTabs[tabIndx]);
@@ -305,7 +479,7 @@ void loop(){
          customCursor(tabIndx, pageLevel);
        }
      }
-
+      */
 
   //////////////////////////////////////////////
   

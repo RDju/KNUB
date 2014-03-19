@@ -1,18 +1,19 @@
-#include "Arduino.h"
+
 /*
 FOR TESTING USE SOFTSERIAL BUT FINAL VERSION USES MAIN SERIAL OUT
 */
-#define CC2Looper 191
+#include <Arduino.h>
 
-byte loopsOut[4];
+#define CC2Looper 176
+
+uint8_t loopsOut[4];
 
 SoftwareSerial looperSerial(11, 4);
 
+uint8_t switchLoops[4] = {80, 81, 82, 83};
+uint8_t loopStates[2] = {0, 127};
+
 byte switchSysEx[8] = {240, 0, 0, 7, 1, 8, 16, 247};
-
-byte switchLoops[8] = {80, 81, 82, 83};
-byte loopStates[2] = {0, 127};
-
 
 void sendSwitchSysEx(){
 
@@ -23,7 +24,7 @@ void sendSwitchSysEx(){
 	}
 }
 
-void switchLoop( byte loopNum, byte state){
+void switchLoop( uint8_t loopNum, uint8_t state){
 
 	looperSerial.write(CC2Looper);
 	looperSerial.write(switchLoops[loopNum]);
@@ -38,12 +39,12 @@ void clearLoopsOut(){
 	}
 }
 
-void fillLoopsOut(byte indx, byte val){
+void fillLoopsOut(uint8_t indx, uint8_t val){
 
     loopsOut[indx] += val;
 }
 
-bool checkLoopsOut(byte indx ){
+bool checkLoopsOut(uint8_t indx ){
 
   if(loopsOut[indx] != 0){
 
@@ -54,18 +55,7 @@ bool checkLoopsOut(byte indx ){
   }
 }
 
-void checkUILeds(){
-
-
-	for(uint8_t i =0; i<4;i++){
-
-		if(checkLoopsOut(i)){
-			switchUILed(i, 1);
-
-		}else{switchUILed(i, 0);}
-	}
-}
-void updateLoops(byte indx, byte val){
+void updateLoops(uint8_t indx, uint8_t val){
 
 	
 		if(val == 0){

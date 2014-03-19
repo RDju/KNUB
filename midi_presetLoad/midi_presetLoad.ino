@@ -19,7 +19,7 @@ void setup(){
 	
 	//eraseEE();
 	writeAllPresets();
-	readAllPresets();
+	//readAllPresets();
 	
 
 	//Serial.println(readByte(eepromAddr1, 126));
@@ -65,26 +65,35 @@ void writeAllPresets(){
 	presetIndx += 1;
 	delay(500);
 
-	// Serial.print("writing at address : ");
-	// Serial.println(presetIndx*presetSize);
-	// writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset4);
-	// presetIndx ++;
-	// delay(500);
+	Serial.print("writing at address : ");
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset4);
+	presetIndx += 1;
+	delay(500);
 
-
-	// Serial.print("writing at address : ");
-	// Serial.println(presetIndx*presetSize);
-	// writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset5);
-	// presetIndx ++;
-	// delay(500);
-
-	// Serial.print("writing at address : ");
-	// Serial.println(presetIndx*presetSize);
-	// writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset6);
-	// presetIndx ++;
-	// delay(500);
-
+	Serial.print("writing at address : ");
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset5);
+	presetIndx += 1;
+	delay(500);
 	
+	Serial.print("writing at address : ");
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset6);
+	presetIndx += 1;
+	delay(500);
+	
+	Serial.print("writing at address : ");
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset7);
+	presetIndx += 1;
+	delay(500);
+
+	Serial.print("writing at address : ");
+	Serial.println(presetIndx*presetSize);
+	writeKnubPreset(eepromAddr1, presetIndx*presetSize, &preset8);
+	//presetIndx += 1;
+	delay(500);
 			
 	Serial.println("DONE WRITING");	
 }

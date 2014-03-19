@@ -34,8 +34,6 @@ void midiInRead(){
 	/*reads incomming PGM change and CC's (for modulation of individual parameters)*/
 
 	//must modify this to reflect preset num and pgm nums
-
-
 	if(midiSerial.available()>0){
 			
 			inMessage[0] = midiSerial.read();//read first byte
@@ -49,15 +47,15 @@ void midiInRead(){
 
 					inMessage[i] = midiSerial.read(); // reads remaining bytes
 				}	
-			
-			
+				
+				
 				//we have a valid PC message change preset accordingly
 
-				readindx = inMessage[1];
+				readindx = inMessage[1]+5;
 				readAdr = readindx*presetSize;
 			
 			
-				if(readindx<8 && readAdr != prevRead && loadFlag == false){
+				if(readindx<13 && readAdr != prevRead && loadFlag == false){
 					
 
 					loadFlag = true;
@@ -99,11 +97,9 @@ void midiInRead(){
       					}
     				}	
     				
-    				
     				time2ChangePage = true;
 					prevRead = readAdr;
-					toRead = 0;
-
+					
 				}
 			}else if(inMessage[0]==176){//if first byte is CC
 
@@ -113,50 +109,19 @@ void midiInRead(){
 
 					inMessage[i] = midiSerial.read(); // reads remaining bytes
 				}
-
-				//we have a valid cc 
-
-				if(inMessage[1] == 127){
+		
+				if(inMessage[1] == 7){
 
 					for(uint8_t i =0; i<4; i++){
        				 if(currentPreset.knubbies[i].modOn == 1){
           				turnKnub(i, map(inMessage[2], 0, 127, currentPreset.knubbies[i].params[0], currentPreset.knubbies[i].params[1]));
        					}
       				}
+      			
       			}
-				toRead = 0;
 			}
 		}
 	}
-		/*
-		if(inRead >=3 && inMessage[0] == 176){
-
-			inRead = 0;
-
-			///turn knub 
-			switch(inMessage[1]){
-
-				case 1:
-					//maybe use a lookup instead of map to save cpu
-					turnKnub(0, map(inMessage[2], 0, 127, 0, 255));
-				break;
-				case 2:
-					
-					turnKnub(1, map(inMessage[2], 0, 127, 0, 255));
-				break;
-				case 3:
-					
-					turnKnub(2, map(inMessage[2], 0, 127, 0, 255));
-				break;
-				case 4:
-					
-					turnKnub(3, map(inMessage[2], 0, 127, 0, 255));
-				break;
-
-				//and so on for other knubs.
-			}
-		}
-		*/
 
 
 
@@ -176,9 +141,7 @@ void doSwitchInDec(){
 
 	//index gut up then load corresponding preset:
 	
-	
-
-				if(readindx < 7){
+				if(readindx < 12){
 					readindx += 1;
 					readAdr = readindx*presetSize;
 				}
