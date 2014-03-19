@@ -171,7 +171,7 @@ void setup(){
 void loop(){
   
   if(pageLevel == 2){
-      //midiInRead();
+      midiInRead();
       doSwitchInDec();
       doExpressionPedal(analogRead(expressionPin));
       
@@ -340,10 +340,10 @@ void loop(){
 
   if(bckValid.clicks != 0){
     
-    if(bckValid.clicks==2 && pageLevel > 2){
-      pageLevel = 2;
-      time2ChangePage = true;
-    }
+    // if(bckValid.clicks==2 && pageLevel > 2){
+    //   pageLevel = 2;
+    //   time2ChangePage = true;
+    // }
 
     switch(pageLevel){
 
@@ -407,7 +407,11 @@ void loop(){
           tab(chParamTabs[tabIndx]);
 
          customCursor(tabIndx, pageLevel);
-       }
+       }else if(bckValid.clicks == 2){
+
+          pageLevel = 2;
+          time2ChangePage = true;
+        }
       break;
     }
   }
