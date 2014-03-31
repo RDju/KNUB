@@ -57,7 +57,7 @@ void knubDoOsc(){
             
             for(uint8_t i = 0; i<4; i++){
 
-                if(checkLoopsOut(i) == true){
+                if(checkLoopsOut(i)){
                     
                     switchLoop(i, 1);
                     

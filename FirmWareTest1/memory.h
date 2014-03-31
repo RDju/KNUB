@@ -8,6 +8,7 @@
 #define stateLength 1
 #define numLoopLength 1
 #define numKnubbies 8
+#define LCDlength 15
 
 #define presetSize 126
 #define modIndx maxNameLength+paramLength
@@ -339,5 +340,54 @@ byte readByte( int deviceaddress, unsigned int eeaddress ) {
     Wire.write(data);
     Wire.endTransmission();
   }
+  
+  /***********************************************************************
+              internal EEPROM
+  ***************************************************************************/
+  boolean isEepromInitialised(){
+    int isInit = EEPROM.read(0);
+    if (isInit == 1)
+      return true;
+    else return false;
+  }
+  
+  //TODO: cut the size of strings if too long for the LCD
+  void initProductPage(){
+    char* prodPageString[] = {"    LE KNUB    ", " by Combosquare "};
+    for (int j = 0; j < 2; j++)
+      for (int i = 0; i < LCDlength; i++)
+        EEPROM.write(i + 1 + j*LCDlength, prodPageString[j][i]);
+  }
+  
+  void initSoftwareVersion(){
+    char initSoftString[] = " Firmware: v0.1a";
+    for (int i = 0; i < LCDlength; i++)
+      EEPROM.write(i+1+2*LCDlength, initSoftString[i]);
+  }
+  
+  void initEEPROM(){
+    if (!isEepromInitialised()){
+      EEPROM.write(0, 1);
+      initProductPage();
+      initSoftwareVersion();
+    }
+  }
+   
+  char ** getProductPageString(){
+    char *prodPageString[] = {(char *)malloc(LCDlength*sizeof (char)), (char *)malloc(LCDlength*sizeof (char))};
+    for (int j = 0; j < 2; j++)
+      for (int i = 0; i < LCDlength; i++)
+         prodPageString[j][i] = EEPROM.read(i+1+j*LCDlength);
+    return prodPageString;
+  }
+  
+  char* getSoftwareVersionString(){
+    char initSoftString[LCDlength+1];
+    for (int i = 0; i < LCDlength; i++)
+         initSoftString[i] = EEPROM.read(i+1+2*LCDlength);
+    return initSoftString;
+  }
+    
+  
 
 

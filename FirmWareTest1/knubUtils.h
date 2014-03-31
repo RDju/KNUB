@@ -1,8 +1,8 @@
 void checkEdition(bool editState){
 
-	if(editState == false){
+	if(!editState){
 
-		editState == true;	
+		editState = true;	
 
 	}
 }

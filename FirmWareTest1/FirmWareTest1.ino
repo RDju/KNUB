@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
+#include <EEPROM.h>
 //#include <SPI.h>
 //#include <Ethernet.h> // version IDE 0022
 //#include <Z_OSC.h>
@@ -131,7 +132,7 @@ void setup(){
 
   for(uint8_t i = 0; i<4; i++){
 
-      if(checkLoopsOut(i) == true){
+      if(checkLoopsOut(i)){
   
           switchLoop(i, 1);
       }else{
@@ -165,6 +166,8 @@ void setup(){
 
   prevUp = digitalRead(upPin);
   prevDown = digitalRead(downPin);
+  
+  initEEPROM();
 
 }
 
@@ -266,7 +269,7 @@ void loop(){
           readAdr = readindx*presetSize;
         }
 
-        if(readAdr != prevRead && loadFlag == false){
+        if(readAdr != prevRead && !loadFlag){
           
 
           loadFlag = true;
@@ -297,7 +300,7 @@ void loop(){
             
             for(uint8_t i = 0; i<4; i++){
 
-                if(checkLoopsOut(i) == true){
+                if(checkLoopsOut(i)){
                     
                     switchLoop(i, 1);
                     
@@ -360,7 +363,7 @@ void loop(){
           readAdr = readindx*presetSize;
         }
 
-        if(readAdr != prevRead && loadFlag == false){
+        if(readAdr != prevRead && !loadFlag){
           
           loadFlag = true;
   
@@ -384,7 +387,7 @@ void loop(){
             
             for(uint8_t i = 0; i<4; i++){
 
-                if(checkLoopsOut(i) == true){
+                if(checkLoopsOut(i)){
                     
                     switchLoop(i, 1);
                     
@@ -621,7 +624,7 @@ if(encoderValue != lastValue){
               ////Serial.printl("value: ");
               ////Serial.printlln(loopsOut[currentPreset.knubbies[currentParam].numLoop]);
               
-              if(checkLoopsOut(currentPreset.knubbies[currentParam].numLoop) == false){
+              if(!checkLoopsOut(currentPreset.knubbies[currentParam].numLoop)){
                   ////Serial.printlln("turnOFF");
                   //turn loop off
                   switchLoop(currentPreset.knubbies[currentParam].numLoop, 0);
@@ -670,7 +673,7 @@ if(encoderValue != lastValue){
 
 void checkEdition(){
 
-  if(isEdited == false){
+  if(!isEdited){
 
     isEdited = true;
   }

@@ -260,24 +260,25 @@ char* stateToString(uint8_t state){
 ///////////// PAGES ///////////////////////////////////
 
 void productPage(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
- clearScreen();
- lcd.setCursor(0,0);
  
- lcd.print("    LE KNUB   ");
+  char** productPageString = getProductPageString();
+  
+  clearScreen();
+  lcd.setCursor(0,0);
  
+ lcd.print(productPageString[0]);
  
  lcd.setCursor(0,1);
  
-
- lcd.print(" by Combosquare ");
+ lcd.print(productPageString[1]);
 }
 
 void softwareVersion(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
-
+ char* softwareVersionString = getSoftwareVersionString();
  clearScreen();
  lcd.setCursor(0,0);
 
- lcd.print(" Firmware: v0.1a");
+ lcd.print(softwareVersionString);
 }
 
 void savePage(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){

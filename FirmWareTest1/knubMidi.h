@@ -55,7 +55,7 @@ void midiInRead(){
 				readAdr = readindx*presetSize;
 			
 			
-				if(readindx<13 && readAdr != prevRead && loadFlag == false){
+				if(readindx<13 && readAdr != prevRead && !loadFlag){
 					
 
 					loadFlag = true;
@@ -86,7 +86,7 @@ void midiInRead(){
   					
   					for(uint8_t i = 0; i<4; i++){
 
-      					if(checkLoopsOut(i) == true){
+      					if(checkLoopsOut(i)){
           					
           					switchLoop(i, 1);
           					
@@ -148,7 +148,7 @@ void doSwitchInDec(){
 					readAdr = readindx*presetSize;
 				}
 
-				if(readAdr != prevRead && loadFlag == false){
+				if(readAdr != prevRead && !loadFlag){
 					
 
 					loadFlag = true;
@@ -179,7 +179,7 @@ void doSwitchInDec(){
   					
   					for(uint8_t i = 0; i<4; i++){
 
-      					if(checkLoopsOut(i) == true){
+      					if(checkLoopsOut(i)){
           					
           					switchLoop(i, 1);
           					
@@ -207,7 +207,7 @@ void doSwitchInDec(){
 					readAdr = readindx*presetSize;
 				}
 
-				if(readAdr != prevRead && loadFlag == false){
+				if(readAdr != prevRead && !loadFlag){
 					
 
 					loadFlag = true;
@@ -238,7 +238,7 @@ void doSwitchInDec(){
   					
   					for(uint8_t i = 0; i<4; i++){
 
-      					if(checkLoopsOut(i) == true){
+      					if(checkLoopsOut(i)){
           					
           					switchLoop(i, 1);
           					
