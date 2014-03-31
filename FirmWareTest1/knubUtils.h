@@ -1,4 +1,4 @@
-void checkEdition(bool editState){
+void checkEdition(boolean &editState){
 
 	if(!editState){
 

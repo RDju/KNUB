@@ -297,17 +297,17 @@ void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpr
 }
 //single read/write functions
 
-void writeByte( int deviceaddress, unsigned int eeaddress, byte data ) {
+/*void writeByte( int deviceaddress, unsigned int eeaddress, byte data ) {
     
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddress >> 8)); // MSB
     Wire.write((int)(eeaddress & 0xFF)); // LSB
     Wire.write(data);
     Wire.endTransmission();
-  }
+  }*/
 
   
-byte readByte( int deviceaddress, unsigned int eeaddress ) {
+/*byte readByte( int deviceaddress, unsigned int eeaddress ) {
    
     Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddress >> 8)); // MSB
@@ -318,7 +318,7 @@ byte readByte( int deviceaddress, unsigned int eeaddress ) {
     if (Wire.available());
      return Wire.read();
   
-  }
+  }*/
  
  byte i2c_eeprom_read_byte( int deviceaddress, unsigned int eeaddress ) {
     

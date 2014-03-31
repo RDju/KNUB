@@ -48,24 +48,8 @@ void knubDoOsc(){
           
           // fill up loopsOut array
             
-            for(uint8_t i = 0; i<numKnubbies; i++){
-
-              fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-            } 
+            updateLoopsOut(&currentPreset);
             
-            // check loops state and update
-            
-            for(uint8_t i = 0; i<4; i++){
-
-                if(checkLoopsOut(i)){
-                    
-                    switchLoop(i, 1);
-                    
-                }else{
-
-                    switchLoop(i, 0);
-                }
-            } 
             time2ChangePage = true;
         }
 

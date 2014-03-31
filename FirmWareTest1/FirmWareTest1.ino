@@ -81,7 +81,7 @@ void setup(){
   lcd.init();
   lcd.backlight();
   
-  Serial.begin(9600);
+  //Serial.begin(9600);
   
   midiSerial.begin(31250);
   looperSerial.begin(31250);
@@ -122,24 +122,7 @@ void setup(){
   
   updateKnubs(&currentPreset);
   
-  // fill up loopsOut array
-  for(uint8_t i = 0; i<numKnubbies; i++){
-
-    fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-  }
-
-  // check loops state and update
-
-  for(uint8_t i = 0; i<4; i++){
-
-      if(checkLoopsOut(i)){
-  
-          switchLoop(i, 1);
-      }else{
-
-          switchLoop(i, 0);
-      }
-    }
+  updateLoopsOut(&currentPreset);
   
 
   //startUp sequence
@@ -288,29 +271,9 @@ void loop(){
             debugKnubPreset(&currentPreset);
           #endif
           clearLoopsOut();
+          updateLoopsOut(&currentPreset);
           
-          // fill up loopsOut array
-            
-            for(uint8_t i = 0; i<numKnubbies; i++){
-
-              fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-            } 
-            
-            // check loops state and update
-            
-            for(uint8_t i = 0; i<4; i++){
-
-                if(checkLoopsOut(i)){
-                    
-                    switchLoop(i, 1);
-                    
-                }else{
-
-                    switchLoop(i, 0);
-
-                }
-            } 
-            time2ChangePage = true;
+          time2ChangePage = true;
           prevRead = readAdr;
 
         }
@@ -375,28 +338,10 @@ void loop(){
           
           loadFlag = false;
           //isEdited = false;
-          clearLoopsOut();
           
-          // fill up loopsOut array
-            for(uint8_t i = 0; i<numKnubbies; i++){
-
-              fillLoopsOut(currentPreset.knubbies[i].numLoop, currentPreset.knubbies[i].state);
-            } 
-            
-            // check loops state and update
-            
-            for(uint8_t i = 0; i<4; i++){
-
-                if(checkLoopsOut(i)){
-                    
-                    switchLoop(i, 1);
-                    
-                }else{
-
-                    switchLoop(i, 0);
-
-                }
-            } 
+          clearLoopsOut();
+          updateLoopsOut(&currentPreset);
+          
             time2ChangePage = true;
             prevRead = readAdr;
 
@@ -472,7 +417,7 @@ if(encoderValue != lastValue){
 
         break;
         case 6:
-              checkEdition();
+              checkEdition(isEdited);
                scaledEncoderValueParam = encoderValue%25;
               if(scaledEncoderValueParam == 0){   
                  txtParamIndx += encoderDir;
@@ -482,7 +427,7 @@ if(encoderValue != lastValue){
             } 
         break;
         case 4:
-              checkEdition();
+              checkEdition(isEdited);
               scaledEncoderValueParam = encoderValue%25;
               if(scaledEncoderValueParam == 0){
                  txtParamIndx += encoderDir;
@@ -495,7 +440,7 @@ if(encoderValue != lastValue){
            
             ///EDITED
 
-            checkEdition();
+            checkEdition(isEdited);
            ///MUST FIND A BETTER WAY OF DEALING WITH THIS
            
            currentParamVal = currentPreset.knubbies[currentParam].params[0];
@@ -536,7 +481,7 @@ if(encoderValue != lastValue){
             }
        break;
        case 2:
-           checkEdition();
+           checkEdition(isEdited);
            
             currentParamVal = currentPreset.knubbies[currentParam].params[1];
            
@@ -593,7 +538,7 @@ if(encoderValue != lastValue){
        break;
        */
        case 5:
-            checkEdition();
+            checkEdition(isEdited);
            
             //do all switch check here (might not be the greatest idea)
             //scaledEncoderValueParam = encoderValue%25;
@@ -671,10 +616,5 @@ if(encoderValue != lastValue){
 }
 
 
-void checkEdition(){
 
-  if(!isEdited){
 
-    isEdited = true;
-  }
-}

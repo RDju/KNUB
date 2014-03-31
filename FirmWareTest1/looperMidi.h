@@ -23,6 +23,8 @@ void sendSwitchSysEx(){
 	}
 }
 
+
+
 void switchLoop( byte loopNum, byte state){
 
 	looperSerial.write(CC2Looper);
@@ -80,3 +82,18 @@ void updateLoops(byte indx, byte val){
 	
 }
 
+void updateLoopsOut(aKnubPreset * currentPreset){
+  
+  // fill up loopsOut array
+  for(uint8_t i = 0; i<numKnubbies; i++)
+    fillLoopsOut(currentPreset->knubbies[i].numLoop, currentPreset->knubbies[i].state);
+
+  // check loops state and update
+  for(uint8_t i = 0; i<4; i++){
+      if(checkLoopsOut(i)){
+          switchLoop(i, 1);
+      }else{
+          switchLoop(i, 0);
+      }
+    }
+}
