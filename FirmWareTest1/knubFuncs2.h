@@ -1,7 +1,8 @@
 #include "Arduino.h"
 //#include "luts.h"
 
-uint8_t redLUT[] = {3 ,  6 ,  8 ,  10 ,  11 ,  12 ,  14 ,  15 ,  16 ,  
+uint8_t redLUT[] = {
+  3 ,  6 ,  8 ,  10 ,  11 ,  12 ,  14 ,  15 ,  16 ,  
   16 ,  17 ,  18 ,  19 ,  19 ,  20 ,  20 ,  21 ,  21 ,  22 ,  22 ,  23 ,  23 ,  
   24 ,  24 ,  24 ,  25 ,  25 ,  25 ,  26 ,  26 ,  26 ,  27 ,  27 ,  27 ,  28 ,  
   28 ,  28 ,  29 ,  29 ,  29 ,  29 ,  30 ,  30 ,  30 ,  30 ,  30 ,  31 ,  31 ,  
@@ -27,7 +28,7 @@ uint16_t vacMin = 0;
 uint16_t vacMax = 4095;
 
 
-uint8_t DACIDZ[2] = {B0001100, B0001101};
+uint8_t dac_ids[2] = {B0001100, B0001101};
 
 uint8_t writeCommands[4] = {B00110001, B00110010,B00110100, B00111000};
 
@@ -37,11 +38,11 @@ uint16_t  lowVal, highVal, prevExp;
 
 void writeDac(uint8_t id, uint8_t wichDac, uint16_t value){
 
-    Wire.beginTransmission(id);
-    Wire.write(writeCommands[wichDac]);
-    Wire.write(highByte(value));
-    Wire.write(lowByte(value));
-    Wire.endTransmission();
+  Wire.beginTransmission(id);
+  Wire.write(writeCommands[wichDac]);
+  Wire.write(highByte(value));
+  Wire.write(lowByte(value));
+  Wire.endTransmission();
 }
 
 //actual turn knub func
@@ -49,50 +50,44 @@ void writeDac(uint8_t id, uint8_t wichDac, uint16_t value){
 void turnKnub(uint8_t knubNum,uint8_t knubVal){
 
 
-    byte hiRead = 255 - knubVal;
+  byte hiRead = 255 - knubVal;
 
-    lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
-    highVal = map(redLUT[hiRead], 0, 255, vacMin, vacMax);
-    
-    switch(knubNum){
-  
-    case 0:
-      
-      writeDac(DACIDZ[0], 0, lowVal);
-      writeDac(DACIDZ[0], 1, highVal);
-    break;
-    
+  lowVal = map(redLUT[knubVal], 0, 255, vacMin, vacMax);
+  highVal = map(redLUT[hiRead], 0, 255, vacMin, vacMax);
 
-    case 1:
-     writeDac(DACIDZ[0], 2, lowVal);
-     writeDac(DACIDZ[0], 3, highVal);
+  switch(knubNum){
+  case 0:
+    writeDac(dac_ids[0], 0, lowVal);
+    writeDac(dac_ids[0], 1, highVal);
     break;
-    
-    case 2:
-      writeDac(DACIDZ[1], 0, lowVal);
-      writeDac(DACIDZ[1], 1, highVal);
+
+  case 1:
+    writeDac(dac_ids[0], 2, lowVal);
+    writeDac(dac_ids[0], 3, highVal);
     break;
-    
-    case 3:
-      writeDac(DACIDZ[1], 2, lowVal);
-     writeDac(DACIDZ[1], 3, highVal);
+
+  case 2:
+    writeDac(dac_ids[1], 0, lowVal);
+    writeDac(dac_ids[1], 1, highVal);
     break;
-    }
+
+  case 3:
+    writeDac(dac_ids[1], 2, lowVal);
+    writeDac(dac_ids[1], 3, highVal);
+    break;
+  }
 }
- void updateKnubs(aKnubPreset * kPreset){
- 
-      for(uint8_t i = 0; i<4; i++){
-        if(kPreset->knubbies[i].state == 1){
-      
-          turnKnub(i, kPreset->knubbies[i].params[0]);
-        }
-      }
+void updateKnubs(aKnubPreset * kPreset){
+
+  for(uint8_t i = 0; i<4; i++)
+    if(kPreset->knubbies[i].state == 1)
+      turnKnub(i, kPreset->knubbies[i].params[0]);
 }
 
 
 void printPresetName(aKnubPreset *kPreset){
 
-    Serial.println(kPreset->name);
+  Serial.println(kPreset->name);
 }
 
 
@@ -100,15 +95,10 @@ void doExpressionPedal(unsigned int expVal){
 
   expVal = expVal >> 2;
 
-    if(abs(expVal - prevExp) > 2){
-
-      for(uint8_t i =0; i<4; i++){
-        if(currentPreset.knubbies[i].modOn == 1){
-          turnKnub(i, map(expVal, 0, 255, currentPreset.knubbies[i].params[0], currentPreset.knubbies[i].params[1]));
-       
-        }
-      }
-
+  if(abs(expVal - prevExp) > 2){
+    for(uint8_t i =0; i<4; i++)
+      if(currentPreset.knubbies[i].modOn == 1)
+        turnKnub(i, map(expVal, 0, 255, currentPreset.knubbies[i].params[0], currentPreset.knubbies[i].params[1]));
     prevExp = expVal;
   }
 }
@@ -126,3 +116,4 @@ void debugKnubPreset(aKnubPreset *kPreset){
     Serial.println(kPreset->knubbies[i].params[0]);
   }
 }
+

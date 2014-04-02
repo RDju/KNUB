@@ -1,18 +1,15 @@
 #include "Arduino.h"
 
 //OSC------------------------------------
-byte myMac[] = {
-  0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02};
+byte myMac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02};
 
-byte myIp[]  = { 
-  192, 168, 0, 8 };
+byte myIp[]  = {192, 168, 0, 8 };
 uint16_t  myPort  = 10000;
 
 Z_OSCServer server;
 Z_OSCMessage *rcvMes;
 
-char *subAddress[3]={
-  "/k", "/pl", "/ps"};
+char *subAddress[3]={"/k", "/pl", "/ps"};
 
 void knubDoOsc(){
 
@@ -58,7 +55,7 @@ void knubDoOsc(){
 
       //save current preset
       writeKnubPreset(eepromAddr1, readAdr, &currentPreset);
-      delay(saveTime*5);
+      //delay(saveTime*5);
     }
   }
 }

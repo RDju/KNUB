@@ -8,22 +8,15 @@ byte loopsOut[4];
 
 SoftwareSerial looperSerial(11, 4);
 
-byte switchSysEx[8] = {
-  240, 0, 0, 7, 1, 8, 16, 247};
-
-byte switchLoops[8] = {
-  80, 81, 82, 83};
-byte loopStates[2] = {
-  0, 127};
+byte switchSysEx[8] = {240, 0, 0, 7, 1, 8, 16, 247};
+byte switchLoops[8] = {80, 81, 82, 83};
+byte loopStates[2] = {0, 127};
 
 
 void sendSwitchSysEx(){
 
-
-  for(uint8_t i = 0; i<8;i++){
-
+  for(uint8_t i = 0; i<8;i++)
     looperSerial.write(switchSysEx[i]);
-  }
 }
 
 
@@ -37,10 +30,8 @@ void switchLoop( byte loopNum, byte state){
 
 void clearLoopsOut(){
 
-  for(uint8_t i = 0; i<4; i++){
-
+  for(uint8_t i = 0; i<4; i++)
     loopsOut[i] = 0;
-  }
 }
 
 void fillLoopsOut(byte indx, byte val){
@@ -50,44 +41,27 @@ void fillLoopsOut(byte indx, byte val){
 
 bool checkLoopsOut(byte indx ){
 
-  if(loopsOut[indx] != 0){
-
+  if(loopsOut[indx] != 0)
     return true;
-  }
-  else if(loopsOut[indx] == 0){
-
-    return false;
-  }
+  else return false;
 }
 
 void checkUILeds(){
 
-
   for(uint8_t i =0; i<4;i++){
-
-    if(checkLoopsOut(i)){
+    if(checkLoopsOut(i))
       switchUILed(i, 1);
-
-    }
-    else{
+    else
       switchUILed(i, 0);
-    }
   }
 }
+
 void updateLoops(byte indx, byte val){
-
-
-  if(val == 0){
-    if(loopsOut[indx] >0){
+  
+  if(val == 0 && loopsOut[indx] >0)
       loopsOut[indx] -= 1;
-    }
-  }
-  else{
-    if(loopsOut[indx]<3){
+  else if (loopsOut[indx]<3)
       loopsOut[indx] += 1;
-    }
-  }
-
 }
 
 void updateLoopsOut(aKnubPreset * currentPreset){
@@ -99,12 +73,10 @@ void updateLoopsOut(aKnubPreset * currentPreset){
 
   // check loops state and update
   for(uint8_t i = 0; i<4; i++){
-    if(checkLoopsOut(i)){
+    if(checkLoopsOut(i))
       switchLoop(i, 1);
-    }
-    else{
+    else
       switchLoop(i, 0);
-    }
   }
 }
 

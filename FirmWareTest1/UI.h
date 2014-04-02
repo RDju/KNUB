@@ -8,21 +8,15 @@ int fxIndx = 0;
 
 int memTabIndx = 0;
 
-uint8_t numTabs[] = {
-  0, 0, 2, 7, 0};
+uint8_t numTabs[] = {0, 0, 2, 7, 0};
 
 char tmpStr[4];
 
-byte fxTabs[2] = {
-  B01110000, B01110001};
-byte paramTabs[8] = {
-  B00000000, B00100000, B11010000, B11010001, B00100001, B01100001, B10100001, B10100000};//???
-byte customCursorTabs[3] = {
-  B00000001, B01010001, B10100001};
-byte chParamTabs[6] = {
-  B00010001, B01010001, B10010001, B11000001, B11000000, B10010000};//???
-byte ledPositions[4] = {
-  B00010001, B01010001, B10010001, B11010001};
+byte fxTabs[2] = {B01110000, B01110001};
+byte paramTabs[8] = {B00000000, B00100000, B11010000, B11010001, B00100001, B01100001, B10100001, B10100000};//???
+byte customCursorTabs[3] = {B00000001, B01010001, B10100001};
+byte chParamTabs[6] = {B00010001, B01010001, B10010001, B11000001, B11000000, B10010000};//???
+byte ledPositions[4] = {B00010001, B01010001, B10010001, B11010001};
 
 // 1,1  5,1  9,1  13,1
 
@@ -70,18 +64,18 @@ void switchUILed(uint8_t wichLed, uint8_t status){
   lcd.write(status);
 }
 
-char* toString(uint8_t val){
+inline char* toString(uint8_t val){
   itoa(val, tmpStr, 10);
   return tmpStr;
 }
 
 //char* customCurveDigits[1] = {"00"};
 
-void tab(byte wichTab){
+inline void tab(byte wichTab){
   lcd.setCursor(wichTab>>4, wichTab&B00001111);
 }
 
-void clearScreen(){
+inline void clearScreen(){
   lcd.clear();
 }
 
@@ -100,18 +94,18 @@ void updateNumParam(uint8_t prmIndx, uint8_t newVal){
   lcd.print(" ");
 }
 
-void updateParam2(uint8_t prmIndx, char newVal[]){
+inline void updateParam2(uint8_t prmIndx, char newVal[]){
   tab(chParamTabs[prmIndx]);
   lcd.print(newVal);
 }
 
-void updatePreset(/*char preset[],*/ char pName[], boolean editMode){
+inline void updatePreset(/*char preset[],*/ char pName[], boolean editMode){
   lcd.print(pName);
   if(editMode)
     lcd.print("%");
 }
 
-void clearAllTabs(){
+inline void clearAllTabs(){
   for(int i=0; i<6; i++){
     tab(chParamTabs[i]);
     lcd.print(" ");
@@ -120,61 +114,20 @@ void clearAllTabs(){
 
 void customCursor(uint8_t cusTab, uint8_t pageLev){
 
-  switch(pageLev){
-  case 3:
-    switch(cusTab){
-    case 0:
+   switch (pageLev){
+   case 3:
       clearAllTabs();
-      break;
-    case 1:
-      clearAllTabs();
-      tab(chParamTabs[0]);
+      if (cusTab != 0)
+        tab(chParamTabs[cusTab-1]);
       lcd.print(">");
       break;
-    case 2:
-      clearAllTabs();
-      tab(chParamTabs[1]);
-      lcd.print(">");  
-      break;
-    case 3:
-      clearAllTabs();
-      tab(chParamTabs[2]);
-      lcd.print(">");
-      break;
-    case 4:
-      clearAllTabs();
-      tab(chParamTabs[3]);
-      lcd.print(">");  
-      break;
-    case 5:
-      clearAllTabs();
-      tab(chParamTabs[4]);
-      lcd.print(">");
-      break;
-    case 6:
-      clearAllTabs();
-      tab(chParamTabs[5]);
-      lcd.print(">");
-      break;
-    }
-    break;
-  case 4:
-    switch(cusTab){
-    case 0:
-      lcd.setCursor(6,0);
-      lcd.print(">");
-      lcd.setCursor(6,1);
-      lcd.print(":");
-      break;
-    case 1:
-      lcd.setCursor(6,1);
-      lcd.print(">");
-      lcd.setCursor(6,0);
-      lcd.print(":");
-      break;
-    }
-    break;
-  }
+   case 4:
+        lcd.setCursor(6,cusTab);
+        lcd.print(">");
+        lcd.setCursor(6, abs(cusTab-1)); // 0 if cusTab = 1, 1 if cusTab = 0
+        lcd.print(":");
+   break;
+   }
 }
 
 char* stateToString(uint8_t state){

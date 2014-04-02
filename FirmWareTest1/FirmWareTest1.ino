@@ -65,12 +65,9 @@ uint8_t currModIndx  = 0;
 uint8_t currSwIndx = 0;
 boolean prmChange;
 
-char* fxState[2] = {
-  "OFF", "ON"};
-char* modOns[3] = {
-  "___", "EXP","MID"};
-char* switchTypes[5] = {
-  "L1", "L2", "L3", "L4","__"};
+char* fxState[2] = {"OFF", "ON"};
+char* modOns[3] = {"___", "EXP","MID"};
+char* switchTypes[5] = {"L1", "L2", "L3", "L4","__"};
 
 byte toPrint;
 
@@ -101,8 +98,8 @@ void setup(){
   pinMode(encoderPin2, INPUT);
   digitalWrite(encoderPin1, HIGH);
   digitalWrite(encoderPin2, HIGH);
-  attachInterrupt(0, updateEncoder, CHANGE); 
-  attachInterrupt(1, updateEncoder, CHANGE);
+  attachInterrupt(0, updateEncoder, CHANGE); //???: why 2 interruptions ?
+  attachInterrupt(1, updateEncoder, CHANGE); 
 
 #ifdef Do_OSC 
   if(Ethernet.begin(myMac) ==0){
@@ -121,7 +118,7 @@ void setup(){
 
   readKnubPreset(eepromAddr1, lastID * presetSize, &currentPreset);
 
-  delay(50);
+  //delay(50);
 
   updateKnubs(&currentPreset);
 
@@ -130,7 +127,7 @@ void setup(){
 
   //startUp sequence
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
-  delay(1000);
+  delay(1000); //TODO: put in the function ?
   (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
   delay(1000);
   //initMemDisp();
@@ -160,7 +157,7 @@ void loop(){
   if(pageLevel == 2){
     midiInRead();
     doSwitchInDec();
-    doExpressionPedal(analogRead(expressionPin));//???: def de la fct ?
+    doExpressionPedal(analogRead(expressionPin));
   }
 
   ////dealing with pages s
@@ -226,8 +223,7 @@ void loop(){
       if(bValid.clicks == 2){
         pageLevel ++;
         time2ChangePage = true;
-      } 
-      else if (bValid.clicks==1){
+      } else if (bValid.clicks==1){
 
         //increment preset and load
         if(readindx < 12){
@@ -349,7 +345,8 @@ void loop(){
           currentParam = txtParamIndx%8;
 
           clearScreen(); //TODO: try to delete
-
+          
+          //TODO: same as first switch case 3
           updateParam(0, toString(currentParam + 1));
           updateParam(1,currentPreset.knubbies[currentParam].name);
           updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
@@ -429,7 +426,6 @@ void loop(){
             else currentPreset.knubbies[currentParam].state = 0;
             updateParam(2, stateToString(currentPreset.knubbies[currentParam].state));
             updateLoops(currentPreset.knubbies[currentParam].numLoop, currentPreset.knubbies[currentParam].state);
-            
         }
 
         //update loop at loop indx
@@ -445,9 +441,6 @@ void loop(){
         else
           //quick and dirty
           switchLoop(currentPreset.knubbies[currentParam].numLoop, 1);//turn loop on
-  
-
-
         break;
       case 6:
         checkEdition(isEdited);
@@ -455,21 +448,16 @@ void loop(){
         if(scaledEncoderValueParam == 0){   
           txtParamIndx += encoderDir;
           currSwIndx = txtParamIndx%13;
-
           updateParam(7, switchTypes[currSwIndx]);
         } 
         break;
-      
-      
-     
-
       }
     }
   }
   lastValue = encoderValue;
-
 }
 
+//Interruption called each time a pin change of value
 void updateEncoder(){
   uint8_t MSB = digitalRead(encoderPin1); //MSB = most significant bit
   uint8_t LSB = digitalRead(encoderPin2); //LSB = least significant bit
@@ -478,21 +466,11 @@ void updateEncoder(){
   uint8_t sum  = (lastEncoderValue << 2) | encoded; //adding it to the previous encoded value
 
   if (sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011){
-
     encoderDir = 1;
     encoderValue ++;
-
-  } 
-  else if (sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000){
+  } else if (sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000){
     encoderDir = -1;
     encoderValue -- ;
-
   }
-
   lastEncoderValue = encoded; //store this value for next time
 }
-
-
-
-
-

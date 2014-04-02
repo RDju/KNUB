@@ -36,6 +36,8 @@ struct aKnubPreset{
 };
 typedef struct aKnubPreset aKnubPreset;
 
+
+//TODO: check if begin/end Transmission are always required
 void writeKnubPresetName( int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset ) {
 
   Wire.beginTransmission(deviceaddress);
@@ -265,13 +267,13 @@ void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpr
 
   // so name
   writeKnubPresetName(deviceaddress, eeaddress, kpreset); 
-  delay(saveTime);
+  //delay(saveTime);
   //then ID
   writeKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
-  delay(saveTime);
+  //delay(saveTime);
   //so now eeaddress is maxNameLength + IDLength
   unsigned int addrPtr = eeaddress + maxNameLength + IDLength;
-  delay(saveTime); 
+  //delay(saveTime); 
   //writeKnubbieName(deviceaddress, addrPtr, kpreset, 0);
 
 
@@ -280,16 +282,16 @@ void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpr
     ///move addrPtr to start of knubbie
     addrPtr = addrPtr*(i+1);
 
-    delay(saveTime);
+    //delay(saveTime);
     writeKnubbieName(deviceaddress,addrPtr , kpreset, i);
 
-    delay(saveTime);
+    //delay(saveTime);
     writeKnubbieParams(deviceaddress, addrPtr+maxNameLength, kpreset, i);
-    delay(saveTime);  
+    //delay(saveTime);  
     writeKnubbiemodOn(deviceaddress, addrPtr+maxNameLength+paramLength, kpreset, i);
-    delay(saveTime);
+    //delay(saveTime);
     writeKnubbieModState(deviceaddress, addrPtr+maxNameLength+paramLength+modOnLength, kpreset, i);
-    delay(saveTime);
+    //delay(saveTime);
     writeKnubbieNumLoop(deviceaddress, addrPtr+maxNameLength+paramLength+modOnLength+stateLength, kpreset, i);
 
   }
@@ -375,8 +377,7 @@ void initEEPROM(){
 }
 
 char ** getProductPageString(){
-  char *prodPageString[] = {
-    (char *)malloc(LCDlength*sizeof (char)), (char *)malloc(LCDlength*sizeof (char))  };
+  char *prodPageString[] = {(char *)malloc(LCDlength*sizeof (char)), (char *)malloc(LCDlength*sizeof (char))  };
   for (int j = 0; j < 2; j++)
     for (int i = 0; i < LCDlength; i++)
       prodPageString[j][i] = EEPROM.read(i+1+j*LCDlength);
@@ -384,7 +385,7 @@ char ** getProductPageString(){
 }
 
 char* getSoftwareVersionString(){
-  char initSoftString[LCDlength+1];
+  char *initSoftString = (char *)malloc(LCDlength*sizeof (char));
   for (int i = 0; i < LCDlength; i++)
     initSoftString[i] = EEPROM.read(i+1+2*LCDlength);
   return initSoftString;
