@@ -31,13 +31,11 @@ void knubDoOsc(){
 
       byte readAdr = rcvMes->getInteger32(0);
       //loac presets
-      loadFlag = true;
 
       readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 
       updateKnubs(&currentPreset);
 
-      loadFlag = false;
       //isEdited = false;
 
 #ifdef DEBUG_LOAD_PRESET

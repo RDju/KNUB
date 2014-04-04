@@ -67,9 +67,8 @@ boolean prmChange;
 
 char* fxState[2] = {"OFF", "ON"};
 char* modOns[3] = {"___", "EXP","MID"};
-char* switchTypes[5] = {"L1", "L2", "L3", "L4","__"};
-
-byte toPrint;
+//Indiquer la localisation de la pédale
+char* switchTypes[5] = {"L1", "L2", "L3", "L4","__"};//TODO: rename "switchOut"
 
 uint16_t prevExpVal;
 uint16_t expVal;
@@ -81,7 +80,7 @@ void setup(){
   lcd.init();
   lcd.backlight();
 
-  //Serial.begin(9600);
+  Serial.begin(9600);
 
   midiSerial.begin(31250);
   looperSerial.begin(31250);
@@ -126,13 +125,16 @@ void setup(){
 
 
   //startUp sequence
+ // Serial.print((int)millis);
   (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
-  delay(1000); //TODO: put in the function ?
+ //productPage("", "", "", "", "", "", "", "", "");
+ // Serial.print((int)millis);
   (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
-  delay(1000);
+  //softwareVersion("", "", "", "", "", "", "", "", "");
   //initMemDisp();
 
   tabIndx = 0;
+  pageLevel = 2;
 
   (*drawFuncs[2])("", "", "", "", "", "", "", "", "");
 
@@ -148,7 +150,7 @@ void setup(){
   prevUp = digitalRead(upPin);
   prevDown = digitalRead(downPin);
 
-  initEEPROM(); //TODO: put it in a distinct firmware
+ // initEEPROM(); //TODO: put it in a distinct firmware
 
 }
 
@@ -180,6 +182,7 @@ void loop(){
     case 3: //Knubbie Page
       tabIndx = 0;
       currentParam = 0;
+      clearScreen();
 
       //TODO : put in knubbiePage() in UI.h
       updateParam(0, toString(currentParam + 1));
@@ -230,11 +233,9 @@ void loop(){
           readindx += 1;
           readAdr = readindx*presetSize;
         }
-        if(readAdr != prevRead && !loadFlag){
-          //loadFlag = true;//TODO: check if usefull
+        if(readAdr != prevRead){
           readKnubPreset(eepromAddr1, readAdr, &currentPreset);
           updateKnubs(&currentPreset);      
-          //loadFlag = false;//TODO: same
 
 #ifdef DEBUG_LOAD_PRESET
           Serial.println(readAdr);
@@ -293,15 +294,12 @@ void loop(){
           readAdr = readindx*presetSize;
         }
 
-        if(readAdr != prevRead && !loadFlag){
+        if(readAdr != prevRead){
 
-          loadFlag = true;//TODO: usefull?
           readKnubPreset(eepromAddr1, readAdr, &currentPreset);
           updateKnubs(&currentPreset);
 
           //writeByte(eepromAddr1, lastPresetMemSpace, readindx);
-
-          loadFlag = false;//TODO: same ?
 
           updateLoopsOut(&currentPreset);
 
@@ -384,7 +382,7 @@ void loop(){
 
         currentParamVal = currentPreset.knubbies[currentParam].params[1];
 
-        if((currentParamVal>0 && currentParamVal<256) || (currentParamVal== 0 && encoderDir ==1) || (currentParamVal== 255 && encoderDir ==-1))
+        if((currentParamVal>0 && currentParamVal<256) || (currentParamVal == 0 && encoderDir == 1) || (currentParamVal == 255 && encoderDir == -1))
           currentParamVal += encoderDir;
           
         currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;

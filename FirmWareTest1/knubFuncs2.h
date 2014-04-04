@@ -29,9 +29,7 @@ uint16_t vacMax = 4095;
 
 
 uint8_t dac_ids[2] = {B0001100, B0001101};
-
-uint8_t writeCommands[4] = {B00110001, B00110010,B00110100, B00111000};
-
+uint8_t writeCommands[4] = {B00110001, B00110010, B00110100, B00111000};
 uint16_t  lowVal, highVal, prevExp;
 
 // bool prevUp, prevDown;
@@ -47,7 +45,7 @@ void writeDac(uint8_t id, uint8_t wichDac, uint16_t value){
 
 //actual turn knub func
 
-void turnKnub(uint8_t knubNum,uint8_t knubVal){
+void turnKnub(uint8_t knubNum, uint8_t knubVal){
 
 
   byte hiRead = 255 - knubVal;
@@ -83,7 +81,6 @@ void updateKnubs(aKnubPreset * kPreset){
     if(kPreset->knubbies[i].state == 1)
       turnKnub(i, kPreset->knubbies[i].params[0]);
 }
-
 
 void printPresetName(aKnubPreset *kPreset){
 

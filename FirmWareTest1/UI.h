@@ -13,13 +13,13 @@ uint8_t numTabs[] = {0, 0, 2, 7, 0};
 char tmpStr[4];
 
 byte fxTabs[2] = {B01110000, B01110001};
-byte paramTabs[8] = {B00000000, B00100000, B11010000, B11010001, B00100001, B01100001, B10100001, B10100000};//???
-byte customCursorTabs[3] = {B00000001, B01010001, B10100001};
-byte chParamTabs[6] = {B00010001, B01010001, B10010001, B11000001, B11000000, B10010000};//???
-byte ledPositions[4] = {B00010001, B01010001, B10010001, B11010001};
+byte paramTabs[8] = {B00000000, B00100000, B11010000, B11010001, B00100001, B01100001, B10100001, B10100000};// localisation des paramètres sur l'écran
+byte chParamTabs[6] = {B00010001, B01010001, B10010001, B11000001, B11000000, B10010000};//change param tab (localisation du curseur de sélection)
+byte ledPositions[4] = {B00010001, B01010001, B10010001, B11010001}; // indication sur le LCD des pétales éteintes et allumées
 
 // 1,1  5,1  9,1  13,1
 
+//use map instead ?
 uint8_t customDigits[256] = {
 
   0, 0, 0, 1, 1, 1, 2, 2, 3, 3, 3, 4, 4, 5, 5, 5, 6, 6, 7, 7, 7, 8, 8, 9, 9, 9, 10, 10, 10, 11, 11, 12, 12, 12, 
@@ -33,7 +33,7 @@ uint8_t customDigits[256] = {
   90, 90, 90, 91, 91, 92, 92, 92, 93, 93, 94, 94, 94, 95, 95, 96, 96, 96, 97, 97, 98, 98, 99, 99, 100, 100
 };
 
-
+//Customizes characters to indicate if pedals are ON or OFF
 uint8_t ledOFF[8] = {
   0b00000,
   0b00000,
@@ -105,6 +105,7 @@ inline void updatePreset(/*char preset[],*/ char pName[], boolean editMode){
     lcd.print("%");
 }
 
+//TODO: try to clear the previous cursor via another way
 inline void clearAllTabs(){
   for(int i=0; i<6; i++){
     tab(chParamTabs[i]);
@@ -145,23 +146,28 @@ char* stateToString(uint8_t state){
 //pageLevel == 0
 void productPage(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
-  char** productPageString = getProductPageString();
+  //char** productPageString = getProductPageString();
 
   clearScreen();
   lcd.setCursor(0,0);
-  lcd.print(productPageString[0]);
+  //lcd.print(productPageString[0]);
+  lcd.print("    LE KNUB   ");
   lcd.setCursor(0,1);
-  lcd.print(productPageString[1]);
+  //lcd.print(productPageString[1]);
+  lcd.print(" by Combosquare ");
+  delay(1000);
 }
 
 //pageLevel == 1
 void softwareVersion(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]){
 
-  char* softwareVersionString = getSoftwareVersionString();
+  //char* softwareVersionString = getSoftwareVersionString();
 
   clearScreen();
   lcd.setCursor(0,0);
-  lcd.print(softwareVersionString);
+  //lcd.print(softwareVersionString);
+  lcd.print(" Firmware: v0.1a");
+  delay(1000);
 }
 
 //pageLevel == 5

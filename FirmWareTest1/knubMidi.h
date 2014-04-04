@@ -16,9 +16,6 @@ uint8_t readindx  = 5; //this later will be change back to load ID from eeprom
 
 uint16_t readAdr;
 
-
-
-bool loadFlag = false;
 bool prevUp, prevDown;
 
 
@@ -55,10 +52,8 @@ void midiInRead(){
       readAdr = readindx*presetSize;
 
 
-      if(readindx<13 && readAdr != prevRead && !loadFlag){
+      if(readindx<13 && readAdr != prevRead){
 
-
-        loadFlag = true;
 
         readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 
@@ -66,7 +61,6 @@ void midiInRead(){
 
         //writeByte(eepromAddr1, lastPresetMemSpace, readindx);
 
-        loadFlag = false;
         //isEdited = false;
 
 #ifdef DEBUG_LOAD_PRESET
@@ -128,10 +122,7 @@ void doSwitchInDec(){
       readAdr = readindx*presetSize;
     }
 
-    if(readAdr != prevRead && !loadFlag){
-
-
-      loadFlag = true;
+    if(readAdr != prevRead){
 
       readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 
@@ -139,7 +130,6 @@ void doSwitchInDec(){
 
       //writeByte(eepromAddr1, lastPresetMemSpace, readindx);
 
-      loadFlag = false;
       //isEdited = false;
 
 #ifdef DEBUG_LOAD_PRESET
@@ -167,10 +157,7 @@ void doSwitchInDec(){
       readAdr = readindx*presetSize;
     }
 
-    if(readAdr != prevRead && !loadFlag){
-
-
-      loadFlag = true;
+    if(readAdr != prevRead){
 
       readKnubPreset(eepromAddr1, readAdr, &currentPreset);
 
@@ -178,7 +165,6 @@ void doSwitchInDec(){
 
       //writeByte(eepromAddr1, lastPresetMemSpace, readindx);
 
-      loadFlag = false;
       //isEdited = false;
 
 #ifdef DEBUG_LOAD_PRESET

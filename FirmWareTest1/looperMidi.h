@@ -19,8 +19,6 @@ void sendSwitchSysEx(){
     looperSerial.write(switchSysEx[i]);
 }
 
-
-
 void switchLoop( byte loopNum, byte state){
 
   looperSerial.write(CC2Looper);
