@@ -1,3 +1,4 @@
+
 inline void checkEdition(boolean &editState){
   if(!editState)
     editState = true;	

@@ -3,6 +3,8 @@
 //#define DEBUG_LOAD_PRESET //uncomment this to activate midi debugging
 #include "Arduino.h"
 
+
+//???: what is upPin and downPin ?
 #define upPin 6
 #define downPin 5
 
@@ -22,7 +24,7 @@ bool prevUp, prevDown;
 uint8_t debounceDelay = 5;
 
 uint8_t baseAddr = 5;
-uint8_t lastID = 5; // this later woul be removed for consistency with readindx
+//uint8_t lastID = 5; // this later woul be removed for consistency with readindx
 uint8_t toRead = 0;
 
 void midiInRead(){

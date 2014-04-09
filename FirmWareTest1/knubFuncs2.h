@@ -75,8 +75,9 @@ void turnKnub(uint8_t knubNum, uint8_t knubVal){
     break;
   }
 }
-void updateKnubs(aKnubPreset * kPreset){
 
+//Activate/Desactivate each pedal depending on the kpreset datas
+void updateKnubs(aKnubPreset * kPreset){
   for(uint8_t i = 0; i<4; i++)
     if(kPreset->knubbies[i].state == 1)
       turnKnub(i, kPreset->knubbies[i].params[0]);

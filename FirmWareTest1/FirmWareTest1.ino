@@ -26,52 +26,31 @@
 
 //#define Do_OSC
 
+//Encoder variables :
 volatile uint8_t lastValue = 0;
 volatile uint8_t lastEncoderValue = 0;
 volatile uint8_t encoderValue = 0;
-volatile uint8_t encoderValueParam = 0;
-volatile uint8_t encoderValueParamVal = 0;
 volatile uint8_t scaledEncoderValueParam = 0;
-
-//boolean time2ChangePage;
-
 uint8_t txtParamIndx = 0;
-
-uint8_t lastMSB = 0;
-uint8_t lastLSB = 0;
-
-char valBuf[4];
+int8_t encoderDir; //-1 -> to the turn to the left, +1 -> turn to the right
 
 ClickButton bValid(validBut, LOW, CLICKBTN_PULLUP);
 ClickButton bckValid(backBut, LOW, CLICKBTN_PULLUP);
 
 byte pageLevel = 0;
 uint8_t tabIndx = 0;
-uint8_t currFx = 0;
-
-int8_t encoderDir;
 
 uint8_t currentPresetID = 0;
-boolean isActive;
 boolean isEdited;
 
-uint8_t currentFx = 0;
 uint8_t currentParam = 0;
 uint8_t currentParamVal;
-uint8_t digiMapParamVal;
-
 
 uint8_t currModIndx  = 0;
 uint8_t currSwIndx = 0;
-boolean prmChange;
 
-char* fxState[2] = {"OFF", "ON"};
 char* modOns[3] = {"___", "EXP","MID"};
-//Indiquer la localisation de la pédale
-char* switchTypes[5] = {"L1", "L2", "L3", "L4","__"};//TODO: rename "switchOut"
-
-uint16_t prevExpVal;
-uint16_t expVal;
+char* switchOut[5] = {"L1", "L2", "L3", "L4","__"}; //Indicate pedal physical localisation
 
 void setup(){
 
@@ -113,45 +92,30 @@ void setup(){
 
   //writeByte(eepromAddr1, lastPresetMemSpace, );
   //read last loaded ID and load that one
-  lastID = 5;
-
-  readKnubPreset(eepromAddr1, lastID * presetSize, &currentPreset);
-
-  //delay(50);
-
-  updateKnubs(&currentPreset);
-
-  updateLoopsOut(&currentPreset);
-
-
-  //startUp sequence
- // Serial.print((int)millis);
-  (*drawFuncs[0])("", "", "", "", "", "", "", "", "");
- //productPage("", "", "", "", "", "", "", "", "");
- // Serial.print((int)millis);
-  (*drawFuncs[1])("", "", "", "", "", "", "", "", "");
-  //softwareVersion("", "", "", "", "", "", "", "", "");
-  //initMemDisp();
-
-  tabIndx = 0;
+  //lastID = 5; //TODO: understand && remove ?
   pageLevel = 2;
 
-  (*drawFuncs[2])("", "", "", "", "", "", "", "", "");
+  readKnubPreset(eepromAddr1, readindx * presetSize, &currentPreset);
+
+  updateKnubs(&currentPreset);
+  updateLoopsOut(&currentPreset);
+
+  //startUp sequence
+  productPage();
+  softwareVersion();
+  presetPage();
 
   updatePreset(currentPreset.name, isEdited);
   checkUILeds();
 
+  //???: usefull ?
   pinMode(upPin, INPUT);
   pinMode(downPin, INPUT);
   digitalWrite(upPin, HIGH);
   digitalWrite(downPin, HIGH);
 
-
   prevUp = digitalRead(upPin);
   prevDown = digitalRead(downPin);
-
- // initEEPROM(); //TODO: put it in a distinct firmware
-
 }
 
 void loop(){
@@ -165,39 +129,22 @@ void loop(){
   ////dealing with pages s
   if(time2ChangePage){
     time2ChangePage = false;
-    //TODO: call of drawFuncs here ?
     switch(pageLevel){
-    case 0: //Product Page
-      (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
-      break;
-    case 1: //Version Page
-      (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
-      break;
     case 2: //Preset Page
       tabIndx = 0;
-      (*drawFuncs[pageLevel])("", "", "", "", "", "", "", "", "");
+      presetPage();
       updatePreset(currentPreset.name, isEdited);
       checkUILeds();
       break;
     case 3: //Knubbie Page
       tabIndx = 0;
       currentParam = 0;
-      clearScreen();
-
-      //TODO : put in knubbiePage() in UI.h
-      updateParam(0, toString(currentParam + 1));
-      updateParam(1,currentPreset.knubbies[currentParam].name);
-      updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
-      updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
-      updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
-      updateNumParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);  
-      updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
+      knubbiePage(currentParam, currentPreset,modOns, switchOut);
       break;
-    case 4: //Knubbie Page //???: why knubbie page to save ?
+    case 4: //Edited Knubbie Page 
       //time to save things.
-      (*drawFuncs[pageLevel+1])("", "",  "",  "", "", "", "", "", "");
+      savePage();
       writeKnubPreset(eepromAddr1, readAdr, &currentPreset);
-      //delay(saveTime*5);//TODO: usefull ?
       pageLevel = 2;
       time2ChangePage = true;
       break;
@@ -210,24 +157,11 @@ void loop(){
 
   if(bValid.clicks !=0){
     switch (pageLevel){
-    case 0: //Product Page
-      if(bValid.clicks == 1){     
-        pageLevel ++;
-        time2ChangePage = true;
-      }
-      break;
-    case 1: //Software Version
-      if(bValid.clicks == 1){
-        pageLevel ++;
-        time2ChangePage = true;
-      }
-      break;
     case 2: //Preset Page
       if(bValid.clicks == 2){
         pageLevel ++;
         time2ChangePage = true;
       } else if (bValid.clicks==1){
-
         //increment preset and load
         if(readindx < 12){
           readindx += 1;
@@ -249,17 +183,17 @@ void loop(){
         }
       }
       break;
-
+      
     case 3: //knubbie page
       if(bValid.clicks == 1){
         tabIndx++;
-        tabIndx = tabIndx%numTabs[pageLevel];
+        tabIndx = tabIndx%numTabs[pageLevel];//TODO: numTabs usefull ?
         tab(chParamTabs[tabIndx]);
         customCursor(tabIndx, pageLevel);
       }
       break;
 
-    case 4://knubbie page
+    case 4://knubbie page //TODO: check if useless
       if(bValid.clicks == 2){
         pageLevel ++;
         time2ChangePage = true;
@@ -279,15 +213,12 @@ void loop(){
     // }
 
     switch(pageLevel){
-
     case 2:
       if(bckValid.clicks == 2){
-
         pageLevel = 4;
         isEdited = false;
         time2ChangePage = true;
-      } 
-      else if (bckValid.clicks == 1){
+      } else if (bckValid.clicks == 1){
 
         if(readindx > 5){
           readindx -=1;
@@ -310,13 +241,15 @@ void loop(){
       break;
     case 3:
       if(bckValid.clicks == 1){
+        Serial.println(tabIndx);
+        if (tabIndx == 0)
+          tabIndx = 7;
         tabIndx--;
-        tabIndx = tabIndx%numTabs[pageLevel];
+        tabIndx = tabIndx%7;//numTabs[pageLevel];
         tab(chParamTabs[tabIndx]);
 
         customCursor(tabIndx, pageLevel);
-      } 
-      else if (bckValid.clicks == 2){
+      } else if (bckValid.clicks == 2){
 
         pageLevel = 2;
         time2ChangePage = true;
@@ -342,18 +275,7 @@ void loop(){
           txtParamIndx += encoderDir;
           currentParam = txtParamIndx%8;
 
-          clearScreen(); //TODO: try to delete
-          
-          //TODO: same as first switch case 3
-          updateParam(0, toString(currentParam + 1));
-          updateParam(1,currentPreset.knubbies[currentParam].name);
-          updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
-          updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
-          updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
-          updateNumParam(5,customDigits[currentPreset.knubbies[currentParam].params[1]]);
-          //updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
-          updateParam(7,switchTypes[currentPreset.knubbies[currentParam].numLoop]);
-          //time2ChangePage = false;
+          knubbiePage(currentParam, currentPreset,modOns, switchOut);
         }
         break;
       case 1:
@@ -367,13 +289,9 @@ void loop(){
 
         if ((currentParamVal>0 && currentParamVal<255) || (currentParamVal== 0 && encoderDir ==1) || (currentParamVal== 255 && encoderDir ==-1))
           currentParamVal += encoderDir;
-        /*else if(currentParamVal == 255 && encoderDir == 1) //already have these values
-          currentParamVal  = 255;     
-        else if(currentParamVal == 0 && encoderDir == -1)
-          currentParamVal = 0;*/
           
         currentPreset.knubbies[currentParam].params[0] = currentParamVal;
-        updateNumParam(4,customDigits[currentPreset.knubbies[currentParam].params[0]]);
+        updateNumParam(4,map(currentPreset.knubbies[currentParam].params[0], 0, 255, 0, 100));
         turnKnub(currentParam, currentPreset.knubbies[currentParam].params[0]);
         break;
         
@@ -386,7 +304,7 @@ void loop(){
           currentParamVal += encoderDir;
           
         currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
-        updateNumParam(5, customDigits[currentParamVal]);
+        updateNumParam(5, map(currentParamVal, 0, 255, 0, 100));
     
         break;
         /*
@@ -446,7 +364,7 @@ void loop(){
         if(scaledEncoderValueParam == 0){   
           txtParamIndx += encoderDir;
           currSwIndx = txtParamIndx%13;
-          updateParam(7, switchTypes[currSwIndx]);
+          updateParam(7, switchOut[currSwIndx]);
         } 
         break;
       }
