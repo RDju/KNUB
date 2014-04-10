@@ -41,9 +41,10 @@ ClickButton bckValid(backBut, LOW, CLICKBTN_PULLUP);
 
 byte pageLevel = 0;
 uint8_t tabIndx = 0;
+byte prevIndx;
 
 uint8_t currentPresetID = 0;
-boolean isEdited;
+//boolean isEdited;
 
 uint8_t currentParam = 0;
 uint8_t currentParamVal;
@@ -112,7 +113,7 @@ void setup(){
   softwareVersion();
   presetPage();
 
-  updatePreset(currentPreset.name, isEdited);
+  updatePreset(currentPreset.name, isPresetEdited() );
   checkUILeds();
 
   //???: usefull ?
@@ -140,7 +141,7 @@ void loop(){
     case 2: //Preset Page
       tabIndx = 0;
       presetPage();
-      updatePreset(currentPreset.name, isEdited);
+      updatePreset(currentPreset.name, isPresetEdited());
       checkUILeds();
       break;
     case 3: //Knubbie Page
@@ -151,7 +152,8 @@ void loop(){
     case 4: //Edited Knubbie Page 
       //time to save things.
       savePage();
-      writeKnubPreset(eepromAddr1, readAdr, &currentPreset);
+      //writeKnubPreset(eepromAddr1, readAdr, &currentPreset);
+      saveEditedKnubbies(eepromAddr1, readAdr, &currentPreset);
       pageLevel = 2;
       time2ChangePage = true;
       break;
@@ -165,7 +167,7 @@ void loop(){
   if(bValid.clicks !=0){
     switch (pageLevel){
     case 2: //Preset Page
-      if(bValid.clicks == 2){
+      if(bValid.clicks == 2){ //TODO: replace by a long click ?
         pageLevel ++;
         time2ChangePage = true;
       } else if (bValid.clicks==1){
@@ -193,18 +195,12 @@ void loop(){
       
     case 3: //knubbie page
       if(bValid.clicks == 1){
+        prevIndx = tabIndx;
         tabIndx++;
         tabIndx = tabIndx%(sizeof(chParamTabs)+1);//numTabs[pageLevel];//TODO: numTabs usefull ?
         tab(chParamTabs[tabIndx]);
-        customCursor(tabIndx, pageLevel);
+        customCursor(tabIndx, pageLevel, prevIndx);
       }
-      break;
-
-    case 4://knubbie page //TODO: check if useless
-      if(bValid.clicks == 2){
-        pageLevel ++;
-        time2ChangePage = true;
-      }   
       break;
     }
   }
@@ -221,16 +217,12 @@ void loop(){
 
     switch(pageLevel){
     case 2:
-      if(bckValid.clicks == 2){
+      if(bckValid.clicks == 2 && isPresetEdited()){
         pageLevel = 4;
-        isEdited = false;
+        for (int i = 0; i < 8; i++)
+          currentPreset.knubbies[i].isEdited = false;
         time2ChangePage = true;
       } else if (bckValid.clicks == 1){
-        Serial.print(readindx);
-        Serial.print(" ");
-        Serial.print(readAdr );
-        Serial.print(" ");
-        Serial.println(prevRead );
         if(readindx > 5){
           readindx -=1;
           readAdr = ((readindx-baseID)*presetSize)+baseAddr;
@@ -253,13 +245,14 @@ void loop(){
     case 3:
       if(bckValid.clicks == 1){
         Serial.println(tabIndx);
+        prevIndx = tabIndx;
         if (tabIndx == 0)
           tabIndx = sizeof(chParamTabs)+1;
         tabIndx--;
         tabIndx = tabIndx%(sizeof(chParamTabs)+1);
         tab(chParamTabs[tabIndx]);
 
-        customCursor(tabIndx, pageLevel);
+        customCursor(tabIndx, pageLevel, prevIndx);
       } else if (bckValid.clicks == 2){
 
         pageLevel = 2;
@@ -293,7 +286,8 @@ void loop(){
 
         ///EDITED
 
-        checkEdition(isEdited);
+        //checkEdition(isEdited);
+        currentPreset.knubbies[currentParam].isEdited = true;
         ///MUST FIND A BETTER WAY OF DEALING WITH THIS
 
         currentParamVal = currentPreset.knubbies[currentParam].params[0];
@@ -307,7 +301,8 @@ void loop(){
         break;
         
       case 2:
-        checkEdition(isEdited);
+        currentPreset.knubbies[currentParam].isEdited = true;
+        //checkEdition(isEdited);
 
         currentParamVal = currentPreset.knubbies[currentParam].params[1];
 
@@ -332,7 +327,8 @@ void loop(){
          break;
          */
       case 4:
-        checkEdition(isEdited);
+        //checkEdition(isEdited);
+        currentPreset.knubbies[currentParam].isEdited = true;
         scaledEncoderValueParam = encoderValue%25;
         if(scaledEncoderValueParam == 0){
           txtParamIndx += encoderDir;
@@ -342,7 +338,8 @@ void loop(){
         } 
         break;
       case 5:
-        checkEdition(isEdited);
+        //checkEdition(isEdited);
+        currentPreset.knubbies[currentParam].isEdited = true;
 
         //do all switch check here (might not be the greatest idea)
         //scaledEncoderValueParam = encoderValue%25;
@@ -370,7 +367,8 @@ void loop(){
           switchLoop(currentPreset.knubbies[currentParam].numLoop, 1);//turn loop on
         break;
       case 6:
-        checkEdition(isEdited);
+        //checkEdition(isEdited);
+        currentPreset.knubbies[currentParam].isEdited = true;
         scaledEncoderValueParam = encoderValue%25;
         if(scaledEncoderValueParam == 0){   
           txtParamIndx += encoderDir;

@@ -110,17 +110,17 @@ inline void updatePreset(/*char preset[],*/ char pName[], boolean editMode){
 }
 
 //TODO: try to clear the previous cursor via another way
-inline void clearAllTabs(){
-  for(int i=0; i<6; i++){
-    tab(chParamTabs[i]);
+inline void clearTabs(byte wichTab, byte prevIndx){
+  if (prevIndx!=0){
+    tab(chParamTabs[prevIndx-1]);
     lcd.print(" ");
   }
 }
 
-void customCursor(uint8_t cusTab, uint8_t pageLev){
+void customCursor(uint8_t cusTab, uint8_t pageLev, byte prevIndx){
   switch(pageLev){
   case 3:
-    clearAllTabs();
+    clearTabs(cusTab, prevIndx);
     if (cusTab!=0){
       tab(chParamTabs[cusTab-1]);
       lcd.print(">");

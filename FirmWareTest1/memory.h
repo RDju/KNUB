@@ -23,6 +23,7 @@ typedef struct aKnub{
   byte modOn;
   byte state;
   byte numLoop;
+  boolean isEdited;
 }aKnub;
 
 
@@ -268,10 +269,11 @@ void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpre
      readKnubbiemodOn(deviceaddress, addrPtr+modIndx, kpreset, i);
      readKnubbieModState(deviceaddress, addrPtr+stateIndx, kpreset, i);
      readKnubbieNumLoop(deviceaddress, addrPtr+loopIndx, kpreset, i);
+     kpreset->knubbies[i].isEdited = false;
    }
 }
 
-void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset){
+/*void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset){
 
   writeKnubPresetName(deviceaddress, eeaddress, kpreset); 
   writeKnubPresetID(deviceaddress, eeaddress + maxNameLength, kpreset);
@@ -288,6 +290,24 @@ void writeKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpr
     writeKnubbiemodOn(deviceaddress, addrPtr+maxNameLength+paramLength, kpreset, i);
     writeKnubbieModState(deviceaddress, addrPtr+maxNameLength+paramLength+modOnLength, kpreset, i);
     writeKnubbieNumLoop(deviceaddress, addrPtr+maxNameLength+paramLength+modOnLength+stateLength, kpreset, i);
+  }
+}*/
+
+//TODO: write only if the parameter has been edited (compare the current parameter with to one in the eeprom)
+void saveEditedKnubbies(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset){
+  unsigned int addrPtr = eeaddress + maxNameLength + IDLength;
+
+  for(int i = 0; i<numKnubbies; i++){
+    addrPtr = addrPtr*(i+1);
+    if (kpreset->knubbies[i].isEdited){
+      ///move addrPtr to start of knubbie
+      
+      writeKnubbieName(deviceaddress,addrPtr , kpreset, i);
+      writeKnubbieParams(deviceaddress, addrPtr+maxNameLength, kpreset, i);
+      writeKnubbiemodOn(deviceaddress, addrPtr+maxNameLength+paramLength, kpreset, i);
+      writeKnubbieModState(deviceaddress, addrPtr+maxNameLength+paramLength+modOnLength, kpreset, i);
+      writeKnubbieNumLoop(deviceaddress, addrPtr+maxNameLength+paramLength+modOnLength+stateLength, kpreset, i);
+    }
   }
 }
 
