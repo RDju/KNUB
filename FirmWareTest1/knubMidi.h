@@ -24,7 +24,7 @@ bool prevUp, prevDown;
 uint8_t debounceDelay = 5;
 
 uint8_t baseAddr = 5;
-//uint8_t lastID = 5; // this later woul be removed for consistency with readindx
+uint8_t lastID = 5; // this later woul be removed for consistency with readindx
 uint8_t toRead = 0;
 
 void midiInRead(){
@@ -51,7 +51,7 @@ void midiInRead(){
       //we have a valid PC message change preset accordingly
 
       readindx = inMessage[1]+5;
-      readAdr = readindx*presetSize;
+      readAdr = ((readindx - baseAddr)*presetSize)+baseAddr;
 
 
       if(readindx<13 && readAdr != prevRead){
@@ -121,7 +121,7 @@ void doSwitchInDec(){
 
     if(readindx < 12){
       readindx += 1;
-      readAdr = readindx*presetSize;
+      readAdr = ((readindx-baseAddr)*presetSize)+baseAddr;
     }
 
     if(readAdr != prevRead){

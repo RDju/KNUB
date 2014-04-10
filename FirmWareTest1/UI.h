@@ -4,12 +4,9 @@ LiquidCrystal_I2C lcd(0x20, 16, 2);
 
 bool time2ChangePage = false;
 
-uint8_t numTabs[] = {0, 0, 2, 7, 0};//TODO: approfondir
-
 byte paramTabs[8] = {B00000000, B00100000, B11010000, B11010001, B00100001, B01100001, B10100001, B10100000};// localisation des paramètres sur l'écran
 byte chParamTabs[6] = {B00010001, B01010001, B10010001, B11000001, B11000000, B10010000};//change param tab (localisation du curseur de sélection)
 byte ledPositions[4] = {B00010001, B01010001, B10010001, B11010001}; // indication sur le LCD des pétales éteintes et allumées
-//byte customCursorTabs[3] = {B00000001, B01010001, B10100001};
 
 //Customizes characters to indicate if pedals are ON or OFF
 uint8_t ledOFF[8] = {
@@ -32,6 +29,28 @@ uint8_t ledON[8] = {
   0b11111,
   0b11111,
   0b11111
+};
+
+uint8_t stateOFF[8] = {
+  0b00000,
+  0b00000,
+  0b11111,
+  0b10001,
+  0b10001,
+  0b10001,
+  0b11111,
+  0b00000
+};
+
+uint8_t stateON[8] = {
+  0b00000,
+  0b00000,
+  0b11111,
+  0b11011,
+  0b10101,
+  0b11011,
+  0b11111,
+  0b00000
 };
 
 //switch led on or off
@@ -58,8 +77,15 @@ inline void clearScreen(){
 }
 
 void updateParam(uint8_t prmIndx, char newVal[]){
-  tab(paramTabs[prmIndx]);
-  lcd.print(newVal);
+    tab(paramTabs[prmIndx]);
+    lcd.print(newVal);
+}
+
+void updateState(uint8_t state){
+  tab(paramTabs[2]);
+  if (state == 1)
+         lcd.write(4);
+  else lcd.write(3);
 }
 
 void updateNumParam(uint8_t prmIndx, uint8_t newVal){
@@ -170,10 +196,11 @@ void knubbiePage(int currentParam, aKnubPreset currentPreset, char* modOns[], ch
   
   updateParam(0, toString(currentParam + 1));
   updateParam(1,currentPreset.knubbies[currentParam].name);
-  updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));
+  //updateState(currentPreset.knubbies[currentParam].state);
+  updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));//TODO: change the visual indicator
   updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
-  updateNumParam(4,map(currentPreset.knubbies[currentParam].params[0], 0, 255, 0, 100));
-  updateNumParam(5,map(currentPreset.knubbies[currentParam].params[1], 0, 255, 0, 100));
+  updateNumParam(4,map(currentPreset.knubbies[currentParam].params[0], 0, 254, 0, 100));
+  updateNumParam(5,map(currentPreset.knubbies[currentParam].params[1], 0, 254, 0, 100));
   //updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
   updateParam(7, switchOut[currentPreset.knubbies[currentParam].numLoop]);
 

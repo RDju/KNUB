@@ -34,6 +34,8 @@ volatile uint8_t scaledEncoderValueParam = 0;
 uint8_t txtParamIndx = 0;
 int8_t encoderDir; //-1 -> to the turn to the left, +1 -> turn to the right
 
+uint16_t baseID;
+
 ClickButton bValid(validBut, LOW, CLICKBTN_PULLUP);
 ClickButton bckValid(backBut, LOW, CLICKBTN_PULLUP);
 
@@ -53,6 +55,8 @@ char* modOns[3] = {"___", "EXP","MID"};
 char* switchOut[5] = {"L1", "L2", "L3", "L4","__"}; //Indicate pedal physical localisation
 
 void setup(){
+  
+  baseID = 5;
 
   Wire.begin();
 
@@ -71,6 +75,8 @@ void setup(){
 
   lcd.createChar(0, ledOFF);
   lcd.createChar(1, ledON);
+  lcd.createChar(3, stateOFF);
+  lcd.createChar(4, stateON);
 
   pinMode(encoderPin1, INPUT); 
   pinMode(encoderPin2, INPUT);
@@ -94,9 +100,10 @@ void setup(){
   //read last loaded ID and load that one
   //lastID = 5; //TODO: understand && remove ?
   pageLevel = 2;
-
-  readKnubPreset(eepromAddr1, readindx * presetSize, &currentPreset);
-
+  lastID = 5;
+  readAdr = 5;
+  readKnubPreset(eepromAddr1, ((lastID-baseID) * presetSize)+baseID, &currentPreset);
+  //printCurrentPreset();
   updateKnubs(&currentPreset);
   updateLoopsOut(&currentPreset);
 
@@ -165,7 +172,7 @@ void loop(){
         //increment preset and load
         if(readindx < 12){
           readindx += 1;
-          readAdr = readindx*presetSize;
+          readAdr = ((readindx-baseID)*presetSize)+baseAddr;
         }
         if(readAdr != prevRead){
           readKnubPreset(eepromAddr1, readAdr, &currentPreset);
@@ -187,7 +194,7 @@ void loop(){
     case 3: //knubbie page
       if(bValid.clicks == 1){
         tabIndx++;
-        tabIndx = tabIndx%numTabs[pageLevel];//TODO: numTabs usefull ?
+        tabIndx = tabIndx%(sizeof(chParamTabs)+1);//numTabs[pageLevel];//TODO: numTabs usefull ?
         tab(chParamTabs[tabIndx]);
         customCursor(tabIndx, pageLevel);
       }
@@ -219,10 +226,14 @@ void loop(){
         isEdited = false;
         time2ChangePage = true;
       } else if (bckValid.clicks == 1){
-
+        Serial.print(readindx);
+        Serial.print(" ");
+        Serial.print(readAdr );
+        Serial.print(" ");
+        Serial.println(prevRead );
         if(readindx > 5){
           readindx -=1;
-          readAdr = readindx*presetSize;
+          readAdr = ((readindx-baseID)*presetSize)+baseAddr;
         }
 
         if(readAdr != prevRead){
@@ -243,9 +254,9 @@ void loop(){
       if(bckValid.clicks == 1){
         Serial.println(tabIndx);
         if (tabIndx == 0)
-          tabIndx = 7;
+          tabIndx = sizeof(chParamTabs)+1;
         tabIndx--;
-        tabIndx = tabIndx%7;//numTabs[pageLevel];
+        tabIndx = tabIndx%(sizeof(chParamTabs)+1);
         tab(chParamTabs[tabIndx]);
 
         customCursor(tabIndx, pageLevel);
