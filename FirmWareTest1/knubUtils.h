@@ -1,20 +1,3 @@
-
-inline boolean isPresetEdited(){
-  for (int i = 0; i < 8; i++){
-    if (currentPreset.knubbies[i].isEdited){
-      Serial.println(i);
-      return true;
-    }
-  }
-  return false;
-}
-
-/*void checkEdition(bool editState){
-  if(!editState)
-    editState == true;	
-}*/
-
-
 void printCurrentPreset(){
 
 

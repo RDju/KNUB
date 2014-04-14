@@ -17,13 +17,20 @@
 
 #define eepromAddr1 0x50
 
+
+  
 typedef struct aKnub{
   char name[maxNameLength];
   byte params[3];
   byte modOn;
   byte state;
   byte numLoop;
-  boolean isEdited;
+  
+  boolean isNameEdited;
+  boolean isParamsEdited[];
+  boolean isModOnEdited;
+  boolean isStateEdited;
+  boolean isNumLoopEdited;
 }aKnub;
 
 
@@ -101,10 +108,12 @@ void writeKnubbieName(int deviceaddress, unsigned int eeaddresspage, aKnubPreset
   for ( byte c = 0; c < maxNameLength; c++){
     Wire.write(kpreset->knubbies[knubbieIndx].name[c]);
   }
-  Wire.endTransmission();*/
-  
-  for(uint16_t i =0 ; i<maxNameLength;i++)
-      writeByte(deviceaddress, eeaddresspage+i, kpreset->knubbies[knubbieIndx].name[i]);
+  Wire.endTransmission();*/ 
+  if (kpreset->knubbies[knubbieIndx].isNameEdited)
+    for(uint16_t i =0 ; i<maxNameLength;i++)
+        writeByte(deviceaddress, eeaddresspage+i, kpreset->knubbies[knubbieIndx].name[i]);
+        
+  kpreset->knubbies[knubbieIndx].isNameEdited = false;
 }
 
 void writeKnubbieParams(int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset, uint8_t knubbieIndx){
@@ -112,51 +121,61 @@ void writeKnubbieParams(int deviceaddress, unsigned int eeaddresspage, aKnubPres
   Wire.beginTransmission(deviceaddress);
   Wire.write((int)eeaddresspage >> 8);
   Wire.write((int)(eeaddresspage & 0xFF)); // LSB
-
+  
   for (byte  c = 0; c < paramLength; c++){
-    Wire.write(kpreset->knubbies[knubbieIndx].params[c]);
-    delay(5);
+    if (kpreset->knubbies[knubbieIndx].isParamsEdited[c]){
+      Wire.write(kpreset->knubbies[knubbieIndx].params[c]);
+      delay(5);
+      kpreset->knubbies[knubbieIndx].params[c] = false;
+    }
   }
   Wire.endTransmission();
 }
 
 void writeKnubbiemodOn(int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset, uint8_t knubbieIndx){
-
-  Wire.beginTransmission(deviceaddress);
-  Wire.write((int)eeaddresspage >> 8);
-  Wire.write((int)(eeaddresspage & 0xFF)); // LSB
-
-  for (byte c = 0; c < modOnLength; c++){
-    Wire.write(kpreset->knubbies[knubbieIndx].modOn);
-    delay(5);
+  if (kpreset->knubbies[knubbieIndx].isModOnEdited){
+    Wire.beginTransmission(deviceaddress);
+    Wire.write((int)eeaddresspage >> 8);
+    Wire.write((int)(eeaddresspage & 0xFF)); // LSB
+  
+  
+    for (byte c = 0; c < modOnLength; c++){
+      Wire.write(kpreset->knubbies[knubbieIndx].modOn);
+      delay(5);
+    }
+    Wire.endTransmission();
   }
-  Wire.endTransmission();
+  kpreset->knubbies[knubbieIndx].isModOnEdited = false;
 }
 
 void writeKnubbieModState(int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset, uint8_t knubbieIndx){
-
-  Wire.beginTransmission(deviceaddress);
-  Wire.write((int)eeaddresspage >> 8);
-  Wire.write((int)(eeaddresspage & 0xFF)); // LSB
-
-  for (byte c = 0; c < stateLength; c++){
-    Wire.write(kpreset->knubbies[knubbieIndx].state);
-    delay(5);
+  if (kpreset->knubbies[knubbieIndx].isStateEdited){
+    Wire.beginTransmission(deviceaddress);
+    Wire.write((int)eeaddresspage >> 8);
+    Wire.write((int)(eeaddresspage & 0xFF)); // LSB
+  
+    for (byte c = 0; c < stateLength; c++){
+      Wire.write(kpreset->knubbies[knubbieIndx].state);//???: manque pas un truc là ?
+      delay(5);
+    }
+    Wire.endTransmission();
   }
-  Wire.endTransmission();
+  kpreset->knubbies[knubbieIndx].isStateEdited = false;
 }
 
 void writeKnubbieNumLoop(int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset, uint8_t knubbieIndx){
-
-  Wire.beginTransmission(deviceaddress);
-  Wire.write((int)eeaddresspage >> 8);
-  Wire.write((int)(eeaddresspage & 0xFF)); // LSB
-
-  for (byte c = 0; c < numLoopLength; c++){
-    Wire.write(kpreset->knubbies[knubbieIndx].numLoop);
-    delay(5);
+  if (kpreset->knubbies[knubbieIndx].isNumLoopEdited){
+    Wire.beginTransmission(deviceaddress);
+    Wire.write((int)eeaddresspage >> 8);
+    Wire.write((int)(eeaddresspage & 0xFF)); // LSB
+  
+    for (byte c = 0; c < numLoopLength; c++){
+      Wire.write(kpreset->knubbies[knubbieIndx].numLoop);
+      delay(5);
+    }
+    Wire.endTransmission();
   }
-  Wire.endTransmission();
+  kpreset->knubbies[knubbieIndx].isNumLoopEdited = false;
 }
 
 void readKnubPresetName( int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset) {
@@ -200,7 +219,7 @@ void readKnubbieName( int deviceaddress, unsigned int eeaddress, aKnubPreset *kp
 
 void readKnubbieParams(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpreset, uint8_t knubbieIndx){
 
-  Wire.beginTransmission(deviceaddress);
+    Wire.beginTransmission(deviceaddress);
     Wire.write((int)(eeaddress >> 8)); // MSB
     Wire.write((int)(eeaddress & 0xFF)); // LSB
     Wire.endTransmission();
@@ -269,7 +288,6 @@ void readKnubPreset(int deviceaddress, unsigned int eeaddress, aKnubPreset *kpre
      readKnubbiemodOn(deviceaddress, addrPtr+modIndx, kpreset, i);
      readKnubbieModState(deviceaddress, addrPtr+stateIndx, kpreset, i);
      readKnubbieNumLoop(deviceaddress, addrPtr+loopIndx, kpreset, i);
-     kpreset->knubbies[i].isEdited = false;
    }
 }
 
@@ -299,7 +317,6 @@ void saveEditedKnubbies(int deviceaddress, unsigned int eeaddress, aKnubPreset *
 
   for(int i = 0; i<numKnubbies; i++){
     addrPtr = addrPtr*(i+1);
-    if (kpreset->knubbies[i].isEdited){
       ///move addrPtr to start of knubbie
       
       writeKnubbieName(deviceaddress,addrPtr , kpreset, i);
@@ -307,8 +324,18 @@ void saveEditedKnubbies(int deviceaddress, unsigned int eeaddress, aKnubPreset *
       writeKnubbiemodOn(deviceaddress, addrPtr+maxNameLength+paramLength, kpreset, i);
       writeKnubbieModState(deviceaddress, addrPtr+maxNameLength+paramLength+modOnLength, kpreset, i);
       writeKnubbieNumLoop(deviceaddress, addrPtr+maxNameLength+paramLength+modOnLength+stateLength, kpreset, i);
+  }
+}
+
+
+inline boolean isPresetEdited(aKnubPreset *kpreset){
+  for (int i = 0; i < 8; i++){
+    if (kpreset->knubbies[i].isNameEdited || kpreset->knubbies[i].isParamsEdited[0] || kpreset->knubbies[i].isParamsEdited[1] || kpreset->knubbies[i].isParamsEdited[2] || kpreset->knubbies[i].isModOnEdited || kpreset->knubbies[i].isStateEdited || kpreset->knubbies[i].isNumLoopEdited){
+      Serial.println(i);
+      return true;
     }
   }
+  return false;
 }
 
 /***********************************************************************
