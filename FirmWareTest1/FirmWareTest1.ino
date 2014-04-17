@@ -7,6 +7,8 @@
 //#include <SPI.h>
 //#include <Ethernet.h> // version IDE 0022
 //#include <Z_OSC.h>
+#include <Bounce.h>
+
 
 #include "presets.h"
 #include "knubFuncs2.h"
@@ -23,6 +25,13 @@
 #define backBut 8
 
 #define expressionPin 0
+
+/* Timer2 reload value, globally available */
+unsigned int tcnt2;  
+// Instantiate a Bounce object with a 5 millisecond debounce time
+// Only pin1 needs to be debounced. It is assumed that pin2
+// will be stable when reading pin1
+Bounce bouncer1 = Bounce( encoderPin1,5 );
 
 //#define Do_OSC
 
@@ -55,6 +64,39 @@ uint8_t currSwIndx = 0;
 char* modOns[3] = {"___", "EXP","MID"};
 char* switchOut[5] = {"L1", "L2", "L3", "L4","__"}; //Indicate pedal physical localisation
 
+void setupTimer(){
+   /* First disable the timer overflow interrupt while we're configuring */
+  TIMSK2 &= ~(1<<TOIE2);  
+  /* Configure timer2 in normal mode (pure counting, no PWM etc.) */
+  TCCR2A &= ~((1<<WGM21) | (1<<WGM20));  
+  TCCR2B &= ~(1<<WGM22);  
+
+  /* Select clock source: internal I/O clock */
+  ASSR &= ~(1<<AS2);  
+
+  /* Disable Compare Match A interrupt enable (only want overflow) */
+  TIMSK2 &= ~(1<<OCIE2A);  
+
+  /* Now configure the prescaler to CPU clock divided by 128 */
+  TCCR2B |= (1<<CS22)  | (1<<CS20); // Set bits  
+  TCCR2B &= ~(1<<CS21);             // Clear bit  
+
+
+  /* We need to calculate a proper value to load the timer counter. 
+   * The following loads the value 131 into the Timer 2 counter register 
+   * The math behind this is: 
+   * (CPU frequency) / (prescaler value) = 125000 Hz = 8us. 
+   * (desired period) / 8us = 125. 
+   * MAX(uint8) + 1 - 125 = 131; 
+   */
+
+  /* Save value globally for later reload in ISR */
+  tcnt2 = 131;   
+  /* Finally load end enable the timer */
+  TCNT2 = tcnt2;  
+  TIMSK2 |= (1<<TOIE2);  
+}
+
 void setup(){
   
   baseID = 5;
@@ -83,8 +125,8 @@ void setup(){
   pinMode(encoderPin2, INPUT);
   digitalWrite(encoderPin1, HIGH);
   digitalWrite(encoderPin2, HIGH);
-  attachInterrupt(0, updateEncoder, CHANGE); //???: why 2 interruptions ?
-  attachInterrupt(1, updateEncoder, CHANGE); 
+  //attachInterrupt(0, updateEncoder, CHANGE); //???: why 2 interruptions ?
+  //attachInterrupt(1, updateEncoder, CHANGE); 
 
 #ifdef Do_OSC 
   if(Ethernet.begin(myMac) ==0){
@@ -123,6 +165,8 @@ void setup(){
 
   prevUp = digitalRead(upPin);
   prevDown = digitalRead(downPin);
+  
+  setupTimer();
 }
 
 void loop(){
@@ -386,7 +430,7 @@ void loop(){
 }
 
 //Interruption called each time a pin change of value
-void updateEncoder(){
+/*void updateEncoder(){
   uint8_t MSB = digitalRead(encoderPin1); //MSB = most significant bit
   uint8_t LSB = digitalRead(encoderPin2); //LSB = least significant bit
 
@@ -401,4 +445,22 @@ void updateEncoder(){
     encoderValue -- ;
   }
   lastEncoderValue = encoded; //store this value for next time
+}*/
+
+ISR(TIMER2_OVF_vect) {  
+  /* Reload the timer */
+  TCNT2 = tcnt2;  
+
+  bouncer1.update();
+  if(bouncer1.risingEdge()){
+    if (digitalRead(encoderPin2)){
+      //Serial.println("CW");
+      encoderDir = -1;
+      encoderValue ++;
+    } else {
+      encoderDir = 1;
+      encoderValue -- ;      
+    }
+  } 
 }
+
