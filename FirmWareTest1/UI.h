@@ -103,6 +103,7 @@ inline void updateParam2(uint8_t prmIndx, char newVal[]){
   lcd.print(newVal);
 }
 
+//TODO: editMode not needed now
 inline void updatePreset(/*char preset[],*/ char pName[], boolean editMode){
   lcd.print(pName);
   if(editMode)
@@ -163,7 +164,6 @@ void productPage(){
   delay(1000);
 }
 
-//pageLevel == 1
 void softwareVersion(){
 
   //char* softwareVersionString = getSoftwareVersionString();
@@ -175,7 +175,14 @@ void softwareVersion(){
   delay(1000);
 }
 
-//pageLevel == 5
+void wantToSave(){
+  clearScreen();
+  lcd.setCursor(0,0);
+  lcd.print("     SAVE ?     ");
+  lcd.setCursor(0,1);
+  lcd.print("L: No  / R: Yes ");
+}
+
 void savePage(){
   clearScreen();
   lcd.setCursor(0,0);
@@ -183,7 +190,7 @@ void savePage(){
   delay(1000);
 }
 
-//pageLevel == 2
+//pageLevel == 1
 void presetPage(){
   clearScreen();
   //lcd.print(presetName); 
@@ -197,12 +204,12 @@ void knubbiePage(int currentParam, aKnubPreset currentPreset, char* modOns[], ch
   updateParam(0, toString(currentParam + 1));
   updateParam(1,currentPreset.knubbies[currentParam].name);
   //updateState(currentPreset.knubbies[currentParam].state);
-  updateParam(2,stateToString(currentPreset.knubbies[currentParam].state));//TODO: change the visual indicator
-  updateParam(3,modOns[currentPreset.knubbies[currentParam].modOn]);
+  updateParam(2,stateToString(currentPreset.knubbies[currentParam].params[4]));//TODO: change the visual indicator
+  updateParam(3,modOns[currentPreset.knubbies[currentParam].params[3]]);
   updateNumParam(4,map(currentPreset.knubbies[currentParam].params[0], 0, 254, 0, 100));
   updateNumParam(5,map(currentPreset.knubbies[currentParam].params[1], 0, 254, 0, 100));
   //updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
-  updateParam(7, switchOut[currentPreset.knubbies[currentParam].numLoop]);
+  updateParam(7, switchOut[currentPreset.knubbies[currentParam].params[5]]);
 
 }
 

@@ -67,7 +67,7 @@ void updateLoopsOut(aKnubPreset * currentPreset){
   clearLoopsOut();
   // fill up loopsOut array
   for(uint8_t i = 0; i<numKnubbies; i++)
-    fillLoopsOut(currentPreset->knubbies[i].numLoop, currentPreset->knubbies[i].state);
+    fillLoopsOut(currentPreset->knubbies[i].params[5], currentPreset->knubbies[i].params[3]);
 
   // check loops state and update
   for(uint8_t i = 0; i<4; i++){

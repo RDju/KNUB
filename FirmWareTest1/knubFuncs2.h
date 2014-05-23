@@ -79,7 +79,7 @@ void turnKnub(uint8_t knubNum, uint8_t knubVal){
 //Activate/Desactivate each pedal depending on the kpreset datas
 void updateKnubs(aKnubPreset * kPreset){
   for(uint8_t i = 0; i<4; i++)
-    if(kPreset->knubbies[i].state == 1)
+    if(kPreset->knubbies[i].params[4] == 1)
       turnKnub(i, kPreset->knubbies[i].params[0]);
 }
 
@@ -95,7 +95,7 @@ void doExpressionPedal(unsigned int expVal){
 
   if(abs(expVal - prevExp) > 2){
     for(uint8_t i =0; i<4; i++)
-      if(currentPreset.knubbies[i].modOn == 1)
+      if(currentPreset.knubbies[i].params[3] == 1)
         turnKnub(i, map(expVal, 0, 255, currentPreset.knubbies[i].params[0], currentPreset.knubbies[i].params[1]));
     prevExp = expVal;
   }

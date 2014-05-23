@@ -8,8 +8,6 @@
 //#include <Ethernet.h> // version IDE 0022
 //#include <Z_OSC.h>
 #include <Bounce.h>
-
-
 #include "presets.h"
 #include "knubFuncs2.h"
 #include "UI.h"
@@ -48,7 +46,7 @@ uint16_t baseID;
 ClickButton bValid(validBut, LOW, CLICKBTN_PULLUP);
 ClickButton bckValid(backBut, LOW, CLICKBTN_PULLUP);
 
-byte pageLevel = 0;
+//byte pageLevel = 0;
 uint8_t tabIndx = 0;
 byte prevIndx;
 
@@ -99,7 +97,7 @@ void setupTimer(){
 
 void setup(){
   
-  baseID = 5;
+  baseID = 0;
 
   Wire.begin();
 
@@ -142,7 +140,7 @@ void setup(){
   //writeByte(eepromAddr1, lastPresetMemSpace, );
   //read last loaded ID and load that one
   //lastID = 5; //TODO: understand && remove ?
-  pageLevel = 2;
+  pageLevel = 1;
   readAdr = 5;
   readKnubPreset(eepromAddr1, ((lastID-baseID) * presetSize)+baseID, &currentPreset);
   //printCurrentPreset();
@@ -154,7 +152,7 @@ void setup(){
   softwareVersion();
   presetPage();
 
-  updatePreset(currentPreset.name, isPresetEdited(&currentPreset) );
+  updatePreset(currentPreset.name , isPresetEdited(&currentPreset) );
   checkUILeds();
 
   //???: usefull ?
@@ -170,8 +168,10 @@ void setup(){
 }
 
 void loop(){
+  
+  //printCurrentPreset();
 
-  if(pageLevel == 2){
+  if(pageLevel == 1){
     midiInRead();
     doSwitchInDec();
     doExpressionPedal(analogRead(expressionPin));
@@ -181,7 +181,7 @@ void loop(){
   if(time2ChangePage){
     time2ChangePage = false;
     switch(pageLevel){
-    case 2: //Preset Page
+    case 1: //Preset Page
       tabIndx = 0;
       presetPage();
       updatePreset(currentPreset.name, isPresetEdited(&currentPreset));
@@ -192,13 +192,10 @@ void loop(){
       currentParam = 0;
       knubbiePage(currentParam, currentPreset,modOns, switchOut);
       break;
+
     case 4: //Edited Knubbie Page 
       //time to save things.
-      savePage();
-      //writeKnubPreset(eepromAddr1, readAdr, &currentPreset);
-      saveEditedKnubbies(eepromAddr1, readAdr, &currentPreset);
-      pageLevel = 2;
-      time2ChangePage = true;
+      wantToSave();
       break;
     }
   }
@@ -206,16 +203,20 @@ void loop(){
 
   //// tab button
   bValid.Update();
-
+  
   if(bValid.clicks !=0){
+    Serial.print("page lvl : ");
+    Serial.println(pageLevel);
     switch (pageLevel){
-    case 2: //Preset Page
-      if(bValid.clicks == 2){ //TODO: replace by a long click ?
-        pageLevel ++;
+    case 1: //Preset Page
+      if(bValid.clicks == -1){
+        pageLevel = 3;
         time2ChangePage = true;
       } else if (bValid.clicks==1){
+        Serial.print("read indx : ");
+        Serial.println(readindx);
         //increment preset and load
-        if(readindx < 12){
+        if(readindx < 60){
           readindx += 1;
           readAdr = ((readindx-baseID)*presetSize)+baseAddr;
         }
@@ -233,7 +234,7 @@ void loop(){
           time2ChangePage = true;
           prevRead = readAdr;
         }
-      }
+      } 
       break;
       
     case 3: //knubbie page
@@ -243,6 +244,16 @@ void loop(){
         tabIndx = tabIndx%(sizeof(chParamTabs)+1);//numTabs[pageLevel];//TODO: numTabs usefull ?
         tab(chParamTabs[tabIndx]);
         customCursor(tabIndx, pageLevel, prevIndx);
+      }
+      break;
+   case 4:
+      if(bValid.clicks == 1){
+          savePage();
+          writeKnubPreset(eepromAddr1, readAdr, &currentPreset);
+          //saveEditedKnubbies(eepromAddr1, readAdr, &currentPreset);
+          delay(50);
+          pageLevel = 1;
+          time2ChangePage = true;
       }
       break;
     }
@@ -259,14 +270,14 @@ void loop(){
     // }
 
     switch(pageLevel){
-    case 2:
+    case 1:
       if(bckValid.clicks == 2 && isPresetEdited(&currentPreset)){
         pageLevel = 4;
         /*for (int i = 0; i < 8; i++)
           currentPreset.knubbies[i].isEdited = false;*/
         time2ChangePage = true;
       } else if (bckValid.clicks == 1){
-        if(readindx > 5){
+        if(readindx > 0){
           readindx -=1;
           readAdr = ((readindx-baseID)*presetSize)+baseAddr;
         }
@@ -296,10 +307,21 @@ void loop(){
         tab(chParamTabs[tabIndx]);
 
         customCursor(tabIndx, pageLevel, prevIndx);
-      } else if (bckValid.clicks == 2){
-
-        pageLevel = 2;
-        time2ChangePage = true;
+      } else if (bckValid.clicks == -1){
+          if ( isPresetEdited(&currentPreset))
+              pageLevel = 4;
+          else
+              pageLevel = 1;
+              
+          time2ChangePage = true;
+      }
+      break;
+      
+    case 4:
+      if(bckValid.clicks == 1){
+          //TODO: paramModified = false
+          pageLevel = 1;
+          time2ChangePage = true;
       }
       break;
     }
@@ -374,7 +396,7 @@ void loop(){
       case 4:
         //checkEdition(isEdited);
         //currentPreset.knubbies[currentParam].isEdited = true;
-        currentPreset.knubbies[currentParam].isModOnEdited = true;
+        currentPreset.knubbies[currentParam].params[3] = true;
         scaledEncoderValueParam = encoderValue%25;
         if(scaledEncoderValueParam == 0){
           txtParamIndx += encoderDir;
@@ -386,16 +408,16 @@ void loop(){
       case 5:
         //checkEdition(isEdited);
         //currentPreset.knubbies[currentParam].isEdited = true;
-        currentPreset.knubbies[currentParam].isStateEdited = true;
+        currentPreset.knubbies[currentParam].params[4] = true;
         //do all switch check here (might not be the greatest idea)
         //scaledEncoderValueParam = encoderValue%25;
 
-        if((encoderDir == 1 && currentPreset.knubbies[currentParam].state == 0) || (encoderDir == -1 && currentPreset.knubbies[currentParam].state == 1)){
-            if (currentPreset.knubbies[currentParam].state == 0)
-              currentPreset.knubbies[currentParam].state = 1;
-            else currentPreset.knubbies[currentParam].state = 0;
-            updateParam(2, stateToString(currentPreset.knubbies[currentParam].state));
-            updateLoops(currentPreset.knubbies[currentParam].numLoop, currentPreset.knubbies[currentParam].state);
+        if((encoderDir == 1 && currentPreset.knubbies[currentParam].params[4] == 0) || (encoderDir == -1 && currentPreset.knubbies[currentParam].params[4] == 1)){
+            if (currentPreset.knubbies[currentParam].params[4] == 0)
+              currentPreset.knubbies[currentParam].params[4] = 1;
+            else currentPreset.knubbies[currentParam].params[4] = 0;
+            updateParam(2, stateToString(currentPreset.knubbies[currentParam].params[4]));
+            updateLoops(currentPreset.knubbies[currentParam].params[5], currentPreset.knubbies[currentParam].params[4]);
         }
 
         //update loop at loop indx
@@ -406,16 +428,16 @@ void loop(){
         ////Serial.printl("value: ");
         ////Serial.printlln(loopsOut[currentPreset.knubbies[currentParam].numLoop]);
 
-        if(!checkLoopsOut(currentPreset.knubbies[currentParam].numLoop))
-          switchLoop(currentPreset.knubbies[currentParam].numLoop, 0);//turn loop off
+        if(!checkLoopsOut(currentPreset.knubbies[currentParam].params[5]))
+          switchLoop(currentPreset.knubbies[currentParam].params[5], 0);//turn loop off
         else
           //quick and dirty
-          switchLoop(currentPreset.knubbies[currentParam].numLoop, 1);//turn loop on
+          switchLoop(currentPreset.knubbies[currentParam].params[5], 1);//turn loop on
         break;
       case 6:
         //checkEdition(isEdited);
         //currentPreset.knubbies[currentParam].isEdited = true;
-        currentPreset.knubbies[currentParam].isNumLoopEdited = true;
+        currentPreset.knubbies[currentParam].params[5] = true;
         scaledEncoderValueParam = encoderValue%25;
         if(scaledEncoderValueParam == 0){   
           txtParamIndx += encoderDir;
@@ -429,24 +451,6 @@ void loop(){
   lastValue = encoderValue;
 }
 
-//Interruption called each time a pin change of value
-/*void updateEncoder(){
-  uint8_t MSB = digitalRead(encoderPin1); //MSB = most significant bit
-  uint8_t LSB = digitalRead(encoderPin2); //LSB = least significant bit
-
-  uint8_t encoded = (MSB << 1) |LSB; //converting the 2 pin value to single number
-  uint8_t sum  = (lastEncoderValue << 2) | encoded; //adding it to the previous encoded value
-
-  if (sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011){
-    encoderDir = 1;
-    encoderValue ++;
-  } else if (sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000){
-    encoderDir = -1;
-    encoderValue -- ;
-  }
-  lastEncoderValue = encoded; //store this value for next time
-}*/
-
 ISR(TIMER2_OVF_vect) {  
   /* Reload the timer */
   TCNT2 = tcnt2;  
@@ -459,7 +463,7 @@ ISR(TIMER2_OVF_vect) {
       encoderValue ++;
     } else {
       encoderDir = 1;
-      encoderValue -- ;      
+      encoderValue --;      
     }
   } 
 }

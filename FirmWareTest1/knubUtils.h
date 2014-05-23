@@ -23,11 +23,11 @@ void printCurrentPreset(){
 
 
   Serial.println("KNUBBIE 1 modOn: ");
-  Serial.println(currentPreset.knubbies[0].modOn);
+  Serial.println(currentPreset.knubbies[0].params[3]);
   Serial.println("KNUBBIE 1 STATE: ");
-  Serial.println(currentPreset.knubbies[0].state);
+  Serial.println(currentPreset.knubbies[0].params[4]);
   Serial.println("KNUBBIE 1 NUMLOOP: ");
-  Serial.println(currentPreset.knubbies[0].numLoop);
+  Serial.println(currentPreset.knubbies[0].params[5]);
 
   Serial.println("----------------------");
   Serial.println("KNUBBIE 2 PARAMS : ");
@@ -39,11 +39,11 @@ void printCurrentPreset(){
 
 
   Serial.println("KNUBBIE 2 modOn: ");
-  Serial.println(currentPreset.knubbies[1].modOn);
+  Serial.println(currentPreset.knubbies[1].params[3]);
   Serial.println("KNUBBIE 2 STATE: ");
-  Serial.println(currentPreset.knubbies[1].state);
+  Serial.println(currentPreset.knubbies[1].params[4]);
   Serial.println("KNUBBIE 2 NUMLOOP: ");
-  Serial.println(currentPreset.knubbies[1].numLoop);
+  Serial.println(currentPreset.knubbies[1].params[5]);
 
   Serial.println("----------------------");
   Serial.println("KNUBBIE 3 PARAMS : ");
@@ -55,10 +55,10 @@ void printCurrentPreset(){
 
 
   Serial.println("KNUBBIE 3 modOn: ");
-  Serial.println(currentPreset.knubbies[2].modOn);
+  Serial.println(currentPreset.knubbies[2].params[3]);
   Serial.println("KNUBBIE 3 STATE: ");
-  Serial.println(currentPreset.knubbies[2].state);
+  Serial.println(currentPreset.knubbies[2].params[4]);
   Serial.println("KNUBBIE 3 NUMLOOP: ");
-  Serial.println(currentPreset.knubbies[2].numLoop);
+  Serial.println(currentPreset.knubbies[2].params[5]);
 }
 
