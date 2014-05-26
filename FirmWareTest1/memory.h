@@ -21,7 +21,7 @@
   
 typedef struct aKnub{
   char name[maxNameLength];
-  byte params[6];
+  byte params[paramLength];
   /*byte modOn;
   byte state;
   byte numLoop;*/
@@ -37,7 +37,7 @@ typedef struct aKnub{
 typedef struct aKnubPreset{
 
   char name[maxNameLength];
-  byte ID[6];
+  byte ID[IDLength];
 
   aKnub knubbies[numKnubbies];
 }aKnubPreset;

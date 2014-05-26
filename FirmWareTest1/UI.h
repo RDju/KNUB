@@ -201,16 +201,27 @@ void knubbiePage(int currentParam, aKnubPreset currentPreset, char* modOns[], ch
   
   clearScreen();
   
-  updateParam(0, toString(currentParam + 1));
-  updateParam(1,currentPreset.knubbies[currentParam].name);
-  //updateState(currentPreset.knubbies[currentParam].state);
-  updateParam(2,stateToString(currentPreset.knubbies[currentParam].params[4]));//TODO: change the visual indicator
-  updateParam(3,modOns[currentPreset.knubbies[currentParam].params[3]]);
-  updateNumParam(4,map(currentPreset.knubbies[currentParam].params[0], 0, 254, 0, 100));
-  updateNumParam(5,map(currentPreset.knubbies[currentParam].params[1], 0, 254, 0, 100));
-  //updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
-  updateParam(7, switchOut[currentPreset.knubbies[currentParam].params[5]]);
+  if (currentParam == 0){
+      updatePreset(currentPreset.name , isPresetEdited(&currentPreset) );
+  } else {
+  
+      updateParam(0, toString(currentParam + 1));
+      updateParam(1,currentPreset.knubbies[currentParam].name);
+      //updateState(currentPreset.knubbies[currentParam].state);
+      //updateParam(2,stateToString(currentPreset.knubbies[currentParam].params[4]));//TODO: change the visual indicator
+      updateParam(3,modOns[currentPreset.knubbies[currentParam].params[3]]);
+      updateNumParam(4,map(currentPreset.knubbies[currentParam].params[0], 0, 254, 0, 100));
+      updateNumParam(5,map(currentPreset.knubbies[currentParam].params[1], 0, 254, 0, 100));
+      //updateParam(6,customCurveDigits[currentPreset.knubbies[currentParam].params[2]]);    
+      //updateParam(7, switchOut[currentPreset.knubbies[currentParam].params[5]]);
+  }
 
+}
+
+void pagePref(){
+  clearScreen();
+  lcd.setCursor(0,0);
+  lcd.print("PREFS");
 }
 
 /*void (*drawFuncs[6])(char dummy[], char dummy1[], char dummy2[], char dummy3[], char dummy4[], char dummy5[], char dummy6[], char dummy7[], char dummy8[]) = {

@@ -62,6 +62,8 @@ uint8_t currSwIndx = 0;
 char* modOns[3] = {"___", "EXP","MID"};
 char* switchOut[5] = {"L1", "L2", "L3", "L4","__"}; //Indicate pedal physical localisation
 
+boolean readAdrChange;
+
 void setupTimer(){
    /* First disable the timer overflow interrupt while we're configuring */
   TIMSK2 &= ~(1<<TOIE2);  
@@ -142,6 +144,7 @@ void setup(){
   //lastID = 5; //TODO: understand && remove ?
   pageLevel = 1;
   readAdr = 5;
+  readAdrChange = false;
   readKnubPreset(eepromAddr1, ((lastID-baseID) * presetSize)+baseID, &currentPreset);
   //printCurrentPreset();
   updateKnubs(&currentPreset);
@@ -197,6 +200,9 @@ void loop(){
       //time to save things.
       wantToSave();
       break;
+    case 5:
+      pagePref();
+      break;
     }
   }
   //////////////////////
@@ -205,36 +211,39 @@ void loop(){
   bValid.Update();
   
   if(bValid.clicks !=0){
-    Serial.print("page lvl : ");
-    Serial.println(pageLevel);
     switch (pageLevel){
     case 1: //Preset Page
-      if(bValid.clicks == -1){
-        pageLevel = 3;
-        time2ChangePage = true;
-      } else if (bValid.clicks==1){
-        Serial.print("read indx : ");
-        Serial.println(readindx);
-        //increment preset and load
-        if(readindx < 60){
-          readindx += 1;
-          readAdr = ((readindx-baseID)*presetSize)+baseAddr;
-        }
-        if(readAdr != prevRead){
-          readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-          updateKnubs(&currentPreset);      
-
-#ifdef DEBUG_LOAD_PRESET
-          Serial.println(readAdr);
-          debugKnubPreset(&currentPreset);
-#endif
-
-          updateLoopsOut(&currentPreset);
-
-          time2ChangePage = true;
-          prevRead = readAdr;
-        }
-      } 
+            if(bValid.clicks == -1){
+              pageLevel = 3;
+              time2ChangePage = true;
+            } else if (bValid.clicks==1){
+              
+                if (readAdrChange){
+                  prevRead = tempReadAdr;
+                  readAdrChange = false;
+                } else {
+                        //increment preset and load
+                        if(readindx < 60){
+                          readindx += 1;
+                          if (readindx == 60) readindx = 0;
+                          readAdr = ((readindx-baseID)*presetSize)+baseAddr;
+                        }
+                        if(readAdr != prevRead){
+                          readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+                          updateKnubs(&currentPreset);      
+                
+                #ifdef DEBUG_LOAD_PRESET
+                          Serial.println(readAdr);
+                          debugKnubPreset(&currentPreset);
+                #endif
+                
+                          updateLoopsOut(&currentPreset);
+                
+                          time2ChangePage = true;
+                          prevRead = readAdr;
+                        }
+               } 
+            }
       break;
       
     case 3: //knubbie page
@@ -271,34 +280,50 @@ void loop(){
 
     switch(pageLevel){
     case 1:
-      if(bckValid.clicks == 2 && isPresetEdited(&currentPreset)){
+      /*if(bckValid.clicks == 2 && isPresetEdited(&currentPreset)){
         pageLevel = 4;
-        /*for (int i = 0; i < 8; i++)
-          currentPreset.knubbies[i].isEdited = false;*/
+        //for (int i = 0; i < 8; i++)
+          //currentPreset.knubbies[i].isEdited = false;
         time2ChangePage = true;
-      } else if (bckValid.clicks == 1){
-        if(readindx > 0){
-          readindx -=1;
-          readAdr = ((readindx-baseID)*presetSize)+baseAddr;
-        }
-
-        if(readAdr != prevRead){
-
-          readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-          updateKnubs(&currentPreset);
-
-          //writeByte(eepromAddr1, lastPresetMemSpace, readindx);
-
-          updateLoopsOut(&currentPreset);
-
+      } else */
+      if (bckValid.clicks == -1){
+          pageLevel = 5;
           time2ChangePage = true;
-          prevRead = readAdr;
-        }
+      } else if (bckValid.clicks == 1){
+        
+               if (readAdrChange){
+                      readAdr = prevRead;
+                      readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+                      updateKnubs(&currentPreset);
+                      readAdrChange = false;
+                      updateLoopsOut(&currentPreset);
+              
+                      time2ChangePage = true;
+                      
+                } else {
+                      if(readindx >= 0){
+                        readindx -=1;
+                        if (readindx == -1) readindx = 59;
+                        readAdr = ((readindx-baseID)*presetSize)+baseAddr;
+                      }
+              
+                      if(readAdr != prevRead){
+              
+                        readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+                        updateKnubs(&currentPreset);
+              
+                        //writeByte(eepromAddr1, lastPresetMemSpace, readindx);
+              
+                        updateLoopsOut(&currentPreset);
+              
+                        time2ChangePage = true;
+                        prevRead = readAdr;
+                      }
+               }
       }
       break;
     case 3:
       if(bckValid.clicks == 1){
-        Serial.println(tabIndx);
         prevIndx = tabIndx;
         if (tabIndx == 0)
           tabIndx = sizeof(chParamTabs)+1;
@@ -320,8 +345,15 @@ void loop(){
     case 4:
       if(bckValid.clicks == 1){
           //TODO: paramModified = false
+          //TODO: updatePreset
           pageLevel = 1;
           time2ChangePage = true;
+      }
+      break;
+    case 5:
+      if (bckValid.clicks == -1){
+        pageLevel = 1;
+        time2ChangePage = true;
       }
       break;
     }
@@ -333,119 +365,147 @@ void loop(){
   /////// encoding Wheel/////////////////////
 
   if(encoderValue != lastValue){
-    if (pageLevel == 3){
-      switch(tabIndx){
-      case 0:
-
-        scaledEncoderValueParam = encoderValue%2;
-
-        if ((scaledEncoderValueParam == 0 && encoderDir == 1 && currentParam < 7) || (scaledEncoderValueParam == 0 && encoderDir == -1 && currentParam > 0)){
-
-          txtParamIndx += encoderDir;
-          currentParam = txtParamIndx%8;
-
-          knubbiePage(currentParam, currentPreset,modOns, switchOut);
-        }
-        break;
-      case 1:
-
-        ///EDITED
-
-        //checkEdition(isEdited);
-        //currentPreset.knubbies[currentParam].isEdited = true;
-        currentPreset.knubbies[currentParam].isParamsEdited[0] = true;
-        ///MUST FIND A BETTER WAY OF DEALING WITH THIS
-
-        currentParamVal = currentPreset.knubbies[currentParam].params[0];
-
-        if ((currentParamVal>0 && currentParamVal<255) || (currentParamVal== 0 && encoderDir ==1) || (currentParamVal== 255 && encoderDir ==-1))
-          currentParamVal += encoderDir;
-          
-        currentPreset.knubbies[currentParam].params[0] = currentParamVal;
-        updateNumParam(4,map(currentPreset.knubbies[currentParam].params[0], 0, 255, 0, 100));
-        turnKnub(currentParam, currentPreset.knubbies[currentParam].params[0]);
-        break;
+    //if (pageLevel == 3){
+    switch(pageLevel){
+    case 1:
         
-      case 2:
-        //currentPreset.knubbies[currentParam].isEdited = true;
-        //checkEdition(isEdited);
-        currentPreset.knubbies[currentParam].isParamsEdited[1] = true;
-
-        currentParamVal = currentPreset.knubbies[currentParam].params[1];
-
-        if((currentParamVal>0 && currentParamVal<256) || (currentParamVal == 0 && encoderDir == 1) || (currentParamVal == 255 && encoderDir == -1))
-          currentParamVal += encoderDir;
+        //if( (readindx < 60 && encoderDir==1) || (readindx > 0 || encoderDir==-1) ){
+         // if (readindx == 1 && encoderDir == -1) readindx = 60;
+          //else if (readindx == 59 && encoderDir == 1) readindx = 0;
+          //else 
+        readindx+=encoderDir;
+        if (readindx == -1) readindx = 59;
+        else if (readindx == 60) readindx = 0;
           
-        currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
-        updateNumParam(5, map(currentParamVal, 0, 255, 0, 100));
-    
-        break;
-        /*
-      case 3:
-         ///not acitve yet
-         currentPreset.knubbies[currentParam].isParamsEdited[2] = true;
-         currentParamVal = currentPreset.knubbies[currentParam].params[2];
-         
-         scaledEncoderValueParam = encoderValue%25;
-         if(scaledEncoderValueParam == 0){
-         txtParamIndx += encoderDir;
-         //updateParam(tabIndx, curves[txtParamIndx%3]);
-         }
-         break;
-         */
-      case 4:
-        //checkEdition(isEdited);
-        //currentPreset.knubbies[currentParam].isEdited = true;
-        currentPreset.knubbies[currentParam].params[3] = true;
-        scaledEncoderValueParam = encoderValue%25;
-        if(scaledEncoderValueParam == 0){
-          txtParamIndx += encoderDir;
-          currModIndx = txtParamIndx%3;
+        readAdr = ((readindx-baseID)*presetSize)+baseAddr;
 
-          updateParam(3, modOns[currModIndx]);
-        } 
-        break;
-      case 5:
-        //checkEdition(isEdited);
-        //currentPreset.knubbies[currentParam].isEdited = true;
-        currentPreset.knubbies[currentParam].params[4] = true;
-        //do all switch check here (might not be the greatest idea)
-        //scaledEncoderValueParam = encoderValue%25;
+        if(readAdr != prevRead){
+          readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+          updateKnubs(&currentPreset);      
+          updateLoopsOut(&currentPreset);
+          
+          readAdrChange = true;
+          
+          
 
-        if((encoderDir == 1 && currentPreset.knubbies[currentParam].params[4] == 0) || (encoderDir == -1 && currentPreset.knubbies[currentParam].params[4] == 1)){
-            if (currentPreset.knubbies[currentParam].params[4] == 0)
-              currentPreset.knubbies[currentParam].params[4] = 1;
-            else currentPreset.knubbies[currentParam].params[4] = 0;
-            updateParam(2, stateToString(currentPreset.knubbies[currentParam].params[4]));
-            updateLoops(currentPreset.knubbies[currentParam].params[5], currentPreset.knubbies[currentParam].params[4]);
+          time2ChangePage = true;
+          tempReadAdr = readAdr;
         }
-
-        //update loop at loop indx
-
-        //check loop at numLoop
-        ////Serial.printl("checking loop: ");
-        ////Serial.printlln(currentPreset.knubbies[currentParam].numLoop);
-        ////Serial.printl("value: ");
-        ////Serial.printlln(loopsOut[currentPreset.knubbies[currentParam].numLoop]);
-
-        if(!checkLoopsOut(currentPreset.knubbies[currentParam].params[5]))
-          switchLoop(currentPreset.knubbies[currentParam].params[5], 0);//turn loop off
-        else
-          //quick and dirty
-          switchLoop(currentPreset.knubbies[currentParam].params[5], 1);//turn loop on
-        break;
-      case 6:
-        //checkEdition(isEdited);
-        //currentPreset.knubbies[currentParam].isEdited = true;
-        currentPreset.knubbies[currentParam].params[5] = true;
-        scaledEncoderValueParam = encoderValue%25;
-        if(scaledEncoderValueParam == 0){   
-          txtParamIndx += encoderDir;
-          currSwIndx = txtParamIndx%13;
-          updateParam(7, switchOut[currSwIndx]);
-        } 
-        break;
-      }
+          
+         break;
+    case 3:
+            switch(tabIndx){
+            case 0: //change knubbies
+      
+              scaledEncoderValueParam = encoderValue%2; //To increment only one time of two
+      
+              if ((scaledEncoderValueParam == 0 && encoderDir == 1 && currentParam < 7) || (scaledEncoderValueParam == 0 && encoderDir == -1 && currentParam > 0)){
+      
+                txtParamIndx += encoderDir;
+                
+                currentParam = txtParamIndx%8;
+                knubbiePage(currentParam, currentPreset,modOns, switchOut);
+              }
+              break;
+            case 1: //change first value
+      
+              ///EDITED
+      
+              //checkEdition(isEdited);
+              //currentPreset.knubbies[currentParam].isEdited = true;
+              currentPreset.knubbies[currentParam].isParamsEdited[0] = true;
+              ///MUST FIND A BETTER WAY OF DEALING WITH THIS
+      
+              currentParamVal = currentPreset.knubbies[currentParam].params[0];
+      
+              if ((currentParamVal>0 && currentParamVal<255) || (currentParamVal== 0 && encoderDir ==1) || (currentParamVal== 255 && encoderDir ==-1))
+                currentParamVal += encoderDir;
+                
+              currentPreset.knubbies[currentParam].params[0] = currentParamVal;
+              updateNumParam(4,map(currentPreset.knubbies[currentParam].params[0], 0, 255, 0, 100));
+              turnKnub(currentParam, currentPreset.knubbies[currentParam].params[0]);
+              break;
+              
+            case 2: // change 2nd value
+              //currentPreset.knubbies[currentParam].isEdited = true;
+              //checkEdition(isEdited);
+              currentPreset.knubbies[currentParam].isParamsEdited[1] = true;
+      
+              currentParamVal = currentPreset.knubbies[currentParam].params[1];
+      
+              if((currentParamVal>0 && currentParamVal<256) || (currentParamVal == 0 && encoderDir == 1) || (currentParamVal == 255 && encoderDir == -1))
+                currentParamVal += encoderDir;
+                
+              currentParamVal = currentPreset.knubbies[currentParam].params[1] = currentParamVal;
+              updateNumParam(5, map(currentParamVal, 0, 255, 0, 100));
+          
+              break;
+              /*
+            case 3:
+               ///not acitve yet
+               currentPreset.knubbies[currentParam].isParamsEdited[2] = true;
+               currentParamVal = currentPreset.knubbies[currentParam].params[2];
+               
+               scaledEncoderValueParam = encoderValue%25;
+               if(scaledEncoderValueParam == 0){
+               txtParamIndx += encoderDir;
+               //updateParam(tabIndx, curves[txtParamIndx%3]);
+               }
+               break;
+               */
+            case 4:
+              //checkEdition(isEdited);
+              //currentPreset.knubbies[currentParam].isEdited = true;
+              currentPreset.knubbies[currentParam].params[3] = true;
+              scaledEncoderValueParam = encoderValue%10;//25;
+              if(scaledEncoderValueParam == 0){
+                txtParamIndx += encoderDir;
+                currModIndx = txtParamIndx%3;
+      
+                updateParam(3, modOns[currModIndx]);
+              } 
+              break;
+            case 5:
+              //checkEdition(isEdited);
+              //currentPreset.knubbies[currentParam].isEdited = true;
+              currentPreset.knubbies[currentParam].params[4] = true;
+              //do all switch check here (might not be the greatest idea)
+              //scaledEncoderValueParam = encoderValue%25;
+      
+              if((encoderDir == 1 && currentPreset.knubbies[currentParam].params[4] == 0) || (encoderDir == -1 && currentPreset.knubbies[currentParam].params[4] == 1)){
+                  if (currentPreset.knubbies[currentParam].params[4] == 0)
+                    currentPreset.knubbies[currentParam].params[4] = 1;
+                  else currentPreset.knubbies[currentParam].params[4] = 0;
+                  updateParam(2, stateToString(currentPreset.knubbies[currentParam].params[4]));
+                  updateLoops(currentPreset.knubbies[currentParam].params[5], currentPreset.knubbies[currentParam].params[4]);
+              }
+      
+              //update loop at loop indx
+      
+              //check loop at numLoop
+              ////Serial.printl("checking loop: ");
+              ////Serial.printlln(currentPreset.knubbies[currentParam].numLoop);
+              ////Serial.printl("value: ");
+              ////Serial.printlln(loopsOut[currentPreset.knubbies[currentParam].numLoop]);
+      
+              if(!checkLoopsOut(currentPreset.knubbies[currentParam].params[5]))
+                switchLoop(currentPreset.knubbies[currentParam].params[5], 0);//turn loop off
+              else
+                //quick and dirty
+                switchLoop(currentPreset.knubbies[currentParam].params[5], 1);//turn loop on
+              break;
+            case 6:
+              //checkEdition(isEdited);
+              //currentPreset.knubbies[currentParam].isEdited = true;
+              currentPreset.knubbies[currentParam].params[5] = true;
+              scaledEncoderValueParam = encoderValue%25;
+              if(scaledEncoderValueParam == 0){   
+                txtParamIndx += encoderDir;
+                currSwIndx = txtParamIndx%13;
+                updateParam(7, switchOut[currSwIndx]);
+              } 
+              break;
+            }
     }
   }
   lastValue = encoderValue;

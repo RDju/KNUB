@@ -16,8 +16,9 @@ byte filteredCC;
 
 byte pageLevel = 0;
 
-unsigned int readindx  = 0; //this later will be change back to load ID from eeprom
+int readindx  = 0; //this later will be change back to load ID from eeprom
 unsigned int readAdr;
+unsigned int tempReadAdr;
 
 bool prevUp, prevDown;
 
