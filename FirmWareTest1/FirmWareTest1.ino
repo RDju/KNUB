@@ -185,6 +185,8 @@ void loop(){
     time2ChangePage = false;
     switch(pageLevel){
     case 1: //Preset Page
+      //Serial.print("readindx : ");
+      //Serial.println(readindx);
       tabIndx = 0;
       presetPage();
       updatePreset(currentPreset.name, isPresetEdited(&currentPreset));
@@ -193,7 +195,7 @@ void loop(){
     case 3: //Knubbie Page
       tabIndx = 0;
       currentParam = 0;
-      knubbiePage(currentParam, currentPreset,modOns, switchOut);
+      knubbiePage(currentParam, currentPreset, modOns, switchOut);
       break;
 
     case 4: //Edited Knubbie Page 
@@ -221,6 +223,17 @@ void loop(){
                 if (readAdrChange){
                   prevRead = tempReadAdr;
                   readAdrChange = false;
+                  
+                  readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+                          updateKnubs(&currentPreset);      
+                
+                
+                          updateLoopsOut(&currentPreset);
+                
+                          time2ChangePage = true;
+                          prevRead = readAdr;
+                          isTempReadindx = false;
+                  
                 } else {
                         //increment preset and load
                         if(readindx < 60){
@@ -293,12 +306,16 @@ void loop(){
         
                if (readAdrChange){
                       readAdr = prevRead;
-                      readKnubPreset(eepromAddr1, readAdr, &currentPreset);
+                      /*readKnubPreset(eepromAddr1, readAdr, &currentPreset);
                       updateKnubs(&currentPreset);
+                      
+                      updateLoopsOut(&currentPreset);*/
                       readAdrChange = false;
-                      updateLoopsOut(&currentPreset);
-              
+                      readindx = tempReadindx; //TODO: get the initial indx
+                      Serial.print("readAdr : ");
+                      Serial.println(readAdr);
                       time2ChangePage = true;
+                      isTempReadindx = false;
                       
                 } else {
                       if(readindx >= 0){
@@ -370,26 +387,26 @@ void loop(){
     switch(pageLevel){
     case 1:
         
-        //if( (readindx < 60 && encoderDir==1) || (readindx > 0 || encoderDir==-1) ){
-         // if (readindx == 1 && encoderDir == -1) readindx = 60;
-          //else if (readindx == 59 && encoderDir == 1) readindx = 0;
-          //else 
+        if (!isTempReadindx){
+          tempReadindx = readindx;
+          isTempReadindx = true;
+        }
+        
+        
         readindx+=encoderDir;
-        if (readindx == -1) readindx = 59;
-        else if (readindx == 60) readindx = 0;
+        if (readindx == -1) readindx = presetsNumber - 1;
+        else if (readindx == presetsNumber) readindx = 0;
           
         readAdr = ((readindx-baseID)*presetSize)+baseAddr;
 
-        if(readAdr != prevRead){
-          readKnubPreset(eepromAddr1, readAdr, &currentPreset);
-          updateKnubs(&currentPreset);      
-          updateLoopsOut(&currentPreset);
+        if(readAdr != tempReadAdr){
           
-          readAdrChange = true;
-          
-          
+          readKnubPresetNameTemp(eepromAddr1, readAdr);
+          presetPage();
+          updatePreset(nameTemp, false);
 
-          time2ChangePage = true;
+          readAdrChange = true;
+
           tempReadAdr = readAdr;
         }
           
@@ -399,14 +416,16 @@ void loop(){
             case 0: //change knubbies
       
               scaledEncoderValueParam = encoderValue%2; //To increment only one time of two
-      
-              if ((scaledEncoderValueParam == 0 && encoderDir == 1 && currentParam < 7) || (scaledEncoderValueParam == 0 && encoderDir == -1 && currentParam > 0)){
-      
-                txtParamIndx += encoderDir;
                 
-                currentParam = txtParamIndx%8;
+              if ((scaledEncoderValueParam == 0 && encoderDir == 1 && currentParam < numKnubbies) || (scaledEncoderValueParam == 0 && encoderDir == -1 && currentParam > -1)){
+
+                if (currentParam == numKnubbies -1 && encoderDir == 1) txtParamIndx = 0;
+                else if (currentParam == 0 && encoderDir == -1) txtParamIndx = numKnubbies - 1;
+                else txtParamIndx += encoderDir;
+                
+                currentParam = txtParamIndx;
                 knubbiePage(currentParam, currentPreset,modOns, switchOut);
-              }
+              } 
               break;
             case 1: //change first value
       
@@ -457,19 +476,22 @@ void loop(){
             case 4:
               //checkEdition(isEdited);
               //currentPreset.knubbies[currentParam].isEdited = true;
-              currentPreset.knubbies[currentParam].params[3] = true;
-              scaledEncoderValueParam = encoderValue%10;//25;
+              
+              currentPreset.knubbies[currentParam].isParamsEdited[2] = true;
+              scaledEncoderValueParam = encoderValue%5;//25;
               if(scaledEncoderValueParam == 0){
                 txtParamIndx += encoderDir;
                 currModIndx = txtParamIndx%3;
-      
+                
+                currentPreset.knubbies[currentParam].params[3] = currModIndx;
+                
                 updateParam(3, modOns[currModIndx]);
               } 
               break;
             case 5:
               //checkEdition(isEdited);
               //currentPreset.knubbies[currentParam].isEdited = true;
-              currentPreset.knubbies[currentParam].params[4] = true;
+              currentPreset.knubbies[currentParam].isParamsEdited[4] = true;
               //do all switch check here (might not be the greatest idea)
               //scaledEncoderValueParam = encoderValue%25;
       
@@ -482,12 +504,6 @@ void loop(){
               }
       
               //update loop at loop indx
-      
-              //check loop at numLoop
-              ////Serial.printl("checking loop: ");
-              ////Serial.printlln(currentPreset.knubbies[currentParam].numLoop);
-              ////Serial.printl("value: ");
-              ////Serial.printlln(loopsOut[currentPreset.knubbies[currentParam].numLoop]);
       
               if(!checkLoopsOut(currentPreset.knubbies[currentParam].params[5]))
                 switchLoop(currentPreset.knubbies[currentParam].params[5], 0);//turn loop off

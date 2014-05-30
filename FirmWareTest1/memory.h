@@ -11,11 +11,14 @@
 #define LCDlength 15
 
 #define presetSize 126
+#define presetsNumber 60
 /*#define modIndx maxNameLength+paramLength
 #define stateIndx maxNameLength+paramLength+modOnLength
 #define loopIndx maxNameLength+paramLength+modOnLength+stateLength*/
 
 #define eepromAddr1 0x50
+
+char nameTemp[maxNameLength];
 
 
   
@@ -114,6 +117,12 @@ void readKnubPresetName( int deviceaddress, unsigned int eeaddresspage, aKnubPre
     
    for(uint8_t i = 0; i<maxNameLength; i++)
       kpreset->name[i] = readByte(deviceaddress, eeaddresspage+i);
+}
+
+void readKnubPresetNameTemp( int deviceaddress, unsigned int eeaddresspage) {
+    
+   for(uint8_t i = 0; i<maxNameLength; i++)
+      nameTemp[i] = readByte(deviceaddress, eeaddresspage+i);
 }
 
 void readKnubPresetID( int deviceaddress, unsigned int eeaddresspage, aKnubPreset *kpreset) {
